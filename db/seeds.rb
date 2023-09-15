@@ -7,10 +7,10 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 User.create!([{
-  username: "OrchardDreamer",
+  username: "HarvestDreamer",
   name: "Hanna"
   password: "Kcc9g5f_Dc3h%-1K",
-  avatar_url: "",
+  avatar_url: "https://i.pinimg.com/originals/c8/6f/8a/c86f8a7ecda86bf1021e56334557d4cc.jpg",
   image: "",
   privacy: false,
   email:"hcodecraft@gmail.com",
