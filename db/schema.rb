@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_15_210621) do
+ActiveRecord::Schema.define(version: 2023_09_15_220613) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,20 @@ ActiveRecord::Schema.define(version: 2023_09_15_210621) do
     t.string "text"
     t.integer "user_id"
     t.integer "update_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "entries", force: :cascade do |t|
+    t.string "nickname"
+    t.string "location"
+    t.string "notes"
+    t.string "image"
+    t.integer "user_id"
+    t.integer "plant_id"
+    t.integer "health"
+    t.string "problems", default: [], array: true
+    t.boolean "open_to_advice"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -35,20 +49,6 @@ ActiveRecord::Schema.define(version: 2023_09_15_210621) do
     t.boolean "poisonous"
     t.boolean "edible"
     t.boolean "medicinal"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "records", force: :cascade do |t|
-    t.string "nickname"
-    t.string "location"
-    t.string "notes"
-    t.string "image"
-    t.integer "user_id"
-    t.integer "plant_id"
-    t.integer "health"
-    t.string "problems", default: [], array: true
-    t.boolean "open_to_advice"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
