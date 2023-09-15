@@ -18,7 +18,8 @@ class UsersController < ApplicationController
   
     private
   
+    # missing :password_confirmation
     def user_params
-      params.permit(:username, :password, :password_confirmation, :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :admin)
+      params.permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :admin)
     end
 end
