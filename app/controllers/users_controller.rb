@@ -12,9 +12,17 @@ class UsersController < ApplicationController
     end
   
     # need to make it so all users can see the user's show route
-    # def show
+    def show
+        user = User.find_by(id: params[:id])
+      
+        if user
+          render json: user
+        else
+          render json: { error: "User not found" }, status: :not_found
+        end
+      end
+      
 
-    # end
   
     private
   

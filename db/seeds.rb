@@ -51,3 +51,48 @@
 #   edible: 0, 
 #   medicinal: 0
 # }])
+
+# Entry.create!([{
+#     nickname: "GoldenPothos",
+#     location: "Office",
+#     notes: "Grown from a tiny rooted leaf",
+#     image: "",
+#     user_id: 1,
+#     plant_id: 1,
+#     health: 4,
+#     problems: [],
+#     open_to_advice: 0
+# },
+# {
+#   nickname: "PurpleVelvet the 3rd",
+#   location: "Bedroom",
+#   notes: "My granddaughter plant from Vita",
+#   image: "",
+#   user_id: 1,
+#   plant_id: 2,
+#   health: 4,
+#   problems: ["not fuzzy enough"],
+#   open_to_advice: 1
+# },
+# {
+#   nickname: "Tradascantia the strong",
+#   location: "Office",
+#   notes: "A prop from my previous Tradiscantia that I threw away because of mealy bug infestation",
+#   image: "",
+#   user_id: 1,
+#   plant_id: 3,
+#   health: 4,
+#   problems: [],
+#   open_to_advice: 0
+# }])
+
+# Comment.create!([{
+#   text: "I heard putting your plant in more light will make it fuzzier",
+#   user_id: 2,
+#   entry_id:2
+# },
+# {
+#   text: "Thank you! I have just the spot, I'll try it ASAP",
+#   user_id: 1,
+#   entry_id: 2
+# }])

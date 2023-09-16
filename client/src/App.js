@@ -1,24 +1,38 @@
-import logo from './logo.svg';
 import './App.css';
+import { Route, Routes } from "react-router-dom";
+import Welcome from './Welcome';
+import Login from './Login';
+import CreateAccount from './CreateAccount';
+import AllPlants from './AllPlants';
+import UserProfile from './UserProfile';
+import EditPlant from './EditPlant';
+import EditEntry from './EditEntry';
+import Plant from './Plant';
+import NewEntry from './NewEntry';
+import UserPlants from './UserPlants';
+import NewPlant from './NewPlant';
+import EditProfile from './EditProfile';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<Welcome/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/users/new" element={<CreateAccount/>} />
+          <Route path="/plants" element={<AllPlants/>} />
+          <Route path="/users/:id" element={<UserProfile/>} />
+          <Route path="/plants/:id/edit" element={<EditPlant/>} />
+          <Route path="/plants/:plant_id/entries/:id" element={<EditEntry/>} />
+          <Route path="/plants/:id" element={<Plant />} />
+          <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
+          <Route path="/plants/:plant_id/entries/new" element={<NewEntry/>} />
+          <Route path="/users/plants" element={<UserPlants/>} />
+          <Route path="/plants/new" element={<NewPlant/>} />
+          <Route path="/users/current/edit" element={<EditProfile/>} />
+        </Routes>
+    </>
   );
 }
 
