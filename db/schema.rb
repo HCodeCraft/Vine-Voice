@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_15_223545) do
+ActiveRecord::Schema.define(version: 2023_09_15_235600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -43,7 +43,7 @@ ActiveRecord::Schema.define(version: 2023_09_15_223545) do
     t.string "image_url"
     t.string "description"
     t.string "water_rec"
-    t.string "sunlight"
+    t.string "sunlight", array: true
     t.boolean "indoor"
     t.string "cycle"
     t.boolean "poisonous_to_humans"
