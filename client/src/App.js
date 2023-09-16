@@ -12,6 +12,7 @@ import NewEntry from './NewEntry';
 import UserPlants from './UserPlants';
 import NewPlant from './NewPlant';
 import EditProfile from './EditProfile';
+import Entry from './Entry'
 
 function App() {
   return (
