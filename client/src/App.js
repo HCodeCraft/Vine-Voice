@@ -13,6 +13,7 @@ import UserPlants from './UserPlants';
 import NewPlant from './NewPlant';
 import EditProfile from './EditProfile';
 import Entry from './Entry'
+import NavBar from './NavBar'
 
 function App() {
   return (
