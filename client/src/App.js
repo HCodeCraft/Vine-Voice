@@ -1,18 +1,18 @@
 import './App.css';
 import { Route, Routes } from "react-router-dom";
 import Welcome from './Welcome';
-import Login from './Login';
-import CreateAccount from './CreateAccount';
-import AllPlants from './AllPlants';
-import UserProfile from './UserProfile';
-import EditPlant from './EditPlant';
-import EditEntry from './EditEntry';
-import Plant from './Plant';
-import NewEntry from './NewEntry';
-import UserPlants from './UserPlants';
-import NewPlant from './NewPlant';
-import EditProfile from './EditProfile';
-import Entry from './Entry'
+import Login from './features/users/Login';
+import CreateAccount from './features/users/CreateAccount';
+import AllPlants from './features/plants/AllPlants';
+import UserProfile from './features/users/UserProfile';
+import EditPlant from './features/plants/EditPlant';
+import EditEntry from './features/entries/EditEntry';
+import Plant from './features/plants/Plant';
+import NewEntry from './features/entries/NewEntry';
+import UserPlants from './features/plants/UserPlants';
+import NewPlant from './features/plants/NewPlant';
+import EditProfile from './features/users/EditProfile';
+import Entry from './features/entries/Entry'
 import NavBar from './NavBar'
 
 function App() {
