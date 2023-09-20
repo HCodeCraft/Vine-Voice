@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { extendedApiSlice } from "./features/plants/plantsSlice";
 
+
 const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 

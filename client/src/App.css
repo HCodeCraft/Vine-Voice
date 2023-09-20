@@ -8,3 +8,8 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.everyone_image {
+  width: 300px;
+  height: 300px;
+}

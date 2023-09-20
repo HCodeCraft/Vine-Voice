@@ -1,27 +1,42 @@
 import React from "react";
 import { useGetPlantsQuery } from "./plantsSlice";
 
+
+
 const AllPlants = () => {
-  // const orderedPlantIds = useSelector(selectPlantIds);
+  const { data: plants, isLoading, isSuccess, isError, error } = useGetPlantsQuery();
 
-  const {
-    data: plants,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetPlantsQuery();
-
-  let content;
+  // Check if data is still loading
   if (isLoading) {
-    content = <p>Loading...</p>; // You can replace this with a loading spinner
-  } else if (isSuccess) {
-    content = plants.ids.map((plantId) => <p key={plantId}>{plantId}</p>);
-  } else if (isError) {
-    content = <p>Error: {error.message}</p>;
+    return <p>Loading...</p>;
   }
 
-  return <div>{content}</div>;
+  // Check if an error occurred
+  if (isError) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  // Check if data has loaded successfully
+  if (isSuccess) {
+    // Ensure 'plants' is not undefined before rendering
+    if (plants) {
+      const content = plants.map((plant) => (
+        <p key={plant.id}>{plant.common_name}
+        <img className="everyone_image" src={plant.image_url}></img></p>
+      ));
+      return (
+        <div>
+          <h2>All Plants</h2>
+          {content}
+        </div>
+      );
+    }
+    // Handle the case where 'plants' does not have 'ids'
+    return <p>No plant data available.</p>;
+  }
+
+  // Handle other cases (e.g., initial render)
+  return null;
 };
 
 export default AllPlants;
