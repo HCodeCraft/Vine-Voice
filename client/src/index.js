@@ -6,21 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { apiSlice } from "./features/api/apiSlice";
+import { extendedApiSlice } from "./features/plants/plantsSlice";
 
 const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 
+store.dispatch(extendedApiSlice.endpoints.getPlants.initiate())
+// store.dispatch(fetchUsers()) <= doesn't exist yet
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ApiProvider api={apiSlice}>
         <Provider store={store}>
           <App />
         </Provider>
-      </ApiProvider>
     </BrowserRouter>
   </React.StrictMode>
 );
