@@ -14,11 +14,14 @@ import NewPlant from './features/plants/NewPlant';
 import EditProfile from './features/users/EditProfile';
 import Entry from './features/entries/Entry'
 import NavBar from './NavBar'
+import { Grid, Container }from "@mui/material"
 
 function App() {
   return (
     <>
-        <NavBar />
+        {/* <NavBar /> */}
+        <Container maxWidth="1g" style={{marginTop:"50px"}}>
+          <Grid container spacing={5} style={{marginTop: "20px"}}>
         <Routes>
           <Route path="/" element={<Welcome/>} />
           <Route path="/login" element={<Login/>} />
@@ -34,6 +37,8 @@ function App() {
           <Route path="/plants/new" element={<NewPlant/>} />
           <Route path="/users/current/edit" element={<EditProfile/>} />
         </Routes>
+        </Grid>
+        </Container>
     </>
   );
 }

@@ -24,7 +24,7 @@ const apiSearchSlice = createApi({
       transformResponse: (responseData) => {
         return responseData; // Return the data as-is
       },
-      providesTags: ["SpeciesList"], // Use the correct type "SpeciesList"
+      providesTags: ["SpeciesList"], 
     }),
   }),
 });
@@ -41,14 +41,13 @@ const detailsSlice = createApi({
       query: (dynamicPart) => ({
         url: `${dynamicPart}`,
         headers: {
-          // You can add headers here if needed
           "x-api-key": process.env.REACT_APP_API_KEY,
         },
       }),
       transformResponse: (responseData) => {
-        return responseData; // Return the data as-is
+        return responseData; 
       },
-      providesTags: ["Species"], // Use the correct type "Species"
+      providesTags: ["Species"], 
     }),
   }),
 });

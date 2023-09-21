@@ -1,10 +1,17 @@
 import React from "react";
 import { useGetPlantsQuery } from "./plantsSlice";
-
-
+import CommonButton from "../../common/CommonButton";
+import PlantCard from "./PlantCard";
+import { Typography, Grid, Box } from "@mui/material";
 
 const AllPlants = () => {
-  const { data: plants, isLoading, isSuccess, isError, error } = useGetPlantsQuery();
+  const {
+    data: plants,
+    isLoading,
+    isSuccess,
+    isError,
+    error,
+  } = useGetPlantsQuery();
 
   // Check if data is still loading
   if (isLoading) {
@@ -21,14 +28,24 @@ const AllPlants = () => {
     // Ensure 'plants' is not undefined before rendering
     if (plants) {
       const content = plants.map((plant) => (
-        <p key={plant.id}>{plant.common_name}
-        <img className="everyone_image" src={plant.image_url}></img></p>
+        <PlantCard
+          key={plant.id}
+          commonName={plant.common_name}
+          image_url={plant.image_url}
+          sciName={plant.scientific_name}
+          description={plant.description}
+        />
       ));
       return (
-        <div>
-          <h2>All Plants</h2>
-          {content}
-        </div>
+        <>
+        <Box sx={{ width: '100%', maxWidth: '100%' }}>
+            <Typography variant="h4" align="center">
+              All Plants
+            </Typography>
+            </Box>
+            {content}
+         
+        </>
       );
     }
     // Handle the case where 'plants' does not have 'ids'
