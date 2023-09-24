@@ -11,7 +11,7 @@ export const apiSlice = createApi({
 
 export const { useGetPlantsQuery } = apiSlice;
 
-const apiSearchSlice = createApi({
+export const apiSearchSlice = createApi({
   reducerPath: "apiSearch",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://perenual.com/api/species-list",
@@ -32,8 +32,7 @@ const apiSearchSlice = createApi({
 export const { useGetSpeciesListQuery } = apiSearchSlice;
 
 
-
-const detailsSlice = createApi({
+export const detailsSlice = createApi({
   reducerPath: "details",
   baseQuery: fetchBaseQuery({ baseUrl: "https://perenual.com/api/species/details" }),
   endpoints: (builder) => ({

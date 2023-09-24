@@ -1,5 +1,4 @@
 class PlantsController < ApplicationController
-  # before_action :force_json, only: :search
     # before_action :authorize
 
     def index
@@ -7,9 +6,6 @@ class PlantsController < ApplicationController
       end
 
       def search
-        puts "Search action called."
-        query = params[:q]
-        puts "Search Query: #{query}"
         @plants = Plant.ransack(common_name_cont: params[:q]).result(distinct: true).limit(5)
         render json: @plants
       end
@@ -33,11 +29,6 @@ class PlantsController < ApplicationController
     
       private
 
-      def force_json
-        request.format = :json
-      end
-    
-    
       def find_plant
         Plant.find_by(id: params[:id])
       end

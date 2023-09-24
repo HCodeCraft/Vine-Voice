@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 const NewPlant = () => {
   const navigate = useNavigate()
 
-  const [commonName, setCommonName] = useState('');
+  const [searchName, setSearchName] = useState('');
 
   const {
     data: plants,
@@ -24,7 +24,7 @@ const NewPlant = () => {
   // } = useGetPlantsQuery()
 
 
-  const onCommonNameChanged = (e) => setCommonName(e.target.value);
+  const onSearchNameChanged = (e) => setSearchName(e.target.value);
 
   const onSearchClick = (e) => {
     e.preventDefault()
@@ -43,8 +43,8 @@ const NewPlant = () => {
           type="text"
           id="commonName"
           name="commonName"
-          value={commonName}
-          onChange={onCommonNameChanged}
+          value={searchName}
+          onChange={setSearchName}
         />
         <button type="button" onClick={onSearchClick}>
           Search!
