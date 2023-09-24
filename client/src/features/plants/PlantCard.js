@@ -11,8 +11,16 @@ import {
   Button,
 } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
+import { Link } from 'react-router-dom'
 
-const PlantCard = ({ commonName, image_url, sciName, description }) => {
+const PlantCard = ({
+  commonName,
+  image_url,
+  sciName,
+  short_description,
+  entries,
+  id
+}) => {
   return (
     <Grid item xs={12} md={4} sm={4}>
       <Card sx={{ maxWidth: 345 }}>
@@ -23,9 +31,16 @@ const PlantCard = ({ commonName, image_url, sciName, description }) => {
           </Typography>
           <Typography variant="subtitle1">{sciName}</Typography>
           <Typography variant="body2" color="text.secondary">
-            {description}
+            {short_description}
           </Typography>
+          <Typography variant="subtitle2">
+            {entries.length > 1
+              ? `${entries.length} entries`
+              : `${entries.length} entry`}
+          </Typography>
+          <Link to={`/plants/${id}`}>
           <CommonButton>Show More</CommonButton>
+          </Link>
         </CardContent>
       </Card>
     </Grid>

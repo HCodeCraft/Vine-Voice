@@ -27,13 +27,16 @@ const AllPlants = () => {
   if (isSuccess) {
     // Ensure 'plants' is not undefined before rendering
     if (plants) {
+      console.log("plants", plants)
       const content = plants.map((plant) => (
         <PlantCard
           key={plant.id}
           commonName={plant.common_name}
           image_url={plant.image_url}
           sciName={plant.scientific_name}
-          description={plant.description}
+          short_description={plant.short_description}
+          entries={plant.entries}
+          id={plant.id}
         />
       ));
       return (

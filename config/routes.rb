@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   # Routes for plants, users, sessions, etc.
-  resources :plants, only: [:index]
+  resources :plants, only: [:index, :show, :create, :destroy, :update]
   resources :users, only: [:create, :show, :index]
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"

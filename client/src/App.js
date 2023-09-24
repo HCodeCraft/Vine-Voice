@@ -19,7 +19,7 @@ import { Grid, Container }from "@mui/material"
 function App() {
   return (
     <>
-        {/* <NavBar /> */}
+        <NavBar />
         <Container maxWidth="1g" style={{marginTop:"50px"}}>
           <Grid container spacing={5} style={{marginTop: "20px"}}>
         <Routes>

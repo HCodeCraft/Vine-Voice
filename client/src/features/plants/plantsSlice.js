@@ -12,12 +12,14 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       },
       providesTags: ["Plant"], // Use the correct type "Plant"
     }),
-    getPlantsByPlantId: builder.query({
-      query: (id) => `/plants/?plantId=${id}`,
+    getPlantQuery: builder.query({
+      query: (plantId) => `/plants/${plantId}`,
+      providesTags: (result, error, arg) => [{ type: 'Plant', id: arg }],
       transformResponse: (responseData) => {
+        console.log('responsedata from id', responseData)
         return responseData; // Return the data as-is
       },
-      providesTags: ["Plant"], // Use the correct type "Plant"
+     // Use the correct type "Plant"
     }),
     addNewPlant: builder.mutation({
       query: (initialPlant) => ({
@@ -48,7 +50,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetPlantsQuery,
-  useGetPlantsByPlantIdQuery,
+  useGetPlantQuery,
   useAddNewPlantMutation,
   useUpdatePlantMutation,
   useDeletePlantMutation,

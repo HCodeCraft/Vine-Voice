@@ -19,5 +19,39 @@ html{
   height: 15rem;
 }
 
+body {
+  padding-top: 1%;
+  display: flex;
+  justify-content: center;
+
+  min-height: 100vh;
+}
+
+.pos_top{
+  width:60%;
+  position:absolute;
+  left: 20%;
+  top: 15%;
+}
+
+.img_deg{
+  float: left;
+  width: auto;
+  margin-right: 3%
+}
+
+.plantbox{
+  background-color:#C9CCD3;
+}
+
+.desc {
+  padding-top: 5%;
+  padding-right: 0%;
+}
+
+.top_bar{
+  padding-top: 30%;
+}
+
 /* font-family: 'Cabin', sans-serif;
 font-family: 'Open Sans', sans-serif; */
