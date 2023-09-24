@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
+  get '/search', to: "plants#search"
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
   resources :users, only: [:create, :show, :index]
   post "/login", to: "sessions#create"
   delete "/logout", to: "sessions#destroy"
+
+  get '/search', to: "plants#search"
 
   # Fallback route for client-side routing (e.g., React, Vue.js)
   get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
