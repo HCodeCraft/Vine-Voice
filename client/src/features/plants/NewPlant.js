@@ -7,21 +7,8 @@ const NewPlant = () => {
 
   const [searchName, setSearchName] = useState('');
 
-  const {
-    data: plants,
-    isLoading,
-    isSuccess,
-    isError,
-    error,
-  } = useGetSpeciesListQuery()
 
-  // const {
-  //   data: plants,
-  //   isLoading,
-  //   isSuccess,
-  //   isError,
-  //   error,
-  // } = useGetPlantsQuery()
+
 
 
   const onSearchNameChanged = (e) => setSearchName(e.target.value);
