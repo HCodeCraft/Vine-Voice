@@ -5,9 +5,8 @@ import { apiSlice, apiSearchSlice, detailsSlice } from "../features/api/apiSlice
 
 export const store = configureStore({
     reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        [apiSearchSlice.reducerPath]: apiSearchSlice.reducer,
-        [detailsSlice.reducerPath]: detailsSlice.reducer
+        [apiSlice.reducerPath]: apiSlice.reducer
+
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware, apiSearchSlice.middleware, detailsSlice.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 })

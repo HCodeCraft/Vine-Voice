@@ -53,5 +53,18 @@ body {
   padding-top: 30%;
 }
 
+.result {
+  display:flex;
+  
+}
+
+.btnbox {
+display: 'flex';
+justify-content: 'center';
+padding: '16px' 
+}
+
+
+
 /* font-family: 'Cabin', sans-serif;
 font-family: 'Open Sans', sans-serif; */

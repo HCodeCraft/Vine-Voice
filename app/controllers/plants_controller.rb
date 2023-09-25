@@ -6,9 +6,14 @@ class PlantsController < ApplicationController
       end
 
       def search
-        @plants = Plant.ransack(common_name_cont: params[:q]).result(distinct: true).limit(5)
+        search_query = params[:q]
+      
+        # Use Ransack to search in both common_name and scientific_name
+        @plants = Plant.ransack(common_name_cont: search_query).result(distinct: true).limit(5)
+      
         render json: @plants
       end
+      
 
       def create
         plant = Plant.create!(plant_params)

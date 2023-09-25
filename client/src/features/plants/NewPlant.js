@@ -1,29 +1,38 @@
-import React, { useState } from 'react';
-import { useGetSpeciesListQuery, useGetPlantsQuery } from '../api/apiSlice';
-import { useNavigate } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import SmallPlantCard from "./SmallPlantCard";
+import axios from "axios";
 
 const NewPlant = () => {
-  const navigate = useNavigate()
-
-  const [searchName, setSearchName] = useState('');
-
-
-
-
+  const navigate = useNavigate();
+  const [searchName, setSearchName] = useState("");
+  const [resultForm, setResultForm] = useState(false);
+  const [apiForm, setApiForm] = useState(false);
+  const [myApiData, setMyApiData] = useState([])
 
   const onSearchNameChanged = (e) => setSearchName(e.target.value);
 
   const onSearchClick = (e) => {
-    e.preventDefault()
-    // search through my db for plant based on name, if not found search perenuals db - include a not listed listing
-  }
+    e.preventDefault();
+    setResultForm(true);
+// Do fetch to my backend search with the searchName in the url params
+ axios.get(`http://localhost:3000/search.json?q=${searchName}`)
+ .then((response) => {
+  console.log("data", response.data)
+  setMyApiData(response.data)
+ })
+ .catch((error) => {
+  console.error("error", error)
+ })
+  };
+
 
 
   return (
     <section>
-      <br/>
-      <h2>Add a New Plant</h2>
-      <br/>
+      <br />
+      <h2>Search for a Plant</h2>
+      <br />
       <form>
         <label htmlFor="commonName">Enter your plant's common name:</label>
         <input
@@ -31,13 +40,25 @@ const NewPlant = () => {
           id="commonName"
           name="commonName"
           value={searchName}
-          onChange={setSearchName}
+          onChange={onSearchNameChanged}
         />
         <button type="button" onClick={onSearchClick}>
           Search!
         </button>
       </form>
-</section>
+      <br />
+      <div className="result">
+        {resultForm && myApiData.length > 0 && (
+          myApiData.map((plant) => (
+            <SmallPlantCard
+              commonName={plant.common_name}
+              sciName={plant.scientific_name}
+              image_url={plant.image_url}
+            />
+          ))
+        )}
+      </div>
+    </section>
   );
 };
 

@@ -11,46 +11,4 @@ export const apiSlice = createApi({
 
 export const { useGetPlantsQuery } = apiSlice;
 
-export const apiSearchSlice = createApi({
-  reducerPath: "apiSearch",
-  baseQuery: fetchBaseQuery({
-    baseUrl: "https://perenual.com/api/species-list",
-  }),
-  endpoints: (builder) => ({
-    getSpeciesList: builder.query({
-      query: ({ query }) => {
-        return `?key=${process.env.REACT_APP_API_KEY}&q=${query}`;
-      },
-      transformResponse: (responseData) => {
-        return responseData; // Return the data as-is
-      },
-      providesTags: ["SpeciesList"], 
-    }),
-  }),
-});
 
-export const { useGetSpeciesListQuery } = apiSearchSlice;
-
-
-export const detailsSlice = createApi({
-  reducerPath: "details",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://perenual.com/api/species/details" }),
-  endpoints: (builder) => ({
-    getSpeciesDetails: builder.query({
-      query: (dynamicPart) => ({
-        url: `${dynamicPart}`,
-        headers: {
-          "x-api-key": process.env.REACT_APP_API_KEY,
-        },
-      }),
-      transformResponse: (responseData) => {
-        return responseData; 
-      },
-      providesTags: ["Species"], 
-    }),
-  }),
-});
-
-export const { useGetSpeciesDetailsQuery } = detailsSlice;
-
-// Would put this in the component i'm calling it in: const { data, isLoading, isSuccess, isError, error } = useGetSpeciesDetailsQuery("7901");
