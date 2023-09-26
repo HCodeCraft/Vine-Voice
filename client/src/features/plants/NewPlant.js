@@ -11,6 +11,32 @@ const NewPlant = () => {
   const [apiForm, setApiForm] = useState(false);
   const [myApiData, setMyApiData] = useState([]);
   const [speciesList, setSpeciesList] = useState([]);
+  const [entry, setEntry] = useState({
+    nickname:"",
+    location:"",
+    notes:"",
+    image:"",
+    plant_id:null,
+    health: 0,
+    problems: [],
+    open_to_advice: false,
+  })
+  const [plant, setPlant] = useState({
+    id: null, // not sure if I should have this < but otherwise how could I set it?
+    common_name:"",
+    scientific_name:"", 
+    image_url:"",
+    med_image_url:"",
+    description:"",
+    water_rec:"",
+    sunlight: [],
+    indoor: false,
+    cycle: "",
+    poisonous_to_humans: false,
+    poisonous_to_animals: false,
+    edible: false,
+    medicinal: false
+  })
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
