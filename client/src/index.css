@@ -71,5 +71,17 @@ padding: 16px;
   padding: 10px;
 }
 
+.classes-field{
+ margin-top: 20;
+margin-bottom: 20;
+display: block
+
+}
+
+.entry_box form{
+  display: flex;
+  flex-direction: column;
+}
+
 /* font-family: 'Cabin', sans-serif;
 font-family: 'Open Sans', sans-serif; */
