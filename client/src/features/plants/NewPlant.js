@@ -54,32 +54,29 @@ const NewPlant = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
-
-    setActiveCard(index)
-
-
+    setActiveCard(index);
+  
     if (apiForm === false) {
-      setPlant({ ...plant, id: selectedPlant.id });
-      // want to put a border around the selected plant
-      setEntryForm(true);
+      setPlant((prevPlant) => ({
+        ...prevPlant,
+        id: selectedPlant.id,
+      }));
+      // Rest of your code
     } else {
       try {
-
-       
-        await setPlant({
-          ...plant, 
+        setPlant((prevPlant) => ({
+          ...prevPlant,
           image_url: selectedPlant.default_image["thumbnail"],
-          med_image_url: selectedPlant.default_image["medium_url"]
-        })
-
-        console.log("selectedPlant.default_image['thumbnail']", selectedPlant.default_image["thumbnail"] )
-
+          med_image_url: selectedPlant.default_image["medium_url"],
+        }));
+  
         const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
         const externalResponse = await axios.get(url);
         console.log("Detailed plant data (exres.data):", externalResponse.data);
         const apiPlant = externalResponse.data;
-        console.log("apiPlant.scientific_name[0]", apiPlant.scientific_name[0])
-        await setPlant({ ...plant,
+        
+        setPlant((prevPlant) => ({
+          ...prevPlant,
           common_name: apiPlant.common_name,
           scientific_name: apiPlant.scientific_name[0],
           description: apiPlant.description,
@@ -91,20 +88,19 @@ const NewPlant = () => {
           poisonous_to_animals: apiPlant.poisonous_to_pets,
           edible: apiPlant.edible_leaf,
           medicinal: apiPlant.medicinal,
-        });
-
-        // Eventually I want only the elements of speciesList that are not in myApiData
-        console.log("plant", plant);
-        // I want to have the entry form pop up after the user clicks "This is my plant~"
+        }));
+  
+        // Rest of your code
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
+  
 
   useEffect(() => {
-console.log("plant from in useEffect", plant)
-  }, [plant])
+    console.log("plant from in useEffect", plant);
+  }, [plant]);
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
@@ -165,10 +161,8 @@ console.log("plant from in useEffect", plant)
     e.preventDefault();
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
-
-
   };
-  console.log("activeCard", activeCard)
+  console.log("activeCard", activeCard);
 
   return (
     <Container>
