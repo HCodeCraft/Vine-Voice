@@ -54,15 +54,17 @@ const NewPlant = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
-    setActiveCard(index);
+  setActiveCard(index);
+
   
     if (apiForm === false) {
       setPlant((prevPlant) => ({
         ...prevPlant,
         id: selectedPlant.id,
       }));
-      // Rest of your code
+     setEntryForm(true)
     } else {
+      setEntryForm(true)
       try {
         setPlant((prevPlant) => ({
           ...prevPlant,
@@ -72,7 +74,6 @@ const NewPlant = () => {
   
         const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
         const externalResponse = await axios.get(url);
-        console.log("Detailed plant data (exres.data):", externalResponse.data);
         const apiPlant = externalResponse.data;
         
         setPlant((prevPlant) => ({
@@ -89,8 +90,8 @@ const NewPlant = () => {
           edible: apiPlant.edible_leaf,
           medicinal: apiPlant.medicinal,
         }));
-  
-        // Rest of your code
+
+
       } catch (error) {
         console.error("API Error:", error);
       }
@@ -98,9 +99,6 @@ const NewPlant = () => {
   };
   
 
-  useEffect(() => {
-    console.log("plant from in useEffect", plant);
-  }, [plant]);
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
@@ -162,7 +160,6 @@ const NewPlant = () => {
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
   };
-  console.log("activeCard", activeCard);
 
   return (
     <Container>
@@ -205,9 +202,10 @@ const NewPlant = () => {
                   sciName={db_plant.scientific_name}
                   image_url={db_plant.image_url}
                   handleSelectedPlant={handleSelectedPlant}
+                  activeCard={activeCard}
                   selectedPlant={selectedPlant}
                   index={index}
-                  color={index === activeCard ? "primary" : "default"}
+              
                 />
               ))}
             </>
@@ -222,7 +220,7 @@ const NewPlant = () => {
                 sciName={p_plant.scientific_name[0]}
                 handleSelectedPlant={handleSelectedPlant}
                 selectedPlant={selectedPlant}
-                color={index === activeCard ? "primary" : "default"}
+                activeCard={activeCard}
                 index={index}
                 image_url={
                   p_plant.default_image
