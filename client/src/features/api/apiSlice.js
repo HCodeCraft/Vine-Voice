@@ -11,4 +11,14 @@ export const apiSlice = createApi({
 
 export const { useGetPlantsQuery } = apiSlice;
 
+export const entriesApiSlice = createApi({
+  reducerPath: 'entriesApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  tagTypes: ['Entry'],
+  endpoints: (builder) => ({
+    // Define your entry-related endpoints for the "entriesApiSlice"
+  }),
+});
+
+export const { useGetEntriesQuery } = entriesApiSlice;
 

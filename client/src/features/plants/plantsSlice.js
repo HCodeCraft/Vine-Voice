@@ -7,7 +7,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     getPlants: builder.query({
       query: () => "/plants",
       transformResponse: (responseData) => {
-        console.log("responseData", responseData)
         return responseData; // Return the data as-is
       },
       providesTags: ["Plant"], // Use the correct type "Plant"
@@ -16,7 +15,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
       query: (plantId) => `/plants/${plantId}`,
       providesTags: (result, error, arg) => [{ type: 'Plant', id: arg }],
       transformResponse: (responseData) => {
-        console.log('responsedata from id', responseData)
         return responseData; // Return the data as-is
       },
      // Use the correct type "Plant"
