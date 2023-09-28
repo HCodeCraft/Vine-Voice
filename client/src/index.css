@@ -85,3 +85,21 @@ display: block
 
 /* font-family: 'Cabin', sans-serif;
 font-family: 'Open Sans', sans-serif; */
+
+input[type='radio'] {
+  display: none;
+}
+
+.star {
+  cursor: pointer;
+  transition: color 200ms;
+}
+
+.health_box{
+  display: flex;
+  justify-content: space-between;
+}
+
+.selected_plant {
+  border: 5px green;
+}

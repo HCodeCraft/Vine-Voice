@@ -3,26 +3,34 @@ import { useNavigate } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import CommonButton from "../../common/CommonButton";
-import { Container, Typography, Button, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
-
-
+import HealthRating from "../../HealthRating";
 
 const NewPlant = () => {
   const navigate = useNavigate();
   const [searchName, setSearchName] = useState("");
   const [resultForm, setResultForm] = useState(false);
   const [apiForm, setApiForm] = useState(false);
-  const [entryForm, setEntryForm] = useState(true);
+  const [entryForm, setEntryForm] = useState(false);
   const [myApiData, setMyApiData] = useState([]);
   const [speciesList, setSpeciesList] = useState([]);
+  const [selectedPlant, setSelectedPlant] = useState("");
+  const [activeCard, setActiveCard] = useState(null);
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
     notes: "",
     image: "",
     plant_id: null,
-    health: 0,
+    health: null,
     problems: [],
     open_to_advice: false,
   });
@@ -43,8 +51,76 @@ const NewPlant = () => {
     medicinal: false,
   });
 
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
+  const handleSelectedPlant = async (selectedPlant, index) => {
+
+    setActiveCard(index)
+
+
+    if (apiForm === false) {
+      setPlant({ ...plant, id: selectedPlant.id });
+      // want to put a border around the selected plant
+      setEntryForm(true);
+    } else {
+      try {
+
+       
+        await setPlant({
+          ...plant, 
+          image_url: selectedPlant.default_image["thumbnail"],
+          med_image_url: selectedPlant.default_image["medium_url"]
+        })
+
+        console.log("selectedPlant.default_image['thumbnail']", selectedPlant.default_image["thumbnail"] )
+
+        const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
+        const externalResponse = await axios.get(url);
+        console.log("Detailed plant data (exres.data):", externalResponse.data);
+        const apiPlant = externalResponse.data;
+        console.log("apiPlant.scientific_name[0]", apiPlant.scientific_name[0])
+        await setPlant({ ...plant,
+          common_name: apiPlant.common_name,
+          scientific_name: apiPlant.scientific_name[0],
+          description: apiPlant.description,
+          water_rec: apiPlant.watering,
+          sunlight: apiPlant.sunlight[0],
+          indoor: apiPlant.indoor,
+          cycle: apiPlant.cycle,
+          poisonous_to_humans: apiPlant.poisonous_to_humans,
+          poisonous_to_animals: apiPlant.poisonous_to_pets,
+          edible: apiPlant.edible_leaf,
+          medicinal: apiPlant.medicinal,
+        });
+
+        // Eventually I want only the elements of speciesList that are not in myApiData
+        console.log("plant", plant);
+        // I want to have the entry form pop up after the user clicks "This is my plant~"
+      } catch (error) {
+        console.error("API Error:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+console.log("plant from in useEffect", plant)
+  }, [plant])
+
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
+  };
+
+  const handleEntryChange = (e) => {
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    setEntry({
+      ...entry,
+      [e.target.name]: value,
+    });
+  };
+
+  const changeRating = (num) => {
+    setEntry({ ...entry, health: num });
   };
 
   const onSearchClick = async (e) => {
@@ -69,8 +145,6 @@ const NewPlant = () => {
 
   const speciesListRequest = async () => {
     setResultForm(false);
-    console.log("speciesListRequest was triggered");
-    const API_KEY = process.env.REACT_APP_API_KEY;
     setApiForm(true);
 
     try {
@@ -88,10 +162,13 @@ const NewPlant = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
-  }
+
+
+  };
+  console.log("activeCard", activeCard)
 
   return (
     <Container>
@@ -125,13 +202,18 @@ const NewPlant = () => {
                   None of these are my plant
                 </CommonButton>
               </div>
-              {myApiData.map((plant) => (
+              {myApiData.map((db_plant, index) => (
                 <SmallPlantCard
-                  id={plant.id}
-                  key={plant.id}
-                  commonName={plant.common_name}
-                  sciName={plant.scientific_name}
-                  image_url={plant.image_url}
+                  id={db_plant.id}
+                  key={db_plant.id}
+                  plant={db_plant}
+                  commonName={db_plant.common_name}
+                  sciName={db_plant.scientific_name}
+                  image_url={db_plant.image_url}
+                  handleSelectedPlant={handleSelectedPlant}
+                  selectedPlant={selectedPlant}
+                  index={index}
+                  color={index === activeCard ? "primary" : "default"}
                 />
               ))}
             </>
@@ -139,22 +221,26 @@ const NewPlant = () => {
           <br />
           {apiForm &&
             speciesList.length > 0 &&
-            speciesList.map((plant) => (
+            speciesList.map((p_plant, index) => (
               <SmallPlantCard
-                plant={plant}
-                commonName={plant.common_name}
-                sciName={plant.scientific_name[0]}
+                plant={p_plant}
+                commonName={p_plant.common_name}
+                sciName={p_plant.scientific_name[0]}
+                handleSelectedPlant={handleSelectedPlant}
+                selectedPlant={selectedPlant}
+                color={index === activeCard ? "primary" : "default"}
+                index={index}
                 image_url={
-                  plant.default_image
-                    ? plant.default_image["thumbnail"] ===
+                  p_plant.default_image
+                    ? p_plant.default_image["thumbnail"] ===
                         "https://perenual.com/storage/image/upgrade_access.jpg" ||
-                      plant.default_image["small_url"] ===
+                      p_plant.default_image["small_url"] ===
                         "https://perenual.com/storage/image/upgrade_access.jpg"
                       ? "https://louisville.edu/history/images/noimage.jpg/image"
-                      : plant.default_image["thumbnail"]
-                      ? plant.default_image["thumbnail"]
-                      : plant.default_image["small_url"]
-                      ? plant.default_image["small_url"]
+                      : p_plant.default_image["thumbnail"]
+                      ? p_plant.default_image["thumbnail"]
+                      : p_plant.default_image["small_url"]
+                      ? p_plant.default_image["small_url"]
                       : "https://louisville.edu/history/images/noimage.jpg/image"
                     : null
                 }
@@ -162,7 +248,7 @@ const NewPlant = () => {
             ))}
         </div>
       </section>
-
+      <br />
       <div className="entry_box">
         {entryForm === true ? (
           <>
@@ -171,49 +257,72 @@ const NewPlant = () => {
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 label="Nickname"
+                name="nickname"
                 variant="outlined"
                 color="secondary"
                 className="classes-field"
+                onChange={handleEntryChange}
               />
               <br />
               <TextField
                 label="Location"
+                name="location"
                 variant="outlined"
                 color="secondary"
                 className="classes-field"
+                onChange={handleEntryChange}
               />
               <br />
               <TextField
                 label="Notes"
+                name="notes"
                 variant="outlined"
                 color="secondary"
                 className="classes-field"
                 multiline
                 rows={4}
+                onChange={handleEntryChange}
               />
               <br />
               <Button variant="contained" component="label" color="primary">
                 {" "}
-                 Upload a picture
+                Upload a picture
                 <input type="file" hidden />
+                {/* need to add an onchange to this */}
               </Button>
               <br />
-              <p>Health selector</p>
-              <br/>
+              <div className="health_box">
+                <Typography variant="h6">Health Rating</Typography>
+                <HealthRating
+                  rating={entry.health}
+                  changeRating={changeRating}
+                />
+              </div>
+              <br />
               <TextField
                 label="Problems (seperate with a ',')"
+                name="problems"
                 variant="outlined"
                 color="secondary"
                 className="classes-field"
+                onChange={handleEntryChange}
               />
               <br />
               <FormGroup>
-              <FormControlLabel required control={<Checkbox />} label="Open to advice" />
+                <FormControlLabel
+                  required
+                  control={<Checkbox />}
+                  label="Open to advice"
+                  name="open_to_advice"
+                  onChange={handleEntryChange}
+                />
               </FormGroup>
               <CommonButton>Submit</CommonButton>
             </form>
           </>
         ) : null}
+        <br />
+        <br />
       </div>
     </Container>
   );
