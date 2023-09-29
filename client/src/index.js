@@ -13,6 +13,7 @@ const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 
 store.dispatch(extendedApiSlice.endpoints.getPlants.initiate())
+
 // store.dispatch(fetchUsers()) <= doesn't exist yet
 
 root.render(

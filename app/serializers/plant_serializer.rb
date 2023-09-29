@@ -1,6 +1,7 @@
 class PlantSerializer < ActiveModel::Serializer
   attributes :id, :common_name, :scientific_name, :image_url, :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous_to_humans, :poisonous_to_pets, :edible, :medicinal, :short_description, :create_date, :sunlight_emojis, :water_emojis, :in_out_emojis,  :cycle_emojis, :human_poison_emoji, :pet_poison_emoji, :edible_emoji, :medicinal_emoji
   has_many :entries
+ has_many :users
 
   def create_date
     created_at = object.created_at
@@ -8,33 +9,33 @@ class PlantSerializer < ActiveModel::Serializer
   end
 
   def short_description
-    object.description.length < 200 ? object.description : "#{object.description[0..200]}..."
+    object.description.nil? ? "" : object.description.length < 200 ? object.description : "#{object.description[0..200]}..."
   end
-
+  
   def sunlight_emojis
-
     emojis = []
-
-    sunlight = object.sunlight[0]
-
-    if sunlight.include?("full sun")
+  
+    sunlight = object.sunlight[0] if object.sunlight
+  
+    if sunlight&.include?("full sun")
       emojis << "☀️ Full Sun"
     end
-
-    if sunlight.include?("part shade")
+  
+    if sunlight&.include?("part shade")
       emojis << "🌤️ Part Shade"
     end
-
-    if sunlight.include?("part sun/part shade")
+  
+    if sunlight&.include?("part sun/part shade")
       emojis << "🌤️/🌥️ Part Sun/Part Shade"
     end
-
+  
     if sunlight == "Shade"
       emojis << "🌥️ Shade"
     end
-
+  
     emojis.join(", ")
   end
+  
 
   
   def water_emojis
@@ -51,10 +52,21 @@ class PlantSerializer < ActiveModel::Serializer
   def in_out_emojis
     object.indoor ? "🏠 Indoor" : "🌳 Outdoor"
   end
-
+  
   def cycle_emojis
-    object.cycle.include?("Perennial") ? "🔁 Perennial" : "🔂 Annual"
+    if object.cycle
+      if object.cycle.include?("Perennial")
+        "🔁 Perennial"
+      elsif object.cycle.include?("Annual")
+        "🔂 Annual"
+      else
+        "Unknown cycle"
+      end
+    else
+      "Cycle data not available"
+    end
   end
+  
 
   def human_poison_emoji
     object.poisonous_to_humans ? "☠️ Poisonous to Humans" : "✔️ Not Poisonous to Humans"

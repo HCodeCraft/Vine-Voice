@@ -103,3 +103,14 @@ input[type='radio'] {
 .selected_plant {
   border: 5px green;
 }
+
+.button_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.entry_pic{
+  width: 400px;
+  height: 400px;
+}

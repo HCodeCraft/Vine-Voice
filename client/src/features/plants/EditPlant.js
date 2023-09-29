@@ -7,16 +7,19 @@ const EditPlant = () => {
 
     const navigate = useNavigate()
 
-const [ updatePlant, { isLoading }] = useUpdatePlantMutation()
-const [deletePlant] = useDeletePlantMutation()
+// const [ updatePlant, { isLoading }] = useUpdatePlantMutation()
+// const [deletePlant] = useDeletePlantMutation()
 
-const { plant, isLoading: isLoadingPosts, isSuccess } = useGetPlantsQuery('getPlants', {
+const { plant, isLoading: isLoadingPlants, isSuccess } = useGetPlantsQuery('getPlants', {
     selectFromResult: ({ data, isLoading, isSuccess }) => ({
-        plant: data?.entities[plantId],
+        plant: data,
         isLoading,
         isSuccess
     }),
+
 })
+
+console.log("plant.data", plant.data)
 
 const [commonName, setCommonName] = useState(plant?.common_name)
 const [sciName, setSciName] = useState(plant?.scientific_name)
@@ -26,36 +29,37 @@ const onCommonNameChanged= e => setCommonName(e.target.value)
 const onSciNameChanged = e => setSciName(e.target.value)
 const onImageUrlChanged= e => setImageUrl(e.target.value)
 
-const canSave = [commonName, sciName, imageUrl].every(Boolean) && !isLoading;
+// const canSave = [commonName, sciName, imageUrl].every(Boolean) && !isLoading;
 
 
-const onSavePlantClicked = async () => {
-  if (canSave) {
-      try {
-          await updatePlant({ commonName, sciName, imageUrl }).unwrap()
+// const onSavePlantClicked = async () => {
+//     if (canSave) {
+//       try {
+//         await updatePlant({ id: plantId, commonName, sciName, imageUrl }).unwrap();
+  
+//         setCommonName('');
+//         setSciName('');
+//         setImageUrl('');
+//         navigate(`/plant/${plantId}`);
+//       } catch (err) {
+//         console.error('Failed to save the plant', err);
+//       }
+//     }
+//   };
+  
 
-          setCommonName('')
-          setSciName('')
-          setImageUrl('')
-          navigate(`/plant/${plantId}`)
-      } catch (err) {
-          console.error('Failed to save the plant', err)
-      }
-  }
-}
+// const onDeletePlantClicked = async () => {
+//   try {
+//       await deletePlant({ id: plant?.id }).unwrap()
 
-const onDeletePlantClicked = async () => {
-  try {
-      await deletePlant({ id: plant?.id }).unwrap()
-
-      setCommonName('')
-      setSciName('')
-      setImageUrl('')
-      navigate('/')
-  } catch (err) {
-      console.error('Failed to delete the post', err)
-  }
-}
+//       setCommonName('')
+//       setSciName('')
+//       setImageUrl('')
+//       navigate('/')
+//   } catch (err) {
+//       console.error('Failed to delete the post', err)
+//   }
+// }
 
 
 
@@ -86,13 +90,14 @@ const onDeletePlantClicked = async () => {
             value={imageUrl}
             onChange={onImageUrlChanged}
         />
-        <button
+        {/* <button
             type="button"
             onClick={onSavePlantClicked}
             disabled={!canSave}
         >Save Post</button>
     </form>
-    <button onClick={onDeletePlantClicked}>Delete Plant</button>
+    <button onClick={onDeletePlantClicked}>Delete Plant</button> */}
+    </form>
 </section>
   )
 }

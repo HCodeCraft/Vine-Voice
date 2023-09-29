@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { useGetPlantsQuery } from "./plantsSlice";
 import { Box, Typography, Grid } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
+import EntryTable from "../entries/EntryTable";
+
 
 const Plant = () => {
   const params = useParams();
@@ -10,9 +12,10 @@ const Plant = () => {
 
   const { data, isLoading, isError } = useGetPlantsQuery();
 
+
   const plant = data?.[id - 1];
 
-  console.log("plant", plant);
+  console.log("plant", plant)
 
   if (isError) {
     return (
@@ -45,9 +48,7 @@ const Plant = () => {
     return (
       <React.Fragment>
         <Grid item xs={4}>
-          <p>
-            {plant.sunlight_emojis}
-          </p>
+          <p>{plant.sunlight_emojis}</p>
         </Grid>
         <Grid item xs={4}>
           <p>{plant.water_emojis}</p>
@@ -76,8 +77,8 @@ const Plant = () => {
 
   return (
     <>
-    <br/>
-    <br/>
+      <br />
+      <br />
       <Box sx={{ width: "100%", maxWidth: "100%" }}>
         <Typography variant="h4" align="center">
           {plant.common_name}
@@ -97,13 +98,26 @@ const Plant = () => {
           <p className="desc">{plant.description}</p>
         </div>
         <Box sx={{ flexGrow: 1 }}>
-          <div>Added on {plant.create_date}</div>
+          <br />
+          <br/>
+          <div className='button_box'>
+            <p>Added on {plant.create_date}</p>
+            <Link to={`/plants/${id}/edit`}><CommonButton>Edit Plant</CommonButton></Link><CommonButton>Delete Plant</CommonButton>
+          </div>
+          <br/>
+          <br/>
           <Grid container spacing={1}>
             <Grid container item spacing={3}>
               <FormRow />
             </Grid>
           </Grid>
         </Box>
+        <br/>
+        <Typography variant='h5' align='center'>Latest {plant.entries.length > 1 ? 'Entries' : 'Entry'}</Typography>
+        <br/>
+        <EntryTable entries={plant.entries}/>
+        <br/>
+        <br/>
       </div>
     </>
   );

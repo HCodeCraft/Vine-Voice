@@ -1,5 +1,8 @@
 class EntrySerializer < ActiveModel::Serializer
-  attributes :id, :nickname, :location, :notes, :image, :plant_id, :health, :problems, :open_to_advice, :username
-  belongs_to :user
-  belongs_to :plant
+  attributes :id, :nickname, :location, :notes, :image, :plant_id, :health, :problems, :open_to_advice, :username, :create_date
+
+  def create_date
+    created_at = object.created_at
+    formatted_time = created_at.strftime("%B %d, %Y, %I:%M %p")
+  end
 end

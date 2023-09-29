@@ -29,7 +29,7 @@ function App() {
           <Route path="/plants" element={<AllPlants/>} />
           <Route path="/users/:id" element={<UserProfile/>} />
           <Route path="/plants/:id/edit" element={<EditPlant/>} />
-          <Route path="/plants/:plant_id/entries/:id" element={<EditEntry/>} />
+          <Route path="/plants/:plant_id/entries/:id/edit" element={<EditEntry/>} />
           <Route path="/plants/:id" element={<Plant />} />
           <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
           <Route path="/plants/:plant_id/entries/new" element={<NewEntry/>} />
