@@ -15,7 +15,7 @@ const Plant = () => {
 
   const plant = data?.[id - 1];
 
-  console.log("plant", plant)
+
 
   if (isError) {
     return (
@@ -87,9 +87,11 @@ const Plant = () => {
           {plant.scientific_name}
         </Typography>
       </Box>
-      <br></br>
-      <br></br>
+    <br/>
+    <br/>
       <div className="pos_top">
+        <br/>
+        <br/>
         <img
           className="img_deg"
           src="https://www.glasshouseworks.com/image/cache/data/images13/Tradescantia_albiflora-max-500.jpg"
@@ -112,6 +114,8 @@ const Plant = () => {
             </Grid>
           </Grid>
         </Box>
+        <br/>
+        <br/>
         <br/>
         <Typography variant='h5' align='center'>Latest {plant.entries.length > 1 ? 'Entries' : 'Entry'}</Typography>
         <br/>

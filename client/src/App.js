@@ -14,11 +14,11 @@ import NewPlant from './features/plants/NewPlant';
 import EditProfile from './features/users/EditProfile';
 import Entry from './features/entries/Entry'
 import NavBar from './NavBar'
-import { Grid, Container }from "@mui/material"
+import { Grid, Container}from "@mui/material"
 
 function App() {
   return (
-    <>
+ <>
         <NavBar />
         <Container maxWidth="1g" style={{marginTop:"50px"}}>
           <Grid container spacing={5} style={{marginTop: "20px"}}>

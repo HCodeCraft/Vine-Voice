@@ -16,7 +16,7 @@ const NavBar = () => {
   return (
     <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
       <Toolbar>
-        <Typography>
+        <Typography variant='h4'>
           Vine Voice
         </Typography>
         <Tabs
