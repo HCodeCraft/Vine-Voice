@@ -1,7 +1,7 @@
 import './App.css';
 import { Route, Routes } from "react-router-dom";
 import Welcome from './Welcome';
-import Login from './features/users/Login';
+import Login from './features/users/LoginPage';
 import CreateAccount from './features/users/CreateAccount';
 import AllPlants from './features/plants/AllPlants';
 import UserProfile from './features/users/UserProfile';

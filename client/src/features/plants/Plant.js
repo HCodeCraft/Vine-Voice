@@ -104,7 +104,7 @@ const Plant = () => {
           <br/>
           <div className='button_box'>
             <p>Added on {plant.create_date}</p>
-            <Link to={`/plants/${id}/edit`}><CommonButton>Edit Plant</CommonButton></Link><CommonButton>Delete Plant</CommonButton>
+          
           </div>
           <br/>
           <br/>

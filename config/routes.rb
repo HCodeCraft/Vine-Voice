@@ -4,8 +4,13 @@ Rails.application.routes.draw do
   resources :plants, only: [:index, :show, :create, :destroy, :update]
   resources :users, only: [:create, :show, :index]
   resources :entries, only: [:index]
-  post "/login", to: "sessions#create"
-  delete "/logout", to: "sessions#destroy"
+
+
+  post '/auth/login', to: 'authentication#create'
+  post '/auth/refresh', to: 'authentication#refresh'
+  delete '/auth/logout', to: 'authentication#destroy'
+  # post "/login", to: "sessions#create"
+  # delete "/logout", to: "sessions#destroy"
 
   get '/search', to: "plants#search"
 

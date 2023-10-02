@@ -3,6 +3,9 @@ import { useUpdatePlantMutation, useDeletePlantMutation, useGetPlantsQuery } fro
 import { useNavigate, useParams } from 'react-router-dom'
 
 const EditPlant = () => {
+
+    // IDK if I even want this, if I had this, then it would ruin the credibility of my website
+    // i could maybe have a 'change plant' through edit Entry
     const { plantId } = useParams()
 
     const navigate = useNavigate()
