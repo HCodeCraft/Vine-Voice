@@ -21,6 +21,8 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'ransack'
 
 gem 'jwt'
+gem 'devise'
+gem 'devise-api'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

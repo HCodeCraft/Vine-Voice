@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   get '/search', to: "plants#search"
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
