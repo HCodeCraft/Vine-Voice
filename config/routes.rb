@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  devise_for :users
+  # devise_for :users, :controllers => {:sessions => "user_sessions", :registrations => "user_registrations"}
+  devise_for :users,
+  controllers: {
+      sessions: 'user_sessions',
+      registrations: 'user_registrations'
+  }
+get '/member-data', to: 'members#show'
   get '/search', to: "plants#search"
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
@@ -7,9 +13,9 @@ Rails.application.routes.draw do
   resources :entries, only: [:index]
 
 
-  post '/auth/login', to: 'authentication#create'
-  post '/auth/refresh', to: 'authentication#refresh'
-  delete '/auth/logout', to: 'authentication#destroy'
+  # post '/auth/login', to: 'authentication#create'
+  # post '/auth/refresh', to: 'authentication#refresh'
+  # delete '/auth/logout', to: 'authentication#destroy'
   # post "/login", to: "sessions#create"
   # delete "/logout", to: "sessions#destroy"
 
