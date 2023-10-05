@@ -9,7 +9,7 @@ import {
   Link,
 } from "@mui/material";
 
-const LoginForm = ({handleChange, handleSubmit, username, password}) => {
+const LoginForm = () => {
   const paperStyle = {
     padding: 20,
     height: "70vh",
