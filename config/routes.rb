@@ -7,8 +7,10 @@ Rails.application.routes.draw do
   resources :entries, only: [:index]
 
 
-  # post "/login", to: "sessions#create"
-  # delete "/logout", to: "sessions#destroy"
+  post "/login", to: "sessions#create"
+  delete "/logout", to: "sessions#destroy"
+  post "/signup", to: "users#create"
+  get "/me", to: "users#show"
 
   get '/search', to: "plants#search"
 

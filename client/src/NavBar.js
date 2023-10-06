@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
+import { logoutUser } from "./features/users/userActions";
+import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
   const [selectedTab, setSelectedTab] = useState(0); // Initialize with the default tab index
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Update the selected tab based on the current URL
@@ -28,6 +32,11 @@ const NavBar = () => {
   const handleTabClick = (event, value) => {
     setSelectedTab(value);
   };
+
+  const handleLogout = () => {
+dispatch(logoutUser())
+navigate('/')
+  }
 
   return (
     <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
@@ -66,7 +75,7 @@ const NavBar = () => {
             value={3}
           />
         </Tabs>
-        <Button sx={{ textTransform: "none" }} variant="contained">
+        <Button sx={{ textTransform: "none" }} variant="contained" onClick={handleLogout}>
           Logout
         </Button>
       </Toolbar>

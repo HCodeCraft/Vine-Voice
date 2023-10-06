@@ -12,12 +12,13 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "../auth/authActions";
+import { userLogin } from "./userActions";
 import { DevTool } from "@hookform/devtools";
 
 const Login = () => {
+
   const navigate = useNavigate();
-  // const { error } = useSelector((state) => state.user);
+ 
   const dispatch = useDispatch();
   const {
     register,
@@ -26,23 +27,23 @@ const Login = () => {
     formState: { errors }
   } = useForm();
 
-  const loading = useSelector((state) => state.auth.loading);
-  const authError = useSelector((state) => state.auth.error);
+
 
 
   const submitForm = (data) => {
     dispatch(userLogin(data));
+    navigate('/users/plants')
   };
 
-  const userInfo = useSelector((state) => state.auth.userInfo)
-  console.log("userInfo", userInfo)
-  // IDK if I want this url still > What about user/:id ?
-  // WHERE DOES USERINFO COME FROM?
-  useEffect(() => {
-    if (userInfo) {
-      navigate('/users')
-    }
-  }, [navigate, userInfo])
+  // const userInfo = useSelector((state) => state.auth.userInfo)
+  // console.log("userInfo", userInfo)
+  // // IDK if I want this url still > What about user/:id ?
+  // // WHERE DOES USERINFO COME FROM?
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     navigate('/users')
+  //   }
+  // }, [navigate, userInfo])
 
 
 

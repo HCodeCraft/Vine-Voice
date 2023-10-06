@@ -10,6 +10,6 @@ export const apiSlice = createApi({
 });
 
 
-export const { useGetPlantsQuery, useGetEntriesQuery } = apiSlice;
+export const { useGetPlantsQuery, useGetEntriesQuery, useGetUsersQuery } = apiSlice;
 
 
