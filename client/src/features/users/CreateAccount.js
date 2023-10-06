@@ -9,12 +9,20 @@ import {
   FormControlLabel,
   Checkbox,
   Dialog,
+  DialogContent,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { DevTool } from '@hookform/devtools'
+import { useForm, Controller } from "react-hook-form";
+import { DevTool } from "@hookform/devtools";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../auth/authActions";
+import Spinner from "../../Spinner";
 
 const CreateAccount = () => {
-
+  const { loading, userInfo, error, success } = useSelector(
+    (state) => state.auth
+  );
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -22,13 +30,27 @@ const CreateAccount = () => {
     control, // Get the control object from useForm
   } = useForm();
 
+  // NEED TO HAVE AVATAR ON HERE TOO
+
   const onSubmit = (data) => {
-    console.log(data);
+    if (data.password !== data.password_confirmation) {
+      alert("Passwords don't match");
+    }
+    data.email = data.email.toLowerCase();
+    dispatch(registerUser(data));
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   const paperStyle = {
     padding: 20,
-    height: "70vh",
+    height: "85vh",
     width: 400,
     margin: "20px auto",
   };
@@ -36,93 +58,155 @@ const CreateAccount = () => {
 
   return (
     <>
-    <Grid>
-      <Paper elevation={10} style={paperStyle}>
-        <Grid align="center">
-          <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
-          <h2>Sign Up</h2>
-        </Grid>
-        <p aria-live="assertive"></p>
-        <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          label="Username"
-          placeholder="Enter Username"
-          fullWidth
-          required
-          type="text"
-          id="username"
-          {...register("username")}
-        />
-        <TextField
-          label="E-mail"
-          placeholder="Enter E-mail"
-          fullWidth
-          required
-          type="text"
-          id="email"
-          {...register("email")}
-        />
-        <br />
-        <TextField
-          label="First Name (optional)"
-          placeholder="Enter First Name"
-          fullWidth
-          type="text"
-          id="first_name"
-          {...register("first_name")}
-        />
-        <TextField
-          label="Password"
-          placeholder="Enter Password"
-          type="password"
-          fullWidth
-          required
-          id="password"
-          {...register("password")}
-        />
-        <TextField
-          label="Password confirmation"
-          placeholder="Enter Password Confirmation"
-          type="password"
-          fullWidth
-          required
-          id="password_confirmation"
-          {...register("password_confirmation")}
-        />
-   
-        {/* NOT SURE HOW THIS WOULD WORK WITH REACT HOOK FORM <FormControlLabel
-          control={<Checkbox checked={devEmails} onChange={handleChange} />}
-          label="Recieve Developer Emails"
-        /> */}
-        <div>
-          {/* <Button variant="contained" onClick={handleOpen}>
-            Open Modal
-          </Button>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            title="Scrollable Modal Example"
-          >
-            {<p>Here is the terms of service</p>}
-            <div style={{ height: "300px", overflowY: "auto" }}>
-              {/* Scrollable content */}
-            {/* </div>  */}
-          {/* </Dialog> */}
-        </div>
-        <Button
-          type="submit"
-          color="primary"
-          fullWidth
-          variant="contained"
-          style={btnstyle}
-          onSubmit={handleSubmit}
-        >
-          Sign Up
-        </Button>
-</form>
-      </Paper>
-    </Grid>
-<DevTool control={control} />
+      <Grid>
+        <Paper elevation={10} style={paperStyle}>
+          <Grid align="center">
+            <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
+            <h2>Sign Up</h2>
+          </Grid>
+          <p aria-live="assertive"></p>
+          <br/>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <TextField
+              label="Username"
+              placeholder="Enter Username"
+              fullWidth
+              type="text"
+              id="username"
+              {...register("username", {
+                required: "Username is required",
+              })}
+            />
+            <p className="error_msg">{errors.username?.message}</p>
+            <TextField
+              label="E-mail"
+              placeholder="Enter E-mail"
+              fullWidth
+              type="text"
+              id="email"
+              {...register("email", {
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email format",
+                },
+              })}
+            />
+            <p className="error_msg">{errors.email?.message}</p>
+
+            <TextField
+              label="First Name (optional)"
+              placeholder="Enter First Name"
+              fullWidth
+              type="text"
+              id="first_name"
+              {...register("first_name")}
+            />
+            <br />
+            <br />
+
+            <TextField
+              label="Password"
+              placeholder="Enter Password"
+              type="password"
+              fullWidth
+              id="password"
+              {...register("password", {
+                required: { value: true, message: "Password is required" },
+              })}
+            />
+            <p className="error_msg">{errors.password?.message}</p>
+
+            <TextField
+              label="Password confirmation"
+              placeholder="Enter Password Again"
+              type="password"
+              fullWidth
+              id="password_confirmation"
+              {...register("password_confirmation", {
+                required: {
+                  value: true,
+                  message: "Password confirmation is required",
+                },
+              })}
+            />
+            <p className="error_msg">{errors.password_confirmation?.message}</p>
+            <br />
+            <Controller
+              name="devEmails"
+              control={control}
+              defaultValue={false} // Initial value of the checkbox
+              render={({ field }) => (
+                <label>
+                  <input type="checkbox" {...field} />
+                  Recieve Developer Emails
+                </label>
+              )}
+            />
+            <br/>
+            <br/>
+            <div>
+                <Button variant="contained" onClick={handleOpen}>
+                  Terms of Service
+                </Button>
+                <Dialog open={open} onClose={handleClose} maxWidth="md">
+                  <DialogContent>
+                    <Typography variant="h4" align="center" gutterBottom>
+                      Terms of Service
+                    </Typography>
+                    <ul className='list'>
+                      <li>
+                        Be considerate, we're all trying to be good plant
+                        parents
+                      </li>
+                      <li>No posting sexual images or graphic violence</li>
+                      <li>No hate speech</li>
+                    </ul>
+                    <Typography variant="h6" color="error" align="center">
+                      Violation of these terms will result in the deletion of
+                      your account
+                    </Typography>
+                    <Typography variant="h5" align="center" gutterBottom>
+                      Please consult additional sources for edibility and
+                      medicinal use information
+                    </Typography>
+                  </DialogContent>
+                </Dialog>
+            </div>
+            <br/>
+            <Controller
+              name="agreeToTerms"
+              control={control}
+              defaultValue={false}
+              rules={{
+                required: {
+                  value: true,
+                  message: "You must agree to the terms and conditions",
+                },
+              }}
+              render={({ field }) => (
+                <label>
+                  <input type="checkbox" {...field} />I agree to the terms and
+                  conditions
+                </label>
+              )}
+            />
+            <p className="error_msg">{errors.agreeToTerms?.message}</p>
+            <br />
+            <Button
+              type="submit"
+              color="primary"
+              fullWidth
+              variant="contained"
+              style={btnstyle}
+              onSubmit={handleSubmit}
+              disabled={loading}
+            >
+              {loading ? <Spinner /> : "Sign Up"}
+            </Button>
+          </form>
+        </Paper>
+      </Grid>
+      <DevTool control={control} />
     </>
   );
 };
