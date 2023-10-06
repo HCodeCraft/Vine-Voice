@@ -38,6 +38,7 @@ const CreateAccount = () => {
     }
     data.email = data.email.toLowerCase();
     dispatch(registerUser(data));
+    console.log('data', data)
   };
 
   const handleOpen = () => {

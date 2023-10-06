@@ -52,6 +52,10 @@
 #   medicinal: 0
 # }])
 
+User.create!([{
+    
+}])
+
 # Entry.create!([{
 #     nickname: "GoldenPothos",
 #     location: "Office",

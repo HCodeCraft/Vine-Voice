@@ -34,13 +34,17 @@ const Login = () => {
     dispatch(userLogin(data));
   };
 
+  const userInfo = useSelector((state) => state.auth.userInfo)
+  console.log("userInfo", userInfo)
   // IDK if I want this url still > What about user/:id ?
   // WHERE DOES USERINFO COME FROM?
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     navigate('/member-data')
-  //   }
-  // }, [navigate, userInfo])
+  useEffect(() => {
+    if (userInfo) {
+      navigate('/users')
+    }
+  }, [navigate, userInfo])
+
+
 
   const paperStyle = {
     padding: 20,

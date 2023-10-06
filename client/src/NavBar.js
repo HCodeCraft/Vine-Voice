@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -8,46 +8,65 @@ import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
 
 const NavBar = () => {
-  const [selectedTab, setSelectedTab] = useState('')
+  const [selectedTab, setSelectedTab] = useState(0); // Initialize with the default tab index
+  const location = useLocation();
+
+  useEffect(() => {
+    // Update the selected tab based on the current URL
+    if (location.pathname === `/users/`) {
+      setSelectedTab(0);
+    } else if (location.pathname === "/users/plants") {
+      setSelectedTab(1);
+    } else if (location.pathname === "/plants/new") {
+      setSelectedTab(2);
+    } else if (location.pathname === "/plants") {
+      setSelectedTab(3);
+    }
+    // Add more conditions as needed for other routes
+  }, [location.pathname]);
 
   const handleTabClick = (event, value) => {
-    setSelectedTab(value)
-  }
+    setSelectedTab(value);
+  };
+
   return (
     <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
       <Toolbar>
-        <Typography variant='h4'>
-          Vine Voice
-        </Typography>
-        <Tabs
-         indicatorColor="primary" value={selectedTab}
-        >
+        <Typography variant="h4">Vine Voice</Typography>
+        <Tabs indicatorColor="primary" value={selectedTab}>
           <Tab
             sx={{ textTransform: "none" }}
             label="My Profile"
             component={Link}
-            to={"/users/${id}"} value={0}
+            to={`/users/`}
+            value={0}
           />
           <Tab
             sx={{ textTransform: "none" }}
             label="My Plants"
             component={Link}
-            to="/users/plants" onClick={handleTabClick} value={1} 
+            to="/users/plants"
+            onClick={handleTabClick}
+            value={1}
           />
           <Tab
             sx={{ textTransform: "none" }}
             label="Add A Plant"
             component={Link}
-            to="/plants/new" onClick={handleTabClick} value={2}
+            to="/plants/new"
+            onClick={handleTabClick}
+            value={2}
           />
           <Tab
             sx={{ textTransform: "none" }}
             label="Everyone's Plants"
             component={Link}
-            to="/plants" onClick={handleTabClick} value={3}
+            to="/plants"
+            onClick={handleTabClick}
+            value={3}
           />
         </Tabs>
-        <Button sx={{ textTransform: "none" }} variant="contained" >
+        <Button sx={{ textTransform: "none" }} variant="contained">
           Logout
         </Button>
       </Toolbar>
