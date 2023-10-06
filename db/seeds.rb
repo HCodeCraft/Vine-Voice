@@ -52,9 +52,9 @@
 #   medicinal: 0
 # }])
 
-User.create!([{
-    
-}])
+# User.create!([{
+#     username: "" , name: "" , privacy: false, email: "", recieve_dev_emails: true, status:"", admin:true, password: ""
+# }, {username: "", name: "", privacy: false, email: '', recieve_dev_emails: false, status: "", admin:false, password: ""}])
 
 # Entry.create!([{
 #     nickname: "GoldenPothos",

@@ -7,17 +7,17 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
     getPlants: builder.query({
       query: () => "/plants",
       transformResponse: (responseData) => {
-        return responseData; // Return the data as-is
+        return responseData; 
       },
-      providesTags: ["Plant"], // Use the correct type "Plant"
+      providesTags: ["Plant"], 
     }),
     getPlantQuery: builder.query({
       query: (plantId) => `/plants/${plantId}`,
       providesTags: (result, error, arg) => [{ type: 'Plant', id: arg }],
       transformResponse: (responseData) => {
-        return responseData; // Return the data as-is
+        return responseData; 
       },
-     // Use the correct type "Plant"
+
     }),
     addNewPlant: builder.mutation({
       query: (initialPlant) => ({
@@ -25,7 +25,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "POST",
         body: initialPlant,
       }),
-      invalidatesTags: ["Plant"], // Use the correct type "Plant"
+      invalidatesTags: ["Plant"], 
     }),
     updatePlant: builder.mutation({
       query: (initialPlant) => ({
@@ -33,7 +33,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "PUT",
         body: initialPlant,
       }),
-      invalidatesTags: ["Plant"], // Use the correct type "Plant"
+      invalidatesTags: ["Plant"], 
     }),
     deletePlant: builder.mutation({
       query: ({ id }) => ({
@@ -41,7 +41,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "DELETE",
         body: { id },
       }),
-      invalidatesTags: ["Plant"], // Use the correct type "Plant"
+      invalidatesTags: ["Plant"], 
     }),
   }),
 });
