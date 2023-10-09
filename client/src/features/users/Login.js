@@ -12,42 +12,31 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { userLogin } from "./userActions";
+import { loginUser } from "../auth/authSlice";
 import { DevTool } from "@hookform/devtools";
-import  { setCredentials }  from "./userSlice"
+import { setCredentials } from "./userSlice";
 
 const Login = () => {
-
   const navigate = useNavigate();
- 
+
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors }
+    formState: { errors },
   } = useForm();
 
-
-
-  const userInfo = useSelector((state) => state.user.userInfo)
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const submitForm = (data) => {
-    dispatch(userLogin(data));
+    dispatch(loginUser(data));
     const userCredentials = { data };
-dispatch(setCredentials(userCredentials));
-    navigate('/users/plants')
+    dispatch(setCredentials(userCredentials));
+    navigate("/users/plants");
   };
 
-
   // // IDK if I want this url still > What about user/:id ?
-  // // WHERE DOES USERINFO COME FROM?
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     navigate('/users')
-  //   }
-  // }, [navigate, userInfo])
-
 
 
   const paperStyle = {
@@ -66,7 +55,7 @@ dispatch(setCredentials(userCredentials));
             <Avatar sx={{ backgroundColor: "#FFD600" }}>🌺</Avatar>
             <h2>Sign In</h2>
           </Grid>
-          <br/>
+          <br />
           <p aria-live="assertive"></p>
           <form onSubmit={handleSubmit(submitForm)} noValidate>
             <TextField
@@ -79,7 +68,7 @@ dispatch(setCredentials(userCredentials));
                 required: { value: true, message: "Username is required" },
               })}
             />
-            <p className='error_msg'>{errors.username?.message}</p>
+            <p className="error_msg">{errors.username?.message}</p>
 
             <TextField
               label="Password"
@@ -91,7 +80,7 @@ dispatch(setCredentials(userCredentials));
                 required: { value: true, message: "Password is required" },
               })}
             />
-            <p className='error_msg'>{errors.password?.message}</p>
+            <p className="error_msg">{errors.password?.message}</p>
 
             <Button
               type="submit"
@@ -103,7 +92,7 @@ dispatch(setCredentials(userCredentials));
               Sign in
             </Button>
           </form>
-          <br/>
+          <br />
           <Typography>
             Do you have an account? <Link to={`/users/new`}>Sign Up</Link>
           </Typography>

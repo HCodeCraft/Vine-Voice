@@ -14,7 +14,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useDispatch, useSelector } from "react-redux";
-import { registerUser } from "./userActions";
+import { addUser } from './userSlice'
 import Spinner from "../../Spinner";
 
 const CreateAccount = () => {
@@ -37,7 +37,7 @@ const CreateAccount = () => {
       alert("Passwords don't match");
     }
     data.email = data.email.toLowerCase();
-    dispatch(registerUser(data));
+    dispatch(addUser(data));
     console.log('data', data)
   };
 
