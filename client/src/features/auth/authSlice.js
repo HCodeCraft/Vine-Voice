@@ -1,11 +1,13 @@
 // features/auth/authSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { registerUser, userLogin } from "./authActions";
+import config from "../../config";
 
-// initialize userToken from local storage
-const userToken = localStorage.getItem("userToken")
-  ? localStorage.getItem("userToken")
-  : null;
+const apiUrl = config.API_BASE_URL;
+
+// create an async thunk for login and logout,
+/// the login would take the username and password and send it to the login action
+
+
 
   
   const initialState = {
@@ -21,33 +23,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: {
-    // login user
-    [userLogin.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [userLogin.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.userInfo = payload;
-      state.userToken = payload.userToken;
-    },
-    [userLogin.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
-    // register user
-    [registerUser.pending]: (state) => {
-      state.loading = true;
-      state.error = null;
-    },
-    [registerUser.fulfilled]: (state, { payload }) => {
-      state.loading = false;
-      state.success = true; // registration successful
-    },
-    [registerUser.rejected]: (state, { payload }) => {
-      state.loading = false;
-      state.error = payload;
-    },
+
   },
 });
 export default authSlice.reducer;

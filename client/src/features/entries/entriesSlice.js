@@ -3,7 +3,7 @@ import { apiSlice } from "../api/apiSlice";
 export const extendedEntriesApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getEntries: builder.query({
-      query: ({ plantId }) => `/plants/${plantId}/entries`,
+      query: ({ plantId }) => `/plants/${plantId}/entries/`,
       transformResponse: (responseData) => {
         console.log(responseData);
         return responseData;
@@ -16,9 +16,6 @@ export const extendedEntriesApiSlice = apiSlice.injectEndpoints({
         { type: 'Entry', id: entryId },
         { type: 'Plant', id: plantId }, // Optionally invalidate the plant cache
       ],
-      transformResponse: (responseData) => {
-        return responseData;
-      },
     }),
     addNewEntry: builder.mutation({
       query: ({ plantId, initialEntry }) => ({
@@ -54,3 +51,4 @@ export const {
   useUpdateEntryMutation,
   useDeleteEntryMutation,
 } = extendedEntriesApiSlice;
+

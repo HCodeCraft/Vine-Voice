@@ -10,6 +10,10 @@ class UsersController < ApplicationController
         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
       end
     end
+
+    def index
+      render json: User.all
+    end
   
     # need to make it so all users can see the user's show route
     def show

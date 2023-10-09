@@ -7,6 +7,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
 import { logoutUser } from "./features/users/userActions";
+import { resetCredentials } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
@@ -17,7 +18,7 @@ const NavBar = () => {
 
   useEffect(() => {
     // Update the selected tab based on the current URL
-    if (location.pathname === `/users/`) {
+    if (location.pathname === `/users/current`) {
       setSelectedTab(0);
     } else if (location.pathname === "/users/plants") {
       setSelectedTab(1);
@@ -34,12 +35,16 @@ const NavBar = () => {
   };
 
   const handleLogout = () => {
-dispatch(logoutUser())
-navigate('/')
-  }
+    dispatch(logoutUser());
+    dispatch(resetCredentials());
+    navigate("/");
+  };
 
   return (
-    <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
+    <AppBar
+      className="topbar"
+      sx={{ textTransform: "none", background: "#81C784" }}
+    >
       <Toolbar>
         <Typography variant="h4">Vine Voice</Typography>
         <Tabs indicatorColor="primary" value={selectedTab}>
@@ -47,7 +52,7 @@ navigate('/')
             sx={{ textTransform: "none" }}
             label="My Profile"
             component={Link}
-            to={`/users/`}
+            to={`/users/current`}
             value={0}
           />
           <Tab
@@ -75,7 +80,11 @@ navigate('/')
             value={3}
           />
         </Tabs>
-        <Button sx={{ textTransform: "none" }} variant="contained" onClick={handleLogout}>
+        <Button
+          sx={{ textTransform: "none" }}
+          variant="contained"
+          onClick={handleLogout}
+        >
           Logout
         </Button>
       </Toolbar>

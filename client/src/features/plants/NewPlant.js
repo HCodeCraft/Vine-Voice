@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
+import { useAddNewPlantMutation } from "./plantsSlice";
 
 const NewPlant = () => {
   const navigate = useNavigate();
@@ -24,6 +25,7 @@ const NewPlant = () => {
   const [speciesList, setSpeciesList] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState("");
   const [activeCard, setActiveCard] = useState(null);
+  const [addPlant] = useAddNewPlantMutation()
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
@@ -159,6 +161,8 @@ const NewPlant = () => {
     e.preventDefault();
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
+    addPlant(plant)
+    // still need to figure out how to do the combo adding with RTK Query -- should I have addEntry
   };
 
   return (

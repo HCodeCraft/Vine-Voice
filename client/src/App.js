@@ -34,6 +34,7 @@ function App() {
         
               <Route path="/home" element={<Home />} />
               <Route path="/plants" element={<AllPlants />} />
+              <Route path="/users/current" element={<UserProfile />} />
               <Route path="/users/:id" element={<UserProfile />} />
               <Route path="/plants/:id/edit" element={<EditPlant />} />
               <Route

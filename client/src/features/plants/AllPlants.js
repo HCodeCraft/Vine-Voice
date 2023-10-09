@@ -6,12 +6,13 @@ import { Typography, Grid, Box } from "@mui/material";
 
 const AllPlants = () => {
   const {
-    data: plants,
+    data = [],
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useGetPlantsQuery();
+ } = useGetPlantsQuery();
+ console.log("data", data)
 
   // Check if data is still loading
   if (isLoading) {
@@ -26,9 +27,8 @@ const AllPlants = () => {
   // Check if data has loaded successfully
   if (isSuccess) {
     // Ensure 'plants' is not undefined before rendering
-    if (plants) {
-      console.log("plants", plants)
-      const content = plants.map((plant) => (
+    if (data) {
+      const content = data.map((plant) => (
         <PlantCard
           key={plant.id}
           commonName={plant.common_name}
@@ -41,13 +41,12 @@ const AllPlants = () => {
       ));
       return (
         <>
-        <Box sx={{ width: '100%', maxWidth: '100%' }}>
+          <Box sx={{ width: "100%", maxWidth: "100%" }}>
             <Typography variant="h4" align="center">
               All Plants
             </Typography>
-            </Box>
-            {content}
-         
+          </Box>
+          {content}
         </>
       );
     }
