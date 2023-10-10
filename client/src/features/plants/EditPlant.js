@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useUpdatePlantMutation, useDeletePlantMutation, useGetPlantsQuery } from './plantsSlice'
+import { useUpdatePlantMutation, useDeletePlantMutation, useGetPlantsQuery } from './plantSlice'
 import { useNavigate, useParams } from 'react-router-dom'
 
 const EditPlant = () => {

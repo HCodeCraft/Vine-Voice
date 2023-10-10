@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetPlantsQuery } from "./plantsSlice";
+import { useGetPlantsQuery } from "./plantSlice";
 import { Box, Typography, Grid } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import EntryTable from "../entries/EntryTable";

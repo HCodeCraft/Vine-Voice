@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
-import { useAddNewPlantMutation } from "./plantsSlice";
+import { useAddNewPlantMutation } from "./plantSlice";
 
 const NewPlant = () => {
   const navigate = useNavigate();

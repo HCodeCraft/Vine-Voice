@@ -1,5 +1,5 @@
 import React from "react";
-import { useGetPlantsQuery } from "./plantsSlice";
+import { useGetPlantsQuery } from "./plantSlice";
 import CommonButton from "../../common/CommonButton";
 import PlantCard from "./PlantCard";
 import { Typography, Grid, Box } from "@mui/material";
