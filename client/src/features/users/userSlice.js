@@ -80,6 +80,31 @@ const userSlice = createSlice({
       state.value = state.value.filter((user) => user.id !== action.payload.id);
     },
   },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchAllUsers.pending, (state, action) => {
+      state.loadingAllUsers = true;
+    })
+    .addCase(fetchAllUsers.fulfilled, (state, action) => {
+      state.users = action.payload
+      state.loadingAllUsers = false
+    })
+    .addCase(fetchAllUsers.rejected, (state, action) => {
+      state.loadingAllUsers = false;
+      state.errorAllUsers = action.error.message;
+    })
+    .addCase(fetchUserById.pending, (state, action) => {
+      state.loadingIndividualUser = true;
+    })
+    .addCase(fetchUserById.fulfilled, (state, action) => {
+      state.individualUser = action.payload
+      state.loadingIndividualUser = false
+    })
+    .addCase(fetchUserById.rejected, (state, action) => {
+      state.loadingIndividualUser = false
+      state.errorIndividualUser = action.error.message
+    })
+  }
 });
 
 
