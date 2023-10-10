@@ -30,9 +30,7 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
-
 /// need login action, logout action, <= auth slice?
-
 
 // I want to get the data for all the users and also an individual user
 // individual user for the user page, but when would I be using all the users? Just to change the user state
@@ -49,65 +47,53 @@ const userSlice = createSlice({
   },
   reducers: {
     setCredentials: (state, { payload }) => {
-      state.userInfo = payload;
+      state.individualUser = payload;
     },
     resetCredentials: (state) => {
-      state.userInfo = null;
+      state.individualUser = null;
     },
     addUser: (state, action) => {
-      const { username, email, name, password, receive_dev_emails } =
-        action.payload;
-      const newUser = {
-        username,
-        email,
-        name,
-        password,
-        receive_dev_emails,
-      };
-      state.users.push(newUser);
+      state.allUsers.push(action.payload);
     },
-    // update user
     updateUser: (state, action) => {
       const { id, updates } = action.payload;
-
-      const userToUpdate = state.users.find((user) => user.id === id);
-
+      const userToUpdate = state.allUsers.find((user) => user.id === id);
       if (userToUpdate) {
         Object.assign(userToUpdate, updates);
       }
     },
     deleteUser: (state, action) => {
-      state.value = state.value.filter((user) => user.id !== action.payload.id);
+      state.allUsers = state.allUsers.filter(
+        (user) => user.id !== action.payload.id
+      );
     },
   },
   extraReducers: (builder) => {
     builder
-    .addCase(fetchAllUsers.pending, (state, action) => {
-      state.loadingAllUsers = true;
-    })
-    .addCase(fetchAllUsers.fulfilled, (state, action) => {
-      state.users = action.payload
-      state.loadingAllUsers = false
-    })
-    .addCase(fetchAllUsers.rejected, (state, action) => {
-      state.loadingAllUsers = false;
-      state.errorAllUsers = action.error.message;
-    })
-    .addCase(fetchUserById.pending, (state, action) => {
-      state.loadingIndividualUser = true;
-    })
-    .addCase(fetchUserById.fulfilled, (state, action) => {
-      state.individualUser = action.payload
-      state.loadingIndividualUser = false
-    })
-    .addCase(fetchUserById.rejected, (state, action) => {
-      state.loadingIndividualUser = false
-      state.errorIndividualUser = action.error.message
-    })
-  }
+      .addCase(fetchAllUsers.pending, (state, action) => {
+        state.loadingAllUsers = true;
+      })
+      .addCase(fetchAllUsers.fulfilled, (state, action) => {
+        state.allUsers = action.payload;
+        state.loadingAllUsers = false;
+      })
+      .addCase(fetchAllUsers.rejected, (state, action) => {
+        state.loadingAllUsers = false;
+        state.errorAllUsers = action.error.message;
+      })
+      .addCase(fetchUserById.pending, (state, action) => {
+        state.loadingIndividualUser = true;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.individualUser = action.payload;
+        state.loadingIndividualUser = false;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loadingIndividualUser = false;
+        state.errorIndividualUser = action.error.message;
+      });
+  },
 });
-
-
 
 export const {
   setCredentials,
