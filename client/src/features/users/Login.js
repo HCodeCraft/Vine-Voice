@@ -32,6 +32,7 @@ const Login = () => {
   const submitForm = (data) => {
     dispatch(loginUser(data));
     const userCredentials = { data };
+    console.log("userCredentials", userCredentials)
     dispatch(setCredentials(userCredentials));
     navigate("/users/plants");
   };
@@ -98,10 +99,6 @@ const Login = () => {
           </Typography>
           <br />
           <br />
-          {/* {error ? <div style={{ fontWeight: 'bold', border: '1px solid red', padding: '5px' }}>
-  <Typography variant='h6'>Error Please enter a correct Username and Password</Typography>
-</div>
- : null} */}
         </Paper>
       </Grid>
       <DevTool control={control} />

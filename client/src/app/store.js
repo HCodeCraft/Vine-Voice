@@ -1,20 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "../features/api/apiSlice";
-import userReducer  from "../features/users/userSlice"
+import { rootReducer} from './rootReducer'
+
 
 
 
 
 
 export const store = configureStore({
-    reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        user: userReducer
-       
-        
-
-    },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware), devTools: true
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(), devTools: true
 })
 
 // in Production, we'll want devtools to be false
