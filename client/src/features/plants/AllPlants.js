@@ -1,34 +1,38 @@
-import React from "react";
-import { useGetPlantsQuery } from "./plantSlice";
+import React, { useEffect } from "react";
+import { fetchAllPlants } from "./plantSlice";
+import { useSelector, useDispatch } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import PlantCard from "./PlantCard";
 import { Typography, Grid, Box } from "@mui/material";
 
 const AllPlants = () => {
-  const {
-    data = [],
-    isLoading,
-    isSuccess,
-    isError,
-    error,
- } = useGetPlantsQuery();
- console.log("data", data)
 
-  // Check if data is still loading
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
 
-  // Check if an error occurred
-  if (isError) {
-    return <p>Error: {error.message}</p>;
-  }
+  const plants = useSelector((state) => state.reducer.plant.allPlants)
 
-  // Check if data has loaded successfully
-  if (isSuccess) {
-    // Ensure 'plants' is not undefined before rendering
-    if (data) {
-      const content = data.map((plant) => (
+
+  // Select the relevant data from the Redux store
+  // const { data, isLoading, isError, isSuccess, error } = useSelector(
+  //   (state) => state.plantSlice.allPlants // Replace 'plants' with the correct slice name from your Redux store
+  // );
+
+
+
+  // // Check if data is still loading
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // // Check if an error occurred
+  // if (isError) {
+  //   return <p>Error: {error.message}</p>;
+  // }
+
+  // // Check if data has loaded successfully
+  // if (isSuccess) {
+  //   // Ensure 'data' is not undefined before rendering
+    if (plants) {
+      const content = plants.map((plant) => (
         <PlantCard
           key={plant.id}
           commonName={plant.common_name}
@@ -50,12 +54,7 @@ const AllPlants = () => {
         </>
       );
     }
-    // Handle the case where 'plants' does not have 'ids'
-    return <p>No plant data available.</p>;
   }
 
-  // Handle other cases (e.g., initial render)
-  return null;
-};
-
 export default AllPlants;
+

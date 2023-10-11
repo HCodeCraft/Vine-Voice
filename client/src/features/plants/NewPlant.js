@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
-import { useAddNewPlantMutation } from "./plantSlice";
+
 
 const NewPlant = () => {
   const navigate = useNavigate();
@@ -25,7 +25,6 @@ const NewPlant = () => {
   const [speciesList, setSpeciesList] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState("");
   const [activeCard, setActiveCard] = useState(null);
-  const [addPlant] = useAddNewPlantMutation()
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",

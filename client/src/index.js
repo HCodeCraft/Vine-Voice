@@ -6,21 +6,22 @@ import reportWebVitals from "./reportWebVitals";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { extendedApiSlice } from "./features/plants/plantsSlice";
+import { PersistGate} from "redux-persist/integration/react"
+import { persistStore } from "redux-persist"
 
 
 const domNode = document.getElementById("root");
 const root = createRoot(domNode);
 
-store.dispatch(extendedApiSlice.endpoints.getPlants.initiate())
-
-
+let persistor = persistStore(store)
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
         <Provider store={store}>
+          <PersistGate persistor={persistor}>
           <App />
+          </PersistGate>
         </Provider>
     </BrowserRouter>
   </React.StrictMode>

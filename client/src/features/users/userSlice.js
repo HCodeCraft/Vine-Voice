@@ -23,6 +23,7 @@ export const fetchUserById = createAsyncThunk(
     try {
       const response = await fetch(`${apiUrl}/users/${userId}`);
       const data = await response.json();
+      console.log("fetchUser's data", data)
       return data;
     } catch (error) {
       throw error;
@@ -103,4 +104,4 @@ export const {
   deleteUser,
 } = userSlice.actions;
 
-export default userSlice.reducer;
+export const userReducer = userSlice.reducer;

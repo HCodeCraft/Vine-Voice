@@ -14,7 +14,8 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../auth/authSlice";
 import { DevTool } from "@hookform/devtools";
-import { setCredentials } from "./userSlice";
+import { setCredentials, fetchUserById } from "./userSlice";
+import { fetchAllPlants } from "../plants/plantSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,13 +28,15 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const userInfo = useSelector((state) => state.user.userInfo);
+  // const userInfo = useSelector((state) => state.user.userInfo);
+  // console.log("userInfo", userInfo)
 
   const submitForm = (data) => {
     dispatch(loginUser(data));
     const userCredentials = { data };
-    console.log("userCredentials", userCredentials)
     dispatch(setCredentials(userCredentials));
+    dispatch(fetchUserById())
+    dispatch(fetchAllPlants())
     navigate("/users/plants");
   };
 
@@ -50,6 +53,8 @@ const Login = () => {
 
   return (
     <>
+    <br/>
+    <br/>
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">

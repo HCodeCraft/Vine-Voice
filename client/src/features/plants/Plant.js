@@ -1,41 +1,16 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { useGetPlantsQuery } from "./plantSlice";
+import { useSelector } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import EntryTable from "../entries/EntryTable";
-
 
 const Plant = () => {
   const params = useParams();
   const id = Number(params.id);
 
-  const { data, isLoading, isError } = useGetPlantsQuery();
-
-
-  const plant = data?.[id - 1];
-
-
-
-  if (isError) {
-    return (
-      <Box sx={{ width: "100%", maxWidth: "100%" }}>
-        <Typography variant="h4" align="center">
-          Error loading plant data
-        </Typography>
-      </Box>
-    );
-  }
-
-  if (isLoading) {
-    return (
-      <Box sx={{ width: "100%", maxWidth: "100%" }}>
-        <Typography variant="h4" align="center">
-          Loading...
-        </Typography>
-      </Box>
-    );
-  }
+  const plants = useSelector((state) => state.reducer.plant.allPlants);
+  const plant = plants?.[id - 1];
 
   if (!plant) {
     return (
@@ -87,11 +62,11 @@ const Plant = () => {
           {plant.scientific_name}
         </Typography>
       </Box>
-    <br/>
-    <br/>
+      <br />
+      <br />
       <div className="pos_top">
-        <br/>
-        <br/>
+        <br />
+        <br />
         <img
           className="img_deg"
           src="https://www.glasshouseworks.com/image/cache/data/images13/Tradescantia_albiflora-max-500.jpg"
@@ -101,27 +76,28 @@ const Plant = () => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <br />
-          <br/>
-          <div className='button_box'>
+          <br />
+          <div className="button_box">
             <p>Added on {plant.create_date}</p>
-          
           </div>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <Grid container spacing={1}>
             <Grid container item spacing={3}>
               <FormRow />
             </Grid>
           </Grid>
         </Box>
-        <br/>
-        <br/>
-        <br/>
-        <Typography variant='h5' align='center'>Latest {plant.entries.length > 1 ? 'Entries' : 'Entry'}</Typography>
-        <br/>
-        <EntryTable entries={plant.entries}/>
-        <br/>
-        <br/>
+        <br />
+        <br />
+        <br />
+        <Typography variant="h5" align="center">
+          Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
+        </Typography>
+        <br />
+        <EntryTable entries={plant.entries} />
+        <br />
+        <br />
       </div>
     </>
   );

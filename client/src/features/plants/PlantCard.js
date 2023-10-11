@@ -34,9 +34,9 @@ const PlantCard = ({
             {short_description}
           </Typography>
           <Typography variant="subtitle2">
-            {entries.length > 1
-              ? `${entries.length} entries`
-              : `${entries.length} entry`}
+            {entries?.length > 1
+              ? `${entries?.length} entries`
+              : `${entries?.length} entry`}
           </Typography>
           <Link to={`/plants/${id}`}>
             <CommonButton>Show More</CommonButton>

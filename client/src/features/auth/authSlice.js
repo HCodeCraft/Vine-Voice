@@ -1,8 +1,11 @@
 // features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
+import { fetchUserById } from "../users/userSlice";
 
 const apiUrl = config.API_BASE_URL;
+
+
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
@@ -17,9 +20,10 @@ export const loginUser = createAsyncThunk(
 
       if (user.error) {
         throw new Error("Invalid Username or Password");
-      }
 
-      return user;
+      }
+      console.log("user from login", user)
+      return user
     } catch (error) {
       throw error;
     }
@@ -84,5 +88,4 @@ const authSlice = createSlice({
 });
 
 
-export default authSlice.reducer;
-
+export const authReducer = authSlice.reducer
