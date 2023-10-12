@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
     # need to make an update action
     def update
-      user = find_user
+      user = User.find_by(id: params[:id])
       user.update(user_params)
       render json: user
     end
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
   
     # missing :password_confirmation
     def user_params
-      params.permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :admin, :id)
+      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :admin, :id)
     end
 
     # It said unpermitted parameters: entries, plants, user so I added them, although not sure need them

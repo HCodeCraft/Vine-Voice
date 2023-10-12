@@ -4,6 +4,9 @@ import config from "../../config";
 
 const apiUrl = config.API_BASE_URL;
 
+
+// idk if I should use reducers since all my actions are asyncThunks
+
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ username, password }) => {
@@ -105,11 +108,11 @@ const userSlice = createSlice({
     loadingIndividualUser: false,
     errorAllUsers: null,
     errorIndividualUser: null,
+    loading: null,
+    error: null,
+    pending: null
   },
   reducers: {
-    setUser: (state, action) => {
-      state.individualUser = action.payload;
-    },
     resetUser: (state) => {
       state.individualUser = null;
     },
@@ -187,9 +190,25 @@ const userSlice = createSlice({
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+      })
+      .addCase(updateUserInApi.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserInApi.fulfilled, (state, action) => {
+        state.loading = false;
+        state.individualUser = action.payload;
+        state.success = true;
+      })
+      .addCase(updateUserInApi.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
+  
   },
 });
+
+// do I need setUser when the asyncThunk is handling it?
 
 export const { setUser, resetUser, addUser, updateUser, deleteUser } =
   userSlice.actions;

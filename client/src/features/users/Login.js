@@ -12,9 +12,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser, setUserInfo } from "../auth/authSlice";
 import { DevTool } from "@hookform/devtools";
-import { setUser, fetchUserById } from "./userSlice";
+import { setUser, fetchUserById, loginUser } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 
 const Login = () => {
@@ -28,8 +27,8 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const userInfo = useSelector((state) => state.reducer.auth.userInfo);
-  console.log("userInfo", userInfo)
+  const indUser = useSelector((state) => state.reducer.user.individualUser);
+  console.log("indUser", indUser)
 
   const state = useSelector((state) => state.reducer )
 
@@ -42,21 +41,16 @@ const Login = () => {
 
   const submitForm = (data) => {
     dispatch(loginUser(data));
-    const userInfo = { data };
-    dispatch(setUserInfo());
-dispatch(setUser())
     dispatch(fetchAllPlants())
-
   };
 
 
 
-// useEffect(() => {
-//   if (userInfo) {
-//   dispatch(fetchUserById(userInfo.id)) }
-//   navigate(`users/${userInfo.id}`)
+useEffect(() => {
+  if (indUser) {
+  navigate(`/users/${indUser.id}`)
 
-// },[userInfo])
+}},[indUser])
 
   const paperStyle = {
     padding: 20,

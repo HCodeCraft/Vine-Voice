@@ -8,58 +8,34 @@ import { updateUserInApi, fetchUserById, updateUser } from "./userSlice";
 const UserProfile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.reducer.user.individualUser);
-  const state = useSelector((state) => state.reducer);
-  console.log("state", state)
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-
-  //Testing
-  const userStatus = useSelector(
-    (state) => state.reducer.user.individualUser.status
-  );
-  const userId = useSelector((state) => state.reducer.user.individualUser.id);
-
-  console.log("userStatus", userStatus);
-  console.log("newStatus", newStatus);
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
   };
 
-  console.log("user.status", user.status);
-  console.log("newStatus", newStatus);
+  const handleStatusFormClick = (e) => {
+    setStatusForm(true);
+    setNewStatus(user.status);
+  };
 
-const handleStatusFormClick = (e) => {
-  setStatusForm(true)
-  setNewStatus(user.status)
-}
+  const handleStatusEditSubmit = async (e) => {
+    e.preventDefault();
+    const updatedUser = {
+      user: {
+        status: newStatus,
+      },
+    };
 
-
-const handleStatusEditSubmit = async (e) => {
-  e.preventDefault();
-  const updatedStatus = newStatus;
-
-  try {
-    // Dispatch the asynchronous action and await its completion
-    await dispatch(updateUserInApi({ userId: user.id, status: updatedStatus  }));
-
-    // Update the component's local state
-    setNewStatus(updatedStatus);
-    setStatusForm(false);
-    console.log("user.status after patch", user.status);
-  } catch (error) {
-    // Handle any errors here
-  }
-};
-
+    try {
+      await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
+    } catch (error) {}
+  };
 
   useEffect(() => {
-    console.log("userId outside", userId);
-    if (userId) {
-      console.log("userId inside", userId);
-      dispatch(fetchUserById(userId));
-    }
-  }, [userId]);
+    setStatusForm(false);
+  }, [user.status]);
 
   return user ? (
     <Container>

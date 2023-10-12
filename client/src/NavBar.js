@@ -6,8 +6,7 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
-import { logoutUser } from "./features/auth/authSlice";
-import { resetUser } from "./features/users/userSlice";
+import { resetUser, logoutUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
