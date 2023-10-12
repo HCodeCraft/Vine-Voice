@@ -4,6 +4,43 @@ import config from "../../config";
 
 const apiUrl = config.API_BASE_URL;
 
+export const loginUser = createAsyncThunk(
+  "user/loginUser",
+  async ({ username, password }) => {
+    try {
+      const response = await fetch(`${apiUrl}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const user = await response.json();
+
+      if (user.error) {
+        throw new Error("Invalid Username or Password");
+      }
+      console.log("user from login", user);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const logoutUser = createAsyncThunk("user/logout", async () => {
+  try {
+    const response = await fetch(`${apiUrl}/logout`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      return true;
+    } else {
+      throw new Error("Logout failed");
+    }
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
   async () => {
@@ -23,7 +60,7 @@ export const fetchUserById = createAsyncThunk(
     try {
       const response = await fetch(`${apiUrl}/users/${userId}`);
       const data = await response.json();
-      console.log("fetchUser's data", data)
+      console.log("fetchUserBy Ids data", data);
       return data;
     } catch (error) {
       throw error;
@@ -31,8 +68,31 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
-/// need login action, logout action, <= auth slice?
+export const updateUserInApi = createAsyncThunk(
+  "user/updateUserInApi",
+  async ({ userId, updatedUser }) => {
+    try {
+      const response = await fetch(`${apiUrl}/users/${userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedUser),
+      });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Update user failed");
+      }
+
+      const updatedUserData = await response.json();
+      console.log("updatedUserData in api data", updatedUserData);
+      return updatedUserData;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 // I want to get the data for all the users and also an individual user
 // individual user for the user page, but when would I be using all the users? Just to change the user state
 
@@ -47,21 +107,28 @@ const userSlice = createSlice({
     errorIndividualUser: null,
   },
   reducers: {
-    setCredentials: (state, { payload }) => {
-      state.individualUser = payload;
+    setUser: (state, action) => {
+      state.individualUser = action.payload;
     },
-    resetCredentials: (state) => {
+    resetUser: (state) => {
       state.individualUser = null;
     },
     addUser: (state, action) => {
       state.allUsers.push(action.payload);
     },
     updateUser: (state, action) => {
+      console.log("🌻updateUser is running");
       const { id, updates } = action.payload;
-      const userToUpdate = state.allUsers.find((user) => user.id === id);
-      if (userToUpdate) {
-        Object.assign(userToUpdate, updates);
-      }
+      console.log("id from updateUser", id);
+      console.log("updates from updateUser", updates);
+      state.allUsers = state.allUsers.map((user) => {
+        if (user.id === id) {
+          // Create a new object with the updated status and other attributes
+          console.log("user from updateUser", user);
+          return { ...user, ...updates };
+        }
+        return user; // Return unmodified users
+      });
     },
     deleteUser: (state, action) => {
       state.allUsers = state.allUsers.filter(
@@ -92,16 +159,39 @@ const userSlice = createSlice({
       .addCase(fetchUserById.rejected, (state, action) => {
         state.loadingIndividualUser = false;
         state.errorIndividualUser = action.error.message;
+      })
+
+      .addCase(loginUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.individualUser = action.payload;
+        state.success = true;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(logoutUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.loading = false;
+        state.individualUser = null;
+        state.success = true;
+      })
+      .addCase(logoutUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });
 
-export const {
-  setCredentials,
-  resetCredentials,
-  addUser,
-  updateUser,
-  deleteUser,
-} = userSlice.actions;
+export const { setUser, resetUser, addUser, updateUser, deleteUser } =
+  userSlice.actions;
 
 export const userReducer = userSlice.reducer;

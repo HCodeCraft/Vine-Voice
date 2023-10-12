@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   get '/search', to: "plants#search"
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
-  resources :users, only: [:create, :show, :index]
+  resources :users, only: [:create, :show, :index, :update]
   resources :entries, only: [:index]
 
 

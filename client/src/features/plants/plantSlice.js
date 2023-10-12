@@ -56,26 +56,30 @@ export const addPlantToApi = createAsyncThunk(
 );
 
 // Not sure I would want to use this except for switching the api plant
-// export const updatePlantInApi = async (plantId, updatedPlant) => {
-//   try {
-//     const response = await fetch(`${apiUrl}/plants/${plantId}`, {
-//       method: "PATCH",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(updatedPlant),
-//     });
+// export const updatePlantInApi = createAsyncThunk(
+//   "user/updateUserInApi",
+//   async ({ plantId, updatedPlant }) => {
+//     try {
+//       const response = await fetch(`${apiUrl}/users/${plantId}`, {
+//         method: "PATCH",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(updatedPlant),
+//       });
 
-//     if (!response.ok) {
-//       const errorData = await response.json();
-//       throw new Error(errorData.message || "Update plant failed");
+//       if (!response.ok) {
+//         const errorData = await response.json();
+//         throw new Error(errorData.message || "Update plant failed");
+//       }
+
+//       const updatedPlantData = await response.json();
+//       return updatedPlantData;
+//     } catch (error) {
+//       throw error;
 //     }
-//     const updatedPlantData = await response.json();
-//     return updatedPlantData;
-//   } catch (error) {
-//     throw error;
 //   }
-// };
+// );
 
 // want to make this availible only to admin
 export const deletePlantFromApi = async (plantId) => {

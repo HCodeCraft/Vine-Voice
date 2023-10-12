@@ -12,9 +12,9 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../auth/authSlice";
+import { loginUser, setUserInfo } from "../auth/authSlice";
 import { DevTool } from "@hookform/devtools";
-import { setCredentials, fetchUserById } from "./userSlice";
+import { setUser, fetchUserById } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 
 const Login = () => {
@@ -28,20 +28,35 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // const userInfo = useSelector((state) => state.user.userInfo);
-  // console.log("userInfo", userInfo)
+  const userInfo = useSelector((state) => state.reducer.auth.userInfo);
+  console.log("userInfo", userInfo)
+
+  const state = useSelector((state) => state.reducer )
+
+  console.log("state", state)
+
+
+
+
+
 
   const submitForm = (data) => {
     dispatch(loginUser(data));
-    const userCredentials = { data };
-    dispatch(setCredentials(userCredentials));
-    dispatch(fetchUserById())
+    const userInfo = { data };
+    dispatch(setUserInfo());
+dispatch(setUser())
     dispatch(fetchAllPlants())
-    navigate("/users/plants");
+
   };
 
-  // // IDK if I want this url still > What about user/:id ?
 
+
+// useEffect(() => {
+//   if (userInfo) {
+//   dispatch(fetchUserById(userInfo.id)) }
+//   navigate(`users/${userInfo.id}`)
+
+// },[userInfo])
 
   const paperStyle = {
     padding: 20,

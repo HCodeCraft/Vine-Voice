@@ -7,7 +7,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
 import { logoutUser } from "./features/auth/authSlice";
-import { resetCredentials } from "./features/users/userSlice";
+import { resetUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
@@ -15,6 +15,8 @@ const NavBar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+
 
   useEffect(() => {
     // Update the selected tab based on the current URL
@@ -36,8 +38,8 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    dispatch(resetCredentials());
-    navigate("/");
+    dispatch(resetUser());
+    navigate("/login");
   };
 
   return (
