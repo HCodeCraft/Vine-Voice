@@ -2,14 +2,22 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box, Container } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
-import { Link } from "react-router-dom";
-import { updateUserInApi, fetchUserById, updateUser } from "./userSlice";
+import { Link, useParams } from "react-router-dom";
+import { updateUserInApi } from "./userSlice";
 
 const UserProfile = () => {
+  const params = useParams()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.reducer.user.individualUser);
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
+  const [currentUser, setCurrentUser] = useState(false)
+
+
+ 
+
+
+
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
@@ -36,6 +44,10 @@ const UserProfile = () => {
   useEffect(() => {
     setStatusForm(false);
   }, [user.status]);
+
+  useEffect(()=> {
+    params.id == user.id ? setCurrentUser(true) : setCurrentUser(false)
+  }, [])
 
   return user ? (
     <Container>
@@ -82,6 +94,7 @@ const UserProfile = () => {
         <Typography variant="h5">{user.name}</Typography>
         <br />
       </Box>
+      {currentUser == true ? (<Link to={`/users/${user.id}/edit`}><CommonButton>Edit Info</CommonButton></Link>) : null}
     </Container>
   ) : (
     <h1>UserInfo not loaded</h1>

@@ -10,7 +10,10 @@ const Plant = () => {
   const id = Number(params.id);
 
   const plants = useSelector((state) => state.reducer.plant.allPlants);
-  const plant = plants?.[id - 1];
+  const plant = plants?.[id];
+
+  console.log("plants", plants)
+
 
   if (!plant) {
     return (
@@ -69,7 +72,7 @@ const Plant = () => {
         <br />
         <img
           className="img_deg"
-          src="https://www.glasshouseworks.com/image/cache/data/images13/Tradescantia_albiflora-max-500.jpg"
+          src={plant.med_image_url}
         ></img>
         <div className="text-box">
           <p className="desc">{plant.description}</p>
@@ -90,6 +93,11 @@ const Plant = () => {
         </Box>
         <br />
         <br />
+        <Box display="flex" justifyContent="flex-end">
+  <Link to={`/plants/${plant.id}/entries/new`}>
+    <CommonButton>Add an Entry</CommonButton>
+  </Link>
+</Box>
         <br />
         <Typography variant="h5" align="center">
           Latest {plant.entries.length > 1 ? "Entries" : "Entry"}

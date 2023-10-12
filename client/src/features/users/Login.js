@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DevTool } from "@hookform/devtools";
 import { setUser, fetchUserById, loginUser } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
+import { fetchAllEntries } from "../entries/entriesSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -39,10 +40,21 @@ const Login = () => {
 
 
 
-  const submitForm = (data) => {
-    dispatch(loginUser(data));
-    dispatch(fetchAllPlants())
+  const submitForm = async (data) => {
+    try {
+      await dispatch(loginUser(data)); // Wait for login action to complete
+  
+      // Dispatch fetch actions only after login is successful
+      if (loginUser.fulfilled.match(loginUser(data))) {
+        dispatch(fetchAllPlants());
+        dispatch(fetchAllEntries());
+      }
+    } catch (error) {
+      // Handle login error
+      console.error('Login failed:', error);
+    }
   };
+  
 
 
 

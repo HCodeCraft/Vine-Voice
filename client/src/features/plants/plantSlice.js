@@ -10,7 +10,7 @@ export const fetchAllPlants = createAsyncThunk(
     try {
       const response = await fetch(`${apiUrl}/plants`);
       const data = await response.json();
-      console.log("data", data)
+    
       return data;
     } catch (error) {
       throw error;
@@ -154,6 +154,19 @@ const plantSlice = createSlice({
         state.loadingIndividualPlant = false;
       })
       .addCase(fetchPlantById.rejected, (state, action) => {
+        state.loadingIndividualPlant = false;
+        state.errorIndividualPlant = action.error.message;
+      })
+      .addCase(addPlantToApi.pending, (state, action) => {
+        state.loadingIndividualPlant = true;
+      })
+      .addCase(addPlantToApi.fulfilled, (state, action) => {
+        // Assuming action.payload is an array of plants
+        state.allPlants.push(action.payload);
+        state.loadingIndividualPlant = false;
+      })
+      
+      .addCase(addPlantToApi.rejected, (state, action) => {
         state.loadingIndividualPlant = false;
         state.errorIndividualPlant = action.error.message;
       });

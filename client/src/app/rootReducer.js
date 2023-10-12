@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { userReducer} from "../features/users/userSlice";
 import { plantReducer} from "../features/plants/plantSlice"
+import { entryReducer } from "../features/entries/entriesSlice";
 
 
 
@@ -8,7 +9,8 @@ import { plantReducer} from "../features/plants/plantSlice"
 
 const rootReducer = combineReducers({
   user: userReducer, // Add your data entity reducers here
-  plant: plantReducer
+  plant: plantReducer,
+  entry: entryReducer
 });
 
 export default rootReducer;

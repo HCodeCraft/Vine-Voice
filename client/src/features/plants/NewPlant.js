@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
+import { addPlantToApi } from "./plantSlice";
+import { useDispatch } from "react-redux"
 import CommonButton from "../../common/CommonButton";
 import {
   Container,
@@ -17,6 +19,7 @@ import HealthRating from "../../HealthRating";
 
 const NewPlant = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [searchName, setSearchName] = useState("");
   const [resultForm, setResultForm] = useState(false);
   const [apiForm, setApiForm] = useState(false);
@@ -77,7 +80,7 @@ const NewPlant = () => {
         const externalResponse = await axios.get(url);
         const apiPlant = externalResponse.data;
         
-        setPlant((prevPlant) => ({
+        await setPlant((prevPlant) => ({
           ...prevPlant,
           common_name: apiPlant.common_name,
           scientific_name: apiPlant.scientific_name[0],
@@ -92,14 +95,16 @@ const NewPlant = () => {
           medicinal: apiPlant.medicinal,
         }));
 
-
+       console.log("Plant from in axios thing", plant)
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
   
-
+const addPlant = (plant) => {
+  dispatch(addPlantToApi(plant))
+}
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
@@ -160,9 +165,14 @@ const NewPlant = () => {
     e.preventDefault();
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
-    addPlant(plant)
+   addPlant(plant)
+
     // still need to figure out how to do the combo adding with RTK Query -- should I have addEntry
   };
+
+  useEffect(() => {
+console.log("plant from in UE", plant)
+  },[plant])
 
   return (
     <Container>
@@ -312,7 +322,7 @@ const NewPlant = () => {
                   onChange={handleEntryChange}
                 />
               </FormGroup>
-              <CommonButton>Submit</CommonButton>
+              <CommonButton onClick={handleSubmit}>Submit</CommonButton>
             </form>
           </>
         ) : null}

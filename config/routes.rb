@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
   resources :users, only: [:create, :show, :index, :update]
-  resources :entries, only: [:index]
+  resources :entries, only: [:index, :show, :create, :update, :destroy]
 
 
   post "/login", to: "sessions#create"

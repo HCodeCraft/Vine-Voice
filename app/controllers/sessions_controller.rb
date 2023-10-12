@@ -1,14 +1,19 @@
 class SessionsController  < ApplicationController
-  # skip_before_action :authorize, only: :create
+  # skip_before_action :authorize, only: [:create, :delete]
 
-  # need to add update and read individual
 
   def create
-    user = find_user
+    puts session[:user_id]
 
-    if user && user.authenticate(params[:password])
+    user = find_user
+    Rails.logger.info("Session contents before: #{session.inspect}")
+
+  if user && user.authenticate(params[:password])
+    Rails.logger.info("Session contents: #{session.inspect}")
+    puts session[:user_id]
       session[:user_id] = user.id
       render json: user, status: :created
+
     else
       render json: { error: "Invalid username or password" }, status: :unauthorized
     end

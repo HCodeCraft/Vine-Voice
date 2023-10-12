@@ -6,7 +6,7 @@ import PlantCard from './PlantCard'
 
 const UserPlants = () => {
 
-  const loggedInUser = useSelector((state) => state.reducer.auth.userInfo)
+  const loggedInUser = useSelector((state) => state.reducer.user.individualUser)
   console.log("loggedInUser", loggedInUser)
 
 

@@ -1,5 +1,8 @@
 class EntriesController < ApplicationController
+  # before_action :authorize
+
     def index
+      Rails.logger.debug("Session contents: #{session.inspect}")
         entries = Entry.all
         render json: entries
       end
@@ -11,6 +14,8 @@ class EntriesController < ApplicationController
       end
       
       def create
+        @current_user = User.find_by(id: session[:user_id])
+        Rails.logger.debug("Current User: #{@current_user.inspect}")
         new_entry = @current_user.entries.create!(entry_params)
         render json: new_entry
       end
@@ -34,7 +39,7 @@ class EntriesController < ApplicationController
       end
       
       def entry_params
-        params.require(:entry).permit(:entrytext, :watched, :rating, :movie_id)
+        params.require(:entry).permit(:nickname, :location, :notes, :image, :user_id, :plant_id, :health, :problems, :open_to_advice)
       end
       
 end

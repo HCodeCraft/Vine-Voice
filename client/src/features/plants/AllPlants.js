@@ -11,6 +11,13 @@ const AllPlants = () => {
   const plants = useSelector((state) => state.reducer.plant.allPlants)
 
 
+
+  useEffect(()=> {
+    console.log("useEffect Ran")
+fetchAllPlants()
+  },[plants])
+
+
   // Select the relevant data from the Redux store
   // const { data, isLoading, isError, isSuccess, error } = useSelector(
   //   (state) => state.plantSlice.allPlants // Replace 'plants' with the correct slice name from your Redux store

@@ -48,7 +48,7 @@ function App() {
               />
               <Route path="/users/plants" element={<UserPlants />} />
               <Route path="/plants/new" element={<NewPlant />} />
-              <Route path="/users/current/edit" element={<EditProfile />} />
+              <Route path="/users/:id/edit" element={<EditProfile />} />
       
           </Routes>
         </Grid>
