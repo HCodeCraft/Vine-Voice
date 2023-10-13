@@ -16,18 +16,44 @@ export const loginUser = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
       });
-      const user = await response.json();
 
+      const user = await response.json();
+      console.log("user from login", user);
       if (user.error) {
         throw new Error("Invalid Username or Password");
       }
-      console.log("user from login", user);
+
       return user;
     } catch (error) {
       throw error;
     }
   }
 );
+
+
+
+export const fetchUserData = createAsyncThunk('user/fetchUserData', async (_) => {
+  try {
+    const response = await fetch(`${apiUrl}/me`);
+
+    console.log("fetchUserData is running")
+
+    if (!response.ok) {
+      const errorData = await response.json(); // Retrieve the error data
+      throw new Error(errorData.message || "fetchUserData failed");
+    }
+
+    // If the response is okay, return the user data
+    const userData = await response.json();
+    console.log("userDatat from fetchUserData", userData)
+    return userData;
+  } catch (error) {
+    throw error;
+  }
+});
+
+
+
 
 export const logoutUser = createAsyncThunk("user/logout", async () => {
   try {
@@ -103,7 +129,8 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     allUsers: [],
-    individualUser: null,
+    loggedInUser: null,
+    loggedIn: null,
     loadingAllUsers: false,
     loadingIndividualUser: false,
     errorAllUsers: null,
@@ -120,14 +147,10 @@ const userSlice = createSlice({
       state.allUsers.push(action.payload);
     },
     updateUser: (state, action) => {
-      console.log("🌻updateUser is running");
       const { id, updates } = action.payload;
-      console.log("id from updateUser", id);
-      console.log("updates from updateUser", updates);
       state.allUsers = state.allUsers.map((user) => {
         if (user.id === id) {
           // Create a new object with the updated status and other attributes
-          console.log("user from updateUser", user);
           return { ...user, ...updates };
         }
         return user; // Return unmodified users
@@ -170,7 +193,9 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.individualUser = action.payload;
+        // state.individualUser = action.payload;
+        state.loggedIn = true;
+        state.loggedInUser = action.payload
         state.success = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -185,6 +210,7 @@ const userSlice = createSlice({
       .addCase(logoutUser.fulfilled, (state) => {
         state.loading = false;
         state.individualUser = null;
+        state.loggedInUser = null;
         state.success = true;
       })
       .addCase(logoutUser.rejected, (state, action) => {
@@ -202,6 +228,22 @@ const userSlice = createSlice({
       })
       .addCase(updateUserInApi.rejected, (state, action) => {
         state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchUserData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.loggedInUser = null;
+      })
+      .addCase(fetchUserData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.loggedIn = true;
+        // state.loggedInUser = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.loading = false;
+        state.loggedIn = false;
         state.error = action.error.message;
       });
   

@@ -1,9 +1,9 @@
 class PlantsController < ApplicationController
-  # before_action :authorize
+  before_action :authorize
 
   def index
     Rails.logger.debug("Session contents: #{session.inspect}")
-
+byebug
     render json: Plant.all
   end
 

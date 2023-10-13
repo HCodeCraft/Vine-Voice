@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { DevTool } from "@hookform/devtools";
-import { setUser, fetchUserById, loginUser } from "./userSlice";
+import { fetchUserData, loginUser } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entriesSlice";
 
@@ -28,10 +28,13 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const indUser = useSelector((state) => state.reducer.user.individualUser);
+  const indUser = useSelector((state) => state.reducer.user.loggedInUser);
   console.log("indUser", indUser)
 
   const state = useSelector((state) => state.reducer )
+
+  const loggedIn = useSelector((state) => state.reducer.user.loggedIn)
+  console.log("loggedIn", loggedIn)
 
   console.log("state", state)
 
@@ -42,20 +45,23 @@ const Login = () => {
 
   const submitForm = async (data) => {
     try {
-      await dispatch(loginUser(data)); // Wait for login action to complete
-  
-      // Dispatch fetch actions only after login is successful
-      if (loginUser.fulfilled.match(loginUser(data))) {
+      const action = await dispatch(loginUser(data));
+      if (loginUser.fulfilled.match(action)) {
         dispatch(fetchAllPlants());
         dispatch(fetchAllEntries());
       }
     } catch (error) {
-      // Handle login error
       console.error('Login failed:', error);
     }
   };
   
-
+  
+// I think I might need to make this wait until the login finishes
+useEffect(() => {
+  if (loggedIn === true) {
+    dispatch(fetchUserData());
+  }
+}, [loggedIn, dispatch]);
 
 
 useEffect(() => {

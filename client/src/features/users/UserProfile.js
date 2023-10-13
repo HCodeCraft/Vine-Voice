@@ -8,7 +8,8 @@ import { updateUserInApi } from "./userSlice";
 const UserProfile = () => {
   const params = useParams()
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.reducer.user.individualUser);
+  const user = useSelector((state) => state.reducer.user.loggedInUser);
+  console.log("user from userProfile", user)
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [currentUser, setCurrentUser] = useState(false)
@@ -47,7 +48,9 @@ const UserProfile = () => {
 
   useEffect(()=> {
     params.id == user.id ? setCurrentUser(true) : setCurrentUser(false)
-  }, [])
+    console.log(currentUser)
+    console.log("params.id", params.id, "user.id", user.id)
+  }, [params])
 
   return user ? (
     <Container>

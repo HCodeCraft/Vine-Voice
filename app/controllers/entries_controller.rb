@@ -1,5 +1,5 @@
 class EntriesController < ApplicationController
-  # before_action :authorize
+  before_action :authorize
 
     def index
       Rails.logger.debug("Session contents: #{session.inspect}")
