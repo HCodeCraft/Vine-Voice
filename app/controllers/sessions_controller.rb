@@ -1,5 +1,5 @@
 class SessionsController  < ApplicationController
-  skip_before_action :authorize, only: [:create, :delete]
+  skip_before_action :authorize, only: [:create]
 
 
   def create
@@ -9,9 +9,9 @@ class SessionsController  < ApplicationController
     Rails.logger.info("Session contents before: #{session.inspect}")
 
   if user && user.authenticate(params[:password])
-    Rails.logger.info("Session contents: #{session.inspect}")
-    puts session[:user_id]
       session[:user_id] = user.id
+
+    Rails.logger.info("Session contents inside: #{session.inspect}")
       render json: user, status: :created
 
     else

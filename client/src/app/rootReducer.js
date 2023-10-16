@@ -2,6 +2,8 @@ import { combineReducers } from "redux";
 import { userReducer} from "../features/users/userSlice";
 import { plantReducer} from "../features/plants/plantSlice"
 import { entryReducer } from "../features/entries/entriesSlice";
+// import { authReducer } from '../features/auth/authSlice';
+
 
 
 

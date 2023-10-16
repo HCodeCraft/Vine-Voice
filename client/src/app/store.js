@@ -1,8 +1,19 @@
+
+
 import { configureStore } from "@reduxjs/toolkit";
 import  rootReducer from './rootReducer'
 import storage from "redux-persist/lib/storage"
-import { persistReducer } from "redux-persist"
-import { combineReducers } from "@reduxjs/toolkit"
+import {
+    persistStore,
+    persistReducer,
+    FLUSH,
+    REHYDRATE,
+    PAUSE,
+    PERSIST,
+    PURGE,
+    REGISTER,
+  } from 'redux-persist'
+
 
 const persistConfig = {
     key: "root",
@@ -10,17 +21,17 @@ const persistConfig = {
     storage
 }
 
-const reducer = combineReducers({
-    reducer: rootReducer,
-})
 
-const persistedReducer = persistReducer(persistConfig, reducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 
 
 export const store = configureStore({
    reducer:persistedReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(), devTools: true
-})
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        }, devTools: true
+}) })
 
 // in Production, we'll want devtools to be false

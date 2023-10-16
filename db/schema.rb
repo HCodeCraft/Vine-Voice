@@ -37,12 +37,6 @@ ActiveRecord::Schema.define(version: 2023_10_06_171259) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "jwt_denylist", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
-  end
-
   create_table "plants", force: :cascade do |t|
     t.string "common_name"
     t.string "scientific_name"
@@ -66,14 +60,15 @@ ActiveRecord::Schema.define(version: 2023_10_06_171259) do
     t.string "name"
     t.string "avatar_url"
     t.string "image"
+    t.string "password"
     t.boolean "privacy"
-    t.string "password_digest"
     t.string "email"
     t.boolean "recieve_dev_emails"
     t.string "status"
     t.boolean "admin"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "password_digest"
   end
 
 end

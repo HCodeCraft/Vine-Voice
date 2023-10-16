@@ -17,6 +17,7 @@ import { fetchUserData, loginUser } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entriesSlice";
 
+
 const Login = () => {
   const navigate = useNavigate();
 
@@ -28,15 +29,14 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const indUser = useSelector((state) => state.reducer.user.loggedInUser);
-  console.log("indUser", indUser)
+  // const indUser = useSelector((state) => state.reducer.user.loggedInUser);
 
-  const state = useSelector((state) => state.reducer )
 
-  const loggedIn = useSelector((state) => state.reducer.user.loggedIn)
+
+  const loggedIn = useSelector((state) => state.user.loggedIn)
   console.log("loggedIn", loggedIn)
 
-  console.log("state", state)
+
 
 
 
@@ -64,11 +64,11 @@ useEffect(() => {
 }, [loggedIn, dispatch]);
 
 
-useEffect(() => {
-  if (indUser) {
-  navigate(`/users/${indUser.id}`)
+// useEffect(() => {
+//   if (indUser) {
+//   navigate(`/users/${indUser.id}`)
 
-}},[indUser])
+// }},[indUser])
 
   const paperStyle = {
     padding: 20,

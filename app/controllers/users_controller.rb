@@ -18,28 +18,33 @@ class UsersController < ApplicationController
 
     # need to make an update action
     def update
-      user = User.find_by(id: params[:id])
+      user = User.find_by(id:params[:id])
       user.update(user_params)
       render json: user
     end
 
 
     # need to make it so all users can see the user's show route
-    def show
-        user = User.find_by(id: params[:id])
+    # def show
+    #     user = User.find_by(id:params[:id])
 
-        puts params
-      
-        if user
-          render json: user
-        else
-          render json: { error: "User not found" }, status: :not_found
-        end
+
+    #     Rails.logger.debug("User ID in user show: #{session[:user_id]}")
+    #     if user
+    #       render json: user
+    #     else
+    #       render json: { error: "User not found" }, status: :not_found
+    #     end
+    #   end
+
+    def show
+      if @current_user
+      render json: @current_user
+      else
+          render json: {error: "You must be logged in to access"}
       end
+    end
       
-      # def me
-      #   render json: @current_user
-      # end
   
     private
   

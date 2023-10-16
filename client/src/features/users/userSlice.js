@@ -233,17 +233,16 @@ const userSlice = createSlice({
       .addCase(fetchUserData.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.loggedInUser = null;
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.loading = false;
         state.loggedIn = true;
-        // state.loggedInUser = action.payload;
+        state.loggedInUser = action.payload;
         state.error = null;
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.loading = false;
-        state.loggedIn = false;
+        // state.loggedIn = false;
         state.error = action.error.message;
       });
   
