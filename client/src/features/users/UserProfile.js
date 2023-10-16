@@ -8,7 +8,7 @@ import { updateUserInApi } from "./userSlice";
 const UserProfile = () => {
   const params = useParams()
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.reducer.user.loggedInUser);
+  const user = useSelector((state) => state.user.loggedInUser);
   console.log("user from userProfile", user)
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");

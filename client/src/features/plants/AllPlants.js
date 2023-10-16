@@ -8,7 +8,7 @@ import { Typography, Grid, Box } from "@mui/material";
 const AllPlants = () => {
 
 
-  const plants = useSelector((state) => state.reducer.plant.allPlants)
+  const plants = useSelector((state) => state.plant.allPlants)
 
 
 
