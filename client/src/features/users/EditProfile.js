@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -7,47 +7,57 @@ import {
   FormControlLabel,
   Checkbox,
   Box,
-} from '@mui/material';
-import TextField from '@mui/material/TextField';
-import CommonButton from '../../common/CommonButton';
-import { useSelector } from 'react-redux';
+} from "@mui/material";
+import TextField from "@mui/material/TextField";
+import CommonButton from "../../common/CommonButton";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserInApi } from "./userSlice";
 
 const EditProfile = () => {
   const currentUser = useSelector((state) => state.user.loggedInUser);
+  const dispatch = useDispatch()
 
   const [user, setUser] = useState({
-    username: '',
-    name: '',
-    image: '',
-    email: '',
-    receive_dev_emails: false,
-    status: '',
+    username: "",
+    name: "",
+    image: "",
+    email: "",
+    recieve_dev_emails: false,
+    status: "",
   });
 
   useEffect(() => {
     if (currentUser) {
       setUser(currentUser);
+      console.log("currentUser", currentUser)
     }
   }, [currentUser]);
 
   const boxStyle = {
-    backgroundColor: '#f5f5f5',
-    padding: '30px',
-    borderRadius: '10px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
+    backgroundColor: "#f5f5f5",
+    padding: "30px",
+    borderRadius: "10px",
+    boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
   };
 
   const handleUserChange = (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    const value =
+      e.target.type === "checkbox" ? e.target.checked : e.target.value;
     setUser({
       ...user,
       [e.target.name]: value,
     });
   };
+  
+  const updateUser = (editedUserId, editedUser) => 
+  {     dispatch(updateUserInApi(editedUserId, editedUser))}
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedUser = user
+    updateUser({ userId: currentUser.id, updatedUser })
     // Handle form submission here
+    // i'll use updateUserInApi and make sure there are extended reducers
   };
 
   return (
@@ -57,16 +67,20 @@ const EditProfile = () => {
       <Container maxWidth="md">
         <Box sx={boxStyle}>
           <Typography variant="h5">Edit My User Details</Typography>
-          <br/>
+          <br />
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
-            <Box mb={2}> {/* Add margin bottom */}
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
               <Button variant="contained" component="label" color="primary">
                 Change Profile Picture
                 <input type="file" hidden />
               </Button>
             </Box>
-            <br/>
-            <Box mb={2}> {/* Add margin bottom */}
+            <br />
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
               <TextField
                 label="Username"
                 name="username"
@@ -77,7 +91,9 @@ const EditProfile = () => {
                 onChange={handleUserChange}
               />
             </Box>
-            <Box mb={2}> {/* Add margin bottom */}
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
               <TextField
                 label="Name"
                 name="name"
@@ -88,7 +104,9 @@ const EditProfile = () => {
                 onChange={handleUserChange}
               />
             </Box>
-            <Box mb={2}> {/* Add margin bottom */}
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
               <TextField
                 label="Status"
                 name="status"
@@ -101,7 +119,9 @@ const EditProfile = () => {
                 onChange={handleUserChange}
               />
             </Box>
-            <Box mb={2}> {/* Add margin bottom */}
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
               <TextField
                 label="Email"
                 name="email"
@@ -112,15 +132,18 @@ const EditProfile = () => {
                 onChange={handleUserChange}
               />
             </Box>
-            <Box mb={2}> {/* Add margin bottom */}
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="Receive Dev Emails"
-                  name="receive_dev_emails"
-                  onChange={handleUserChange}
-                />
-              </FormGroup>
+            <Box mb={2}>
+              {" "}
+              {/* Add margin bottom */}
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={user.receive_dev_emails}
+                    onChange={handleUserChange}
+                  />
+                }
+                label="Receive Dev Emails"
+              />
             </Box>
             <CommonButton onClick={handleSubmit}>Submit</CommonButton>
           </form>
@@ -131,5 +154,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-
-

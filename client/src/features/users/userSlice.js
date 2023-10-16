@@ -101,6 +101,7 @@ export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
     try {
+      console.log("url trying to send to", `${apiUrl}/users/${userId}`)
       const response = await fetch(`${apiUrl}/users/${userId}`, {
         method: "PATCH",
         headers: {
@@ -223,7 +224,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUserInApi.fulfilled, (state, action) => {
         state.loading = false;
-        state.individualUser = action.payload;
+        state.loggedInUser = action.payload;
         state.success = true;
       })
       .addCase(updateUserInApi.rejected, (state, action) => {
