@@ -9,7 +9,7 @@ const Plant = () => {
   const params = useParams();
   const id = Number(params.id);
 
-  const plants = useSelector((state) => state.reducer.plant.allPlants);
+  const plants = useSelector((state) => state.plant.allPlants);
   const plant = plants?.[id];
 
   console.log("plants", plants)
