@@ -2,15 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
 
-const apiUrl = config.API_BASE_URL;
+// const apiUrl = config.API_BASE_URL;
 
-console.log("apiUrl", apiUrl)
+
 
 export const fetchAllEntries = createAsyncThunk(
   "entries/fetchAllEntries",
   async () => {
     try {
-      const response = await fetch(`${apiUrl}/entries`);
+      const response = await fetch(`/entries`);
       const data = await response.json();
 
       return data;
@@ -24,7 +24,7 @@ export const fetchEntryById = createAsyncThunk(
   "entries/fetchEntryById",
   async (entryId) => {
     try {
-      const response = await fetch(`${apiUrl}/entries/${entryId}`);
+      const response = await fetch(`/entries/${entryId}`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -37,7 +37,7 @@ export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
   async ( newEntry ) => {
     try {
-      const response = await fetch(`${apiUrl}/entries`, {
+      const response = await fetch(`/entries`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const addEntryToApi = createAsyncThunk(
 
 export const deleteEntryFromApi = async (entryId) => {
   try {
-    const response = await fetch(`${apiUrl}/entries/${entryId}`, {
+    const response = await fetch(`/entries/${entryId}`, {
       method: "DELETE",
     });
     if (response.ok) {

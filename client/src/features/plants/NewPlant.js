@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import { addPlantToApi } from "./plantSlice";
-import { useDispatch } from "react-redux"
+import { addEntryToApi } from "../entries/entriesSlice";
+import { useDispatch } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
   Container,
@@ -16,10 +17,9 @@ import {
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 
-
 const NewPlant = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [searchName, setSearchName] = useState("");
   const [resultForm, setResultForm] = useState(false);
   const [apiForm, setApiForm] = useState(false);
@@ -58,28 +58,27 @@ const NewPlant = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
-  setActiveCard(index);
+    setActiveCard(index);
 
-  
     if (apiForm === false) {
       setPlant((prevPlant) => ({
         ...prevPlant,
         id: selectedPlant.id,
       }));
-     setEntryForm(true)
+      setEntryForm(true);
     } else {
-      setEntryForm(true)
+      setEntryForm(true);
       try {
         setPlant((prevPlant) => ({
           ...prevPlant,
           image_url: selectedPlant.default_image["thumbnail"],
           med_image_url: selectedPlant.default_image["medium_url"],
         }));
-  
+
         const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
         const externalResponse = await axios.get(url);
         const apiPlant = externalResponse.data;
-        
+
         await setPlant((prevPlant) => ({
           ...prevPlant,
           common_name: apiPlant.common_name,
@@ -95,16 +94,20 @@ const NewPlant = () => {
           medicinal: apiPlant.medicinal,
         }));
 
-       console.log("Plant from in axios thing", plant)
+        console.log("Plant from in axios thing", plant);
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
-  
-const addPlant = (plant) => {
-  dispatch(addPlantToApi(plant))
-}
+
+  const addPlant = (plant) => {
+    dispatch(addPlantToApi(plant));
+  };
+
+  const addEntry = (entry) => {
+    dispatch(addEntryToApi(entry));
+  };
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
@@ -129,13 +132,12 @@ const addPlant = (plant) => {
 
     try {
       // First Axios request
-      const localResponse = await axios.get(
-        `http://localhost:3000/search.json?q=${searchName}`
-      );
+      const localResponse = await axios.get(`/search.json?q=${searchName}`);
       console.log("Local API Data:", localResponse.data);
       setMyApiData(localResponse.data);
 
-      if (!myApiData && apiForm === true) {
+      if (myApiData.length === 0) {
+        setApiForm(true);
         speciesListRequest();
       }
     } catch (error) {
@@ -165,14 +167,30 @@ const addPlant = (plant) => {
     e.preventDefault();
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
-   addPlant(plant)
+    // if apiform == false, then we'll just add an enry (to the plant, using the id) otherwise, well add
+    // both the plant and the entry at the same time
 
-    // still need to figure out how to do the combo adding with RTK Query -- should I have addEntry
+    if (apiForm == false) {
+      // add entry with the plant id
+      addEntry(entry);
+    } else {
+      // being sure to add the entry also as a combined post
+
+      const newPlantWithEntry = {
+        ...plant,
+        entry,
+      };
+
+      addPlant(newPlantWithEntry);
+    }
+
+    // will I need to reload plant and user state or will redux to dit for me? 
+
   };
 
   useEffect(() => {
-console.log("plant from in UE", plant)
-  },[plant])
+    console.log("plant from in UE", plant);
+  }, [plant]);
 
   return (
     <Container>
@@ -218,7 +236,6 @@ console.log("plant from in UE", plant)
                   activeCard={activeCard}
                   selectedPlant={selectedPlant}
                   index={index}
-              
                 />
               ))}
             </>
@@ -265,7 +282,6 @@ console.log("plant from in UE", plant)
                 name="nickname"
                 variant="outlined"
                 color="secondary"
-                className="classes-field"
                 onChange={handleEntryChange}
               />
               <br />
@@ -274,7 +290,6 @@ console.log("plant from in UE", plant)
                 name="location"
                 variant="outlined"
                 color="secondary"
-                className="classes-field"
                 onChange={handleEntryChange}
               />
               <br />
@@ -283,7 +298,6 @@ console.log("plant from in UE", plant)
                 name="notes"
                 variant="outlined"
                 color="secondary"
-                className="classes-field"
                 multiline
                 rows={4}
                 onChange={handleEntryChange}
@@ -293,7 +307,6 @@ console.log("plant from in UE", plant)
                 {" "}
                 Upload a picture
                 <input type="file" hidden />
-                {/* need to add an onchange to this */}
               </Button>
               <br />
               <div className="health_box">
@@ -305,11 +318,10 @@ console.log("plant from in UE", plant)
               </div>
               <br />
               <TextField
-                label="Problems (seperate with a ',')"
+                label="Problems (separate with a ',')"
                 name="problems"
                 variant="outlined"
                 color="secondary"
-                className="classes-field"
                 onChange={handleEntryChange}
               />
               <br />

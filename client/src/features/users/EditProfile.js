@@ -12,24 +12,26 @@ import TextField from "@mui/material/TextField";
 import CommonButton from "../../common/CommonButton";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserInApi } from "./userSlice";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const currentUser = useSelector((state) => state.user.loggedInUser);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState({
     username: "",
     name: "",
     image: "",
     email: "",
-    recieve_dev_emails: false,
+    recieve_dev_emails: null,
     status: "",
   });
 
   useEffect(() => {
     if (currentUser) {
       setUser(currentUser);
-      console.log("currentUser", currentUser)
+      console.log("currentUser", currentUser);
     }
   }, [currentUser]);
 
@@ -48,14 +50,17 @@ const EditProfile = () => {
       [e.target.name]: value,
     });
   };
-  
-  const updateUser = (editedUserId, editedUser) => 
-  {     dispatch(updateUserInApi(editedUserId, editedUser))}
+
+  const updateUser = (editedUserId, editedUser) => {
+    dispatch(updateUserInApi(editedUserId, editedUser));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedUser = user
-    updateUser({ userId: currentUser.id, updatedUser })
+    const updatedUser = user;
+    updateUser({ userId: currentUser.id, updatedUser });
+
+    navigate(`/users/${user.id}`);
     // Handle form submission here
     // i'll use updateUserInApi and make sure there are extended reducers
   };
@@ -138,8 +143,10 @@ const EditProfile = () => {
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={user.receive_dev_emails}
+                    checked={user.recieve_dev_emails}
                     onChange={handleUserChange}
+                    color="primary" 
+                    checkedColor="primary" 
                   />
                 }
                 label="Receive Dev Emails"

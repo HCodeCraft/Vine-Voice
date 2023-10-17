@@ -154,3 +154,7 @@ input[type='radio'] {
   display: flex;
   align-content: flex-end;
 }
+
+.cBox {
+  padding:5px
+}

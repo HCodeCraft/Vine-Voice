@@ -15,11 +15,13 @@ const NavBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const user = useSelector((state) => state.user.loggedInUser);
+
 
 
   useEffect(() => {
     // Update the selected tab based on the current URL
-    if (location.pathname === `/users/current`) {
+    if (location.pathname === `/users/${user?.id}`) {
       setSelectedTab(0);
     } else if (location.pathname === "/users/plants") {
       setSelectedTab(1);
@@ -53,7 +55,7 @@ const NavBar = () => {
             sx={{ textTransform: "none" }}
             label="My Profile"
             component={Link}
-            to={`/users/current`}
+            to={`/users/${user?.id}`}
             value={0}
           />
           <Tab
@@ -81,6 +83,8 @@ const NavBar = () => {
             value={3}
           />
         </Tabs>
+        <Typography mr={3} ml={3}>{user?.username}</Typography>
+      
         <Button
           sx={{ textTransform: "none" }}
           variant="contained"
@@ -88,6 +92,7 @@ const NavBar = () => {
         >
           Logout
         </Button>
+        
       </Toolbar>
     </AppBar>
   );

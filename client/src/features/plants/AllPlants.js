@@ -9,7 +9,9 @@ const AllPlants = () => {
 
 
   const plants = useSelector((state) => state.plant.allPlants)
+  const entries = useSelector((state) => state.entry.allEntries)
 
+console.log("entries", entries)
 
 
   useEffect(()=> {

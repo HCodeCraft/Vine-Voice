@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
 
-const apiUrl = config.API_BASE_URL;
+// const apiUrl = config.API_BASE_URL;
 
 
 // idk if I should use reducers since all my actions are asyncThunks
@@ -11,7 +11,7 @@ export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ username, password }) => {
     try {
-      const response = await fetch(`${apiUrl}/login`, {
+      const response = await fetch(`/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -34,7 +34,7 @@ export const loginUser = createAsyncThunk(
 
 export const fetchUserData = createAsyncThunk('user/fetchUserData', async (_) => {
   try {
-    const response = await fetch(`${apiUrl}/me`);
+    const response = await fetch(`/me`);
 
     console.log("fetchUserData is running")
 
@@ -57,7 +57,7 @@ export const fetchUserData = createAsyncThunk('user/fetchUserData', async (_) =>
 
 export const logoutUser = createAsyncThunk("user/logout", async () => {
   try {
-    const response = await fetch(`${apiUrl}/logout`, {
+    const response = await fetch(`/logout`, {
       method: "DELETE",
     });
     if (response.ok) {
@@ -74,7 +74,7 @@ export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
   async () => {
     try {
-      const response = await fetch(`${apiUrl}/users`);
+      const response = await fetch(`/users`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -87,7 +87,7 @@ export const fetchUserById = createAsyncThunk(
   "users/fetchUserById",
   async (userId) => {
     try {
-      const response = await fetch(`${apiUrl}/users/${userId}`);
+      const response = await fetch(`/users/${userId}`);
       const data = await response.json();
       console.log("fetchUserBy Ids data", data);
       return data;
@@ -101,8 +101,8 @@ export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
     try {
-      console.log("url trying to send to", `${apiUrl}/users/${userId}`)
-      const response = await fetch(`${apiUrl}/users/${userId}`, {
+      console.log("url trying to send to", `/users/${userId}`)
+      const response = await fetch(`/users/${userId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

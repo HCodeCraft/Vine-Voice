@@ -2,13 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
 
-const apiUrl = config.API_BASE_URL;
+// const apiUrl = config.API_BASE_URL;
 
 export const fetchAllPlants = createAsyncThunk(
   "plants/fetchAllPlants",
   async () => {
     try {
-      const response = await fetch(`${apiUrl}/plants`);
+      const response = await fetch(`/plants`);
       const data = await response.json();
     
       return data;
@@ -22,7 +22,7 @@ export const fetchPlantById = createAsyncThunk(
   "plants/fetchPlantById",
   async (plantId) => {
     try {
-      const response = await fetch(`${apiUrl}/plants/${plantId}`);
+      const response = await fetch(`/plants/${plantId}`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -36,7 +36,7 @@ export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
   async (newPlant) => {
     try {
-      const response = await fetch(`${apiUrl}/plants`, {
+      const response = await fetch(`/plants`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ export const addPlantToApi = createAsyncThunk(
 // want to make this availible only to admin
 export const deletePlantFromApi = async (plantId) => {
   try {
-    const response = await fetch(`${apiUrl}/plants/${plantId}`, {
+    const response = await fetch(`/plants/${plantId}`, {
       method: "DELETE",
     });
     if (response.ok) {
