@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   get '/search', to: "plants#search"
   # Routes for plants, users, sessions, etc.
   resources :plants, only: [:index, :show, :create, :destroy, :update]
-  resources :users, only: [:create, :show, :index, :update]
+  resources :users, only: [:create, :show, :index, :update, :destroy]
   resources :entries, only: [:index, :show, :create, :update, :destroy]
-  resources :comments, only: [:create, :update, :destroy]
+  resources :comments, only: [:index, :show, :create, :update, :destroy]
 
 
   post "/login", to: "sessions#create"

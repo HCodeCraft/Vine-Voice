@@ -82,20 +82,23 @@ export const addPlantToApi = createAsyncThunk(
 // );
 
 // want to make this availible only to admin
-export const deletePlantFromApi = async (plantId) => {
-  try {
-    const response = await fetch(`/plants/${plantId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      console.log("Plant deleted successfully.");
-    } else {
-      console.error("Failed to delete plant:", response.status);
+export const deletePlantFromApi = createAsyncThunk(
+  "plants/deletePlantFromApi",
+  async (plantId) => {
+    try {
+      const response = await fetch(`/plants/${plantId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("Plant deleted successfully.");
+      } else {
+        throw new Error(`Failed to delete plant: ${response.status}`);
+      }
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    console.error("An error occurred while deleting the plant:", error);
   }
-};
+);
 
 
 

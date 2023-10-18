@@ -56,21 +56,24 @@ export const addEntryToApi = createAsyncThunk(
   }
 );
 
-
-export const deleteEntryFromApi = async (entryId) => {
-  try {
-    const response = await fetch(`/entries/${entryId}`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      console.log("Entry deleted successfully.");
-    } else {
-      console.error("Failed to delete entry:", response.status);
+// Need to make this an asyncThunk!
+export const deleteEntryFromApi = createAsyncThunk(
+  "entries/deleteEntryFromApi",
+  async (entryId) => {
+    try {
+      const response = await fetch(`/entries/${entryId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("Entry deleted successfully.");
+      } else {
+        throw new Error(`Failed to delete Entry: ${response.status}`);
+      }
+    } catch (error) {
+      throw error;
     }
-  } catch (error) {
-    console.error("An error occurred while deleting the entry:", error);
   }
-};
+);
 
 const entrySlice = createSlice({
   name: "entry",
