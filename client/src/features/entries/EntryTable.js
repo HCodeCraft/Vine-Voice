@@ -19,7 +19,8 @@ const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
 const EntryTable = ({ entries }) => {
   return (
-    <TableContainer component={Card} sx={{backgroundColor:'C9CCD3', maxHeight: '300px'}} >
+    <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
+    <TableContainer component={Card} sx={{backgroundColor:'C9CCD3'}} >
       <Table aria-label="table of entries" stickyHeader>
         <TableHead>
           <TableRow>
@@ -44,6 +45,7 @@ const EntryTable = ({ entries }) => {
         </TableRow>)}</TableBody>
       </Table>
     </TableContainer>
+    </div>
   );
 };
 

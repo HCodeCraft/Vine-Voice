@@ -1,8 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import config from "../../config";
-
-// const apiUrl = config.API_BASE_URL;
 
 
 
@@ -27,6 +24,31 @@ export const fetchEntryById = createAsyncThunk(
       const response = await fetch(`/entries/${entryId}`);
       const data = await response.json();
       return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const updateEntryInApi = createAsyncThunk(
+  "entry/updateEntryInApi",
+  async ({ entryId, updatedEntry }) => {
+    try {
+      const response = await fetch(`/entries/${entryId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedEntry),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Update entry failed");
+      }
+
+      const updatedEntryData = await response.json();
+      return updatedEntryData;
     } catch (error) {
       throw error;
     }

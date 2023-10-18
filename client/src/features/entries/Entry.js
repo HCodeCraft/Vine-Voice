@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useGetEntryQuery } from "./entriesSlice";
 import { Typography } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { FaSquare } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { addCommentToApi } from "../comments/commentSlice";
+import { useDispatch } from "react-redux";
+import { fetchEntryById } from "./entriesSlice";
+
 
 const Entry = () => {
   const params = useParams();
   const entryId = Number(params.id);
   const plantId = Number(params.plant_id);
+  const dispatch = useDispatch()
 
   const [commentForm, setCommentForm] = useState(false);
   const [comment, setComment] = useState({
@@ -19,6 +23,8 @@ const Entry = () => {
   const entries = useSelector((state) => state.entry.allEntries);
 
   const entry = entries[entryId - 1];
+
+  // fetch the individual entry? then use that for the useSelector
 
   const handleCommentClick = () => {
   console.log("handlecomment click was triggered!")
@@ -40,10 +46,28 @@ const Entry = () => {
   // // make a delete button and delete handler for all comments if it's user's plant
   // // only show username if it's not current user's
 
-  const handleCommentSubmit = () => {
+
+  const handleCommentSubmit = (e) => {
     e.preventDefault()
 
+    const newComment = {
+    comment: {
+     text: comment,
+     entry_id: entryId
+   } }
+    
+
+    dispatch(addCommentToApi(newComment))
+    setComment("")
+    setCommentForm(false)
+
   }
+
+  useEffect(() => {
+
+dispatch(fetchEntryById(entryId))
+
+  }, [entries])
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 

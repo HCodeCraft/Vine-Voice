@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
 export const fetchAllComments = createAsyncThunk(
   "comments/fetchAllComments",
   async () => {
@@ -51,23 +50,49 @@ export const addCommentToApi = createAsyncThunk(
   }
 );
 
-export const deleteCommentFromApi = createAsyncThunk(
-    "comments/deleteCommentFromApi",
-    async (commentId) => {
-      try {
-        const response = await fetch(`/comments/${commentId}`, {
-          method: "DELETE",
-        });
-        if (response.ok) {
-          console.log("Comment deleted successfully.");
-        } else {
-          throw new Error(`Failed to delete comment: ${response.status}`);
-        }
-      } catch (error) {
-        throw error;
+export const updateCommentInApi = createAsyncThunk(
+  "comment/updateCommentInApi",
+  async ({ commentId, updatedComment }) => {
+    try {
+      const response = await fetch(`/comments/${commentId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedComment),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Update comment failed");
       }
+
+      const updatedCommentData = await response.json();
+      return updatedCommentData;
+    } catch (error) {
+      throw error;
     }
-  );
+  }
+);
+
+export const deleteCommentFromApi = createAsyncThunk(
+  "comments/deleteCommentFromApi",
+  async (commentId) => {
+    try {
+      const response = await fetch(`/comments/${commentId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+        console.log("Comment deleted successfully.");
+        return commentId
+      } else {
+        throw new Error(`Failed to delete comment: ${response.status}`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 const commentSlice = createSlice({
   name: "comment",
@@ -130,13 +155,40 @@ const commentSlice = createSlice({
       .addCase(addCommentToApi.rejected, (state, action) => {
         state.loadingIndividualComment = false;
         state.errorIndividualComment = action.error.message;
+      })
+      .addCase(updateCommentInApi.pending, (state, action) => {
+        state.loadingIndividualComment = true;
+      })
+      .addCase(updateCommentInApi.fulfilled, (state, action) => {
+        // Assuming action.payload is an array of comments
+        state.individualComment = action.payload;
+        state.loadingIndividualComment = false;
+      })
+      .addCase(updateCommentInApi.rejected, (state, action) => {
+        state.loadingIndividualComment = false;
+        state.errorIndividualComment = action.error.message;
+      })
+      .addCase(deleteCommentFromApi.pending, (state, action) => {
+        state.loadingIndividualComment = true;
+      })
+      .addCase(deleteCommentFromApi.fulfilled, (state, action) => {
+        // Assuming action.payload is the commentId of the deleted comment
+        const deletedCommentId = action.payload;
+
+        // Update your state to remove the deleted comment by its commentId
+        state.allComments = state.comments.filter(
+          (comment) => comment.commentId !== deletedCommentId
+        );
+
+        state.loadingIndividualComment = false;
+      })
+      .addCase(deleteCommentFromApi.rejected, (state, action) => {
+        state.loadingIndividualComment = false;
+        state.errorIndividualComment = action.error.message;
       });
   },
 });
 
-export const {
-  addComment,
-  deleteComment,
-} = commentSlice.actions;
+export const { addComment, deleteComment } = commentSlice.actions;
 
 export const commentReducer = commentSlice.reducer;

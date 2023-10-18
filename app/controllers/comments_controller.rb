@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
 
     # create the comment though the user
     def create
-        newComment = @current_user.comment.create!(comment_params)
+        newComment = @current_user.comments.create!(comment_params)
         render json: newComment
     end
 

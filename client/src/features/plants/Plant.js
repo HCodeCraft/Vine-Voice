@@ -89,7 +89,7 @@ const Plant = () => {
           <br />
           <br />
           <Grid container spacing={1}>
-            <Grid container item spacing={3}>
+            <Grid container item spacing={3} >
               <FormRow />
             </Grid>
           </Grid>
@@ -106,7 +106,9 @@ const Plant = () => {
           Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
         <br />
+
         <EntryTable entries={plant.entries} />
+
         <br />
         <br />
       </div>
