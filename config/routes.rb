@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :plants, only: [:index, :show, :create, :destroy, :update]
   resources :users, only: [:create, :show, :index, :update]
   resources :entries, only: [:index, :show, :create, :update, :destroy]
+  resources :comments, only: [:create, :update, :destroy]
 
 
   post "/login", to: "sessions#create"
