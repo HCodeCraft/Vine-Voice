@@ -2,17 +2,14 @@ import { combineReducers } from "redux";
 import { userReducer} from "../features/users/userSlice";
 import { plantReducer} from "../features/plants/plantSlice"
 import { entryReducer } from "../features/entries/entriesSlice";
-// import { authReducer } from '../features/auth/authSlice';
+import { commentReducer } from "../features/comments/commentSlice";
 
-
-
-
-// I know I need to replace the get queries that apiSlice exports
 
 const rootReducer = combineReducers({
-  user: userReducer, // Add your data entity reducers here
+  user: userReducer, 
   plant: plantReducer,
-  entry: entryReducer
+  entry: entryReducer,
+  comment: commentReducer
 });
 
 export default rootReducer;
