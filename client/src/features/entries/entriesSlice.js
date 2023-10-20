@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
-
 export const fetchAllEntries = createAsyncThunk(
   "entries/fetchAllEntries",
   async () => {
@@ -57,7 +55,7 @@ export const updateEntryInApi = createAsyncThunk(
 
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
-  async ( newEntry ) => {
+  async (newEntry) => {
     try {
       const response = await fetch(`/entries`, {
         method: "POST",
@@ -70,7 +68,7 @@ export const addEntryToApi = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Failed to add entry to API");
       }
-      console.log("data from addEntry", data)
+      console.log("data from addEntry", data);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -117,7 +115,9 @@ const entrySlice = createSlice({
         (entry) => entry.id !== action.payload
       );
     },
-    
+    addCommentToEntry: (state, action) => {
+      state.individualEntry.comments.push(action.payload)
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -147,9 +147,12 @@ const entrySlice = createSlice({
         state.loadingIndividualEntry = true;
       })
       .addCase(addEntryToApi.fulfilled, (state, action) => {
+        const newEntry = action.payload;
 
-        state.allEntries.push(action.payload);
-        state.individualEntry = action.payload
+        state.allEntries.push(newEntry);
+
+        state.individualEntry = newEntry;
+
         state.loadingIndividualEntry = false;
       })
       .addCase(addEntryToApi.rejected, (state, action) => {
@@ -165,23 +168,18 @@ const entrySlice = createSlice({
 
         // Update your state to remove the deleted comment by its commentId
         state.allEntries = state.allEntries.filter(
-          (entry) => entry.entryId!== deletedEntryId
+          (entry) => entry.entryId !== deletedEntryId
         );
-        
+
         state.loadingIndividualEntry = false;
       })
       .addCase(deleteEntryFromApi.rejected, (state, action) => {
         state.loadingIndividualEntry = false;
-        state.errorIndividualEntry= action.error.message;
-      });
+        state.errorIndividualEntry = action.error.message;
+      })
   },
 });
 
-export const {
-  addEntry,
-  deleteEntry,
-} = entrySlice.actions;
+export const { addEntry, deleteEntry, addCommentToEntry } = entrySlice.actions;
 
 export const entryReducer = entrySlice.reducer;
-
-

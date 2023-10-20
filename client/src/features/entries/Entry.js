@@ -33,6 +33,8 @@ const Entry = () => {
   });
 
   const indEntry = useSelector((state) => state.entry.individualEntry);
+  const indEntryComments = useSelector((state) => state.entry.individualEntry.comments)
+  console.log("indEntryComments", indEntryComments)
   console.log("indEntry", indEntry)
   const allComments = useSelector((state) => state.comment.allComments);
   console.log("allComments", allComments)
@@ -40,6 +42,8 @@ const Entry = () => {
   const entryComments = allComments.filter((comment) =>    comment.entry.id === indEntry.id)
 
   console.log("entryComments", entryComments)
+
+  /// need to figure out how to add the new commment to indEntry.comments
 
 
   const scrollToSection = (elementRef) => {
@@ -175,8 +179,8 @@ const Entry = () => {
           <br />
         </>
       ) : null}
-      {entryComments?.length > 0 ? (
-        entryComments.map((comment, index) => (
+      {indEntry.comments.length > 0 ? (
+        indEntry.comments.map((comment, index) => (
           <div key={index}>
             <CommentCard
               key={index}
