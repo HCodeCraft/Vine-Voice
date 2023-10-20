@@ -1,5 +1,5 @@
 class CommentSerializer < ActiveModel::Serializer
-  attributes :text, :username, :create_date, :id
+  attributes :text, :username, :create_date, :id, :entry_id
   belongs_to :entry
 
 

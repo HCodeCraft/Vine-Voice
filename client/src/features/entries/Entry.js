@@ -35,7 +35,11 @@ const Entry = () => {
   const indEntry = useSelector((state) => state.entry.individualEntry);
   console.log("indEntry", indEntry)
   const allComments = useSelector((state) => state.comment.allComments);
-  console.log("allComments from entry", allComments)
+  console.log("allComments", allComments)
+
+  const entryComments = allComments.filter((comment) =>    comment.entry.id === indEntry.id)
+
+  console.log("entryComments", entryComments)
 
 
   const scrollToSection = (elementRef) => {
@@ -171,8 +175,8 @@ const Entry = () => {
           <br />
         </>
       ) : null}
-      {indEntry.comments?.length > 0 ? (
-        indEntry.comments.map((comment, index) => (
+      {entryComments?.length > 0 ? (
+        entryComments.map((comment, index) => (
           <div key={index}>
             <CommentCard
               key={index}
