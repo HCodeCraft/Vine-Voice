@@ -11,7 +11,6 @@ const AllPlants = () => {
   const plants = useSelector((state) => state.plant.allPlants)
   const entries = useSelector((state) => state.entry.allEntries)
 
-console.log("entries", entries)
 
 
   useEffect(()=> {
@@ -20,26 +19,6 @@ fetchAllPlants()
   },[plants])
 
 
-  // Select the relevant data from the Redux store
-  // const { data, isLoading, isError, isSuccess, error } = useSelector(
-  //   (state) => state.plantSlice.allPlants // Replace 'plants' with the correct slice name from your Redux store
-  // );
-
-
-
-  // // Check if data is still loading
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // // Check if an error occurred
-  // if (isError) {
-  //   return <p>Error: {error.message}</p>;
-  // }
-
-  // // Check if data has loaded successfully
-  // if (isSuccess) {
-  //   // Ensure 'data' is not undefined before rendering
     if (plants) {
       const content = plants.map((plant) => (
         <PlantCard

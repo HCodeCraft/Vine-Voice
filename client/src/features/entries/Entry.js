@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Typography } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
@@ -7,67 +7,101 @@ import { useSelector } from "react-redux";
 import { addCommentToApi } from "../comments/commentSlice";
 import { useDispatch } from "react-redux";
 import { fetchEntryById } from "./entriesSlice";
-
+import CommentCard from "../comments/CommentCard";
 
 const Entry = () => {
   const params = useParams();
+  const commentBox = useRef(null);
   const entryId = Number(params.id);
-  const plantId = Number(params.plant_id);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+
 
   const [commentForm, setCommentForm] = useState(false);
-  const [comment, setComment] = useState({
-    text:""
-  })
+  const [comment, setComment] = useState("");
+  const [entry, setEntry] = useState({
+    nickname: "",
+    location: "",
+    notes: "",
+    image: "",
+    user_id: "",
+    plant_id: "",
+    health: null,
+    problems: [],
+    open_to_advice: false,
+    comments: [],
+  });
 
-  const entries = useSelector((state) => state.entry.allEntries);
+  const indEntry = useSelector((state) => state.entry.individualEntry);
+  console.log("indEntry", indEntry)
+  const allComments = useSelector((state) => state.comment.allComments);
+  console.log("allComments from entry", allComments)
 
-  const entry = entries[entryId - 1];
+
+  const scrollToSection = (elementRef) => {
+    window.scrollTo({
+      top: elementRef.current.offsetTop,
+      behavior: "smooth",
+    });
+  };
+
+  // need to add boolean if the curretly logged in user is the author of the entry
+  // s/he can delete everyone's comment and also edit the entry
+
+  // if a person made the comment, they can delete it
+
+  useEffect(() => {
+    const fetchEntry = async () => {
+      const result = await dispatch(fetchEntryById(entryId));
+      setEntry(result.payload); // Assuming the entry data is in payload
+    };
+
+    fetchEntry();
+  }, []);
 
   // fetch the individual entry? then use that for the useSelector
 
-  const handleCommentClick = () => {
-  console.log("handlecomment click was triggered!")
-    setCommentForm((prevCommentForm) => !prevCommentForm);
+  const handleCommentClick = async () => {
+    await setCommentForm((prevCommentForm) => !prevCommentForm);
+    scrollToSection(commentBox);
   };
-  
-
-  console.log("commentForm", commentForm)
 
   const handleCommentChange = (e) => {
-    setComment(e.target.value)
-  }
+    setComment(e.target.value);
+  };
 
   // // TO-DO
   // // If this is user's plant, prepend nickname with "My"
   // // Add user's avatars to their comments
-  // // add Edit button to current user's comments
-  // // add an add comment button
   // // make a delete button and delete handler for all comments if it's user's plant
   // // only show username if it's not current user's
 
-
-  const handleCommentSubmit = (e) => {
-    e.preventDefault()
-
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault();
+  
     const newComment = {
-    comment: {
-     text: comment,
-     entry_id: entryId
-   } }
-    
+      text: comment,
+      entry_id: entryId,
+    };
+  
+    try {
+      const resultAction = await dispatch(addCommentToApi(newComment, entryId));
+  
+      if (addCommentToApi.fulfilled.match(resultAction)) {
+        const updatedEntry = resultAction.payload;
+          // Update the entry with the new comment
+        setComment("");  // Clear the comment input
+        setCommentForm(false);
 
-    dispatch(addCommentToApi(newComment))
-    setComment("")
-    setCommentForm(false)
-
-  }
-
-  useEffect(() => {
-
-dispatch(fetchEntryById(entryId))
-
-  }, [entries])
+        return updatedEntry  // Close the comment form
+      } else {
+        console.log("error", resultAction.error);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
+  };
+  
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
@@ -99,7 +133,7 @@ dispatch(fetchEntryById(entryId))
       <br />
       <Typography>
         Problems:{" "}
-        {entry.problems.length > 0
+        {entry.problems?.length > 0
           ? entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
           : "No Problems :)"}
       </Typography>
@@ -122,32 +156,31 @@ dispatch(fetchEntryById(entryId))
           <CommonButton>Edit Entry</CommonButton>
           <CommonButton>Delete Entry</CommonButton>
           <br />
-          <br />
-          <CommonButton>Add Comment</CommonButton>
+
         </>
       )} */}
       <br />
-      <br />
       <Typography variant="h5">Comments:</Typography>
-      {commentForm == false ? <CommonButton onClick={handleCommentClick}>Add a Comment</CommonButton> : null}
-      
-      {entry.comments.length > 0 ? (
-        entry.comments.map((comment, index) => (
-          <div className="comment_box" key={index}>
-            <Typography
-              align="left"
-              sx={{
-                textDecoration: "underline",
-              }}
-            >
-              {comment.username}
-            </Typography>
-            <Typography align="left" variant="subtitle1">
-              {comment.create_date}
-            </Typography>
-            <Typography variant="h6" align="left">
-              {comment.text}
-            </Typography>
+      <br />
+      {commentForm == false ? (
+        <>
+          {" "}
+          <CommonButton onClick={handleCommentClick}>
+            Add a Comment
+          </CommonButton>{" "}
+          <br />
+        </>
+      ) : null}
+      {indEntry.comments?.length > 0 ? (
+        indEntry.comments.map((comment, index) => (
+          <div key={index}>
+            <CommentCard
+              key={index}
+              setComment={setComment}
+              comment={comment}
+              handleCommentChange={handleCommentChange}
+            />
+            <br />
           </div>
         ))
       ) : (
@@ -157,28 +190,30 @@ dispatch(fetchEntryById(entryId))
           <Typography>No comments yet.</Typography>
         </>
       )}
+
       {commentForm === true ? (
-              <>
-                <br />
-                <br />
-                <textarea
-                  rows={5}
-                  cols={20}
-                  name="text"
-                  value={comment.text}
-                  onChange={handleCommentChange}
-                  type="text"
-                  className="cBox"
-                />
-                <br />
-                <br />{" "}
-                <CommonButton onClick={handleCommentSubmit}>Submit</CommonButton>
-              </>
-            ) : null}
+        <div ref={commentBox} className="commentBox">
+          <br />
+          <textarea
+            rows={5}
+            cols={20}
+            name="text"
+            value={comment.text}
+            onChange={handleCommentChange}
+            type="text"
+            className="cBox"
+          />
+          <br />
+          <br />{" "}
+          <CommonButton onClick={handleCommentSubmit}>Submit</CommonButton>
+          <br />
+        </div>
+      ) : null}
+
       <br />
       <br />
-      <br/>
-      <br/>
+      <br />
+      <br />
     </section>
   );
 };

@@ -6,6 +6,10 @@ class CommentsController < ApplicationController
         render json: newComment
     end
 
+    def index
+      render json: Comment.all
+    end
+
     def update
         comment = find_comment
         comment.update(comment_params)
@@ -27,6 +31,6 @@ class CommentsController < ApplicationController
 
       # not sure if I need to include user_id?
       def comment_params
-        params.require(:comment).permit(:text, :entry_id)
+        params.require(:comment).permit(:text, :entry_id, :id)
       end
 end

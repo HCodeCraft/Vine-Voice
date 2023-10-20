@@ -17,7 +17,10 @@ import {
 
 const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
+
 const EntryTable = ({ entries }) => {
+
+console.log("entries from entryTable", entries)
   return (
     <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
     <TableContainer component={Card} sx={{backgroundColor:'C9CCD3'}} >

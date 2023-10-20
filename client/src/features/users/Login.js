@@ -16,6 +16,7 @@ import { DevTool } from "@hookform/devtools";
 import { fetchUserData, loginUser } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entriesSlice";
+import { fetchAllComments } from "../comments/commentSlice";
 
 
 const Login = () => {
@@ -49,6 +50,7 @@ const Login = () => {
       if (loginUser.fulfilled.match(action)) {
         dispatch(fetchAllPlants());
         dispatch(fetchAllEntries());
+        dispatch(fetchAllComments())
       }
     } catch (error) {
       console.error('Login failed:', error);

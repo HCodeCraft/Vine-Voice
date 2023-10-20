@@ -48,8 +48,7 @@ const UserProfile = () => {
 
   useEffect(()=> {
     params.id == user.id ? setCurrentUser(true) : setCurrentUser(false)
-    console.log(currentUser)
-    console.log("params.id", params.id, "user.id", user.id)
+
   }, [params])
 
   return user ? (

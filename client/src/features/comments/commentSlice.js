@@ -7,7 +7,9 @@ export const fetchAllComments = createAsyncThunk(
     try {
       const response = await fetch(`/comments`);
       const data = await response.json();
+      console.log("data from fetchAllComments", data)
       return data;
+      
     } catch (error) {
       throw error;
     }
@@ -42,7 +44,9 @@ export const addCommentToApi = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Failed to add comment to API");
       }
+      
       const data = await response.json();
+      console.log("data from commentSlice", data)
       return data;
     } catch (error) {
       throw error;
@@ -52,7 +56,7 @@ export const addCommentToApi = createAsyncThunk(
 
 export const updateCommentInApi = createAsyncThunk(
   "comment/updateCommentInApi",
-  async ({ commentId, updatedComment }) => {
+  async ({ commentId, updatedComment },) => {
     try {
       const response = await fetch(`/comments/${commentId}`, {
         method: "PATCH",
@@ -61,7 +65,7 @@ export const updateCommentInApi = createAsyncThunk(
         },
         body: JSON.stringify(updatedComment),
       });
-
+    
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || "Update comment failed");
@@ -148,10 +152,12 @@ const commentSlice = createSlice({
         state.loadingIndividualComment = true;
       })
       .addCase(addCommentToApi.fulfilled, (state, action) => {
-        // Assuming action.payload is an array of comments
-        state.allComments.push(action.payload);
+        state.individualComment = action.payload
+      state.allComments.push(action.payload)
+    //   state.entry.comments.push(action.payload)
         state.loadingIndividualComment = false;
       })
+      
       .addCase(addCommentToApi.rejected, (state, action) => {
         state.loadingIndividualComment = false;
         state.errorIndividualComment = action.error.message;
@@ -160,10 +166,19 @@ const commentSlice = createSlice({
         state.loadingIndividualComment = true;
       })
       .addCase(updateCommentInApi.fulfilled, (state, action) => {
-        // Assuming action.payload is an array of comments
-        state.individualComment = action.payload;
+        // Assuming action.payload is the updated comment
+        const updatedComment = action.payload;
+      
+        // Update the individualComment
+        state.individualComment = updatedComment;
+      
+        // Update the allComments array by mapping over it and replacing the updated comment
+        state.allComments = state.allComments.map((comment) =>
+          comment.id === updatedComment.id ? updatedComment : comment
+        );
+      
         state.loadingIndividualComment = false;
-      })
+      })      
       .addCase(updateCommentInApi.rejected, (state, action) => {
         state.loadingIndividualComment = false;
         state.errorIndividualComment = action.error.message;
@@ -174,12 +189,12 @@ const commentSlice = createSlice({
       .addCase(deleteCommentFromApi.fulfilled, (state, action) => {
         // Assuming action.payload is the commentId of the deleted comment
         const deletedCommentId = action.payload;
-
+    
         // Update your state to remove the deleted comment by its commentId
-        state.allComments = state.comments.filter(
-          (comment) => comment.commentId !== deletedCommentId
+        state.allComments = state.allComments.filter(
+          (comment) => comment.id !== deletedCommentId
         );
-
+    
         state.loadingIndividualComment = false;
       })
       .addCase(deleteCommentFromApi.rejected, (state, action) => {
