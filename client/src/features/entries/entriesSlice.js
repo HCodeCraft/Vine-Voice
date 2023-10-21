@@ -117,6 +117,18 @@ const entrySlice = createSlice({
     },
     addCommentToEntry: (state, action) => {
       state.individualEntry.comments.push(action.payload)
+    },
+    deleteCommentFromEntry:(state, action) => {
+      state.individualEntry.comments = state.individualEntry.comments.filter(
+        (comment) => comment.id !== action.payload
+      );
+    },
+    updateCommentInEntry:(state, action) => {
+      const updatedComment = action.payload;
+
+      state.individualEntry.comments = state.individualEntry.comments.map((comment) =>
+        comment.id === updatedComment.id ? updatedComment : comment
+      );
     }
   },
   extraReducers: (builder) => {
@@ -180,6 +192,6 @@ const entrySlice = createSlice({
   },
 });
 
-export const { addEntry, deleteEntry, addCommentToEntry } = entrySlice.actions;
+export const { addEntry, deleteEntry, addCommentToEntry, deleteCommentFromEntry, updateCommentInEntry } = entrySlice.actions;
 
 export const entryReducer = entrySlice.reducer;

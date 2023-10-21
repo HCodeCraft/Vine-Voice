@@ -9,10 +9,10 @@ import { deleteCommentFromApi } from "../comments/commentSlice";
 
 const CommentCard = ({ comment, setComment }) => {
 
-  const allComments = useSelector((state) => state.comment.allComments)
+    const indEntryComments = useSelector((state) => state.entry.individualEntry.comments)
 
 
-  const oneComment = allComments.find(allComment => comment.id == allComment.id);
+  const oneComment = indEntryComments.find(indComment => comment.id == indComment.id);
  
 
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const CommentCard = ({ comment, setComment }) => {
   };
 
   if (!comment) {
-    return null; // Return null if comment is undefined
+    return null; 
   }
 
   return oneComment ? (

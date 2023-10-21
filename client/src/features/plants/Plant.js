@@ -1,21 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import EntryTable from "../entries/EntryTable";
+import { fetchPlantById } from "./plantSlice";
 
 const Plant = () => {
   const params = useParams();
+  const dispatch = useDispatch();
   const id = Number(params.id);
 
-
-  const plants = useSelector((state) => state.plant.allPlants);
-  const plant = plants[id -1];
-
-  console.log("Plant entries", plant.entries)
+  // To-Do
+  // add medium image Urls to existing plants and use them for the plant page image
+  // get plant comments so I can put it in EntryTable
 
 
+  // const plants = useSelector((state) => state.plant.allPlants);
+  // const otherWay = plants[id-1]
+  // was this way faster?
+
+  const plant = useSelector((state) => state.plant.individualPlant);
+
+
+
+
+  // how can I get the entry.comments?
+// currently getting Plant.entries
+// could filter the comments, or get the plant model to have comments somehow
+
+useEffect(()=> {
+dispatch(fetchPlantById(id))
+console.log("plant", plant)
+},[])
 
 
   if (!plant) {
@@ -75,7 +92,7 @@ const Plant = () => {
         <br />
         <img
           className="img_deg"
-          src={plant.med_image_url}
+          src={plant.image_url}
         ></img>
         <div className="text-box">
           <p className="desc">{plant.description}</p>
@@ -107,7 +124,7 @@ const Plant = () => {
         </Typography>
         <br />
 
-        <EntryTable entries={plant.entries} />
+        <EntryTable entries={plant.entries} comments={plant.comments}/>
 
         <br />
         <br />

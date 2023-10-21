@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addCommentToEntry } from "../entries/entriesSlice";
-import { useDispatch } from "react-redux"
+import { addCommentToEntry, deleteCommentFromEntry, updateCommentInEntry } from "../entries/entriesSlice";
+
 
 
 export const fetchAllComments = createAsyncThunk(
@@ -58,7 +58,7 @@ export const addCommentToApi = createAsyncThunk(
 
 export const updateCommentInApi = createAsyncThunk(
   "comment/updateCommentInApi",
-  async ({ commentId, updatedComment }) => {
+  async ({ commentId, updatedComment }, thunkAPI) => {
     try {
       const response = await fetch(`/comments/${commentId}`, {
         method: "PATCH",
@@ -74,6 +74,7 @@ export const updateCommentInApi = createAsyncThunk(
       }
 
       const updatedCommentData = await response.json();
+      thunkAPI.dispatch(updateCommentInEntry(updatedCommentData))
       return updatedCommentData;
     } catch (error) {
       throw error;
@@ -83,12 +84,14 @@ export const updateCommentInApi = createAsyncThunk(
 
 export const deleteCommentFromApi = createAsyncThunk(
   "comments/deleteCommentFromApi",
-  async (commentId) => {
+  async (commentId, thunkAPI) => {
     try {
       const response = await fetch(`/comments/${commentId}`, {
         method: "DELETE",
       });
+
       if (response.ok) {
+        thunkAPI.dispatch(deleteCommentFromEntry(commentId))
         console.log("Comment deleted successfully.");
         return commentId;
       } else {
@@ -111,12 +114,6 @@ const commentSlice = createSlice({
     errorIndividualComment: null,
   },
   reducers: {
-    setCredentials: (state, { payload }) => {
-      state.individualComment = payload;
-    },
-    resetCredentials: (state) => {
-      state.individualComment = null;
-    },
     addComment: (state, action) => {
       state.allComments.push(action.payload);
     },

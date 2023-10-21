@@ -43,7 +43,9 @@ margin-top: 2%;
 .img_deg{
   float: left;
   width: auto;
-  margin-right: 3%
+  margin-right: 3%;
+  max-height: 400px;
+  max-width: 300px;
 }
 
 .plantbox{

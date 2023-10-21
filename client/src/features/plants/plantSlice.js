@@ -114,12 +114,6 @@ const plantSlice = createSlice({
     errorIndividualPlant: null,
   },
   reducers: {
-    setCredentials: (state, { payload }) => {
-      state.individualPlant = payload;
-    },
-    resetCredentials: (state) => {
-      state.individualPlant = null;
-    },
     addPlant: (state, action) => {
       state.allPlants.push(action.payload);
     },

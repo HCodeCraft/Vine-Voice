@@ -13,6 +13,7 @@ const AllPlants = () => {
 
 
 
+
   useEffect(()=> {
     console.log("useEffect Ran")
 fetchAllPlants()

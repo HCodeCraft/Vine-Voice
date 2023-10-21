@@ -7,10 +7,15 @@ import PlantCard from './PlantCard'
 const UserPlants = () => {
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser)
-  console.log("loggedInUser", loggedInUser)
+
+console.log("loggedInUser", loggedInUser)
+// could filter the user.entries to be a count for each plant
+
 
 
   const plants = loggedInUser?.plants
+
+  console.log("plants", plants)
 
 
 // TO-Do
@@ -27,7 +32,7 @@ const UserPlants = () => {
           image_url={plant.image_url}
           sciName={plant.scientific_name}
           short_description={plant.short_description}
-          entries={plant.entries}
+          entries={loggedInUser.entries.filter((entry) => entry.plant_id == plant.id)}
           id={plant.id}
         />
       ));

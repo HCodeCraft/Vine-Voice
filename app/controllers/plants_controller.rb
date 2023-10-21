@@ -7,6 +7,11 @@ class PlantsController < ApplicationController
     render json: Plant.all
   end
 
+  def show
+    plant = find_plant
+    render json: plant
+  end
+
   def search
     search_query = params[:q]
 

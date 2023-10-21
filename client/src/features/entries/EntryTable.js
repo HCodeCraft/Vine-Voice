@@ -17,8 +17,13 @@ import {
 
 const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
+// this is not shwing the comment count because it's from allPlants
 
-const EntryTable = ({ entries }) => {
+
+const EntryTable = ({ entries, comments }) => {
+
+  // const entryComments = comments.filter((comment) => comment.entry_id ==entry.id)
+  // probably a more concise way of putting the comments in...
 
 console.log("entries from entryTable", entries)
   return (
@@ -43,7 +48,7 @@ console.log("entries from entryTable", entries)
           <TableCell align='center'>{row.image ? row.image : "No Picture"}</TableCell>
           <TableCell align='center'>{<Typography variant='h4'><FaSquare color={ colorArray[row.health -1]}/> </Typography>}</TableCell>
           <TableCell align='center'>{row.problems ? row.problems.length : '0'}</TableCell>
-          <TableCell align='center'>{row.comments ? row.comments.length : '0'}</TableCell>
+          <TableCell align='center'>{comments.filter((comment) => comment.entry_id ==row.id) ? comments.filter((comment) => comment.entry_id ==row.id).length : '0'}</TableCell>
           <TableCell align='center'><Link to={`entries/${row.id}`}><CommonButton>Show More</CommonButton></Link></TableCell>
         </TableRow>)}</TableBody>
       </Table>
