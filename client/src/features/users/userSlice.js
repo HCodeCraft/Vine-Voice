@@ -162,6 +162,19 @@ const userSlice = createSlice({
         (user) => user.id !== action.payload.id
       );
     },
+    updateUserPlants: (state, action) => {
+      const updatedPlant = action.payload;
+
+      state.loggedInUser.plants = state.loggedInUser.plants.map((plant) =>
+        plant.id === updatedPlant.id ? updatedPlant : Plant
+      );
+
+      // I probably need to change it for all users, but I don't have all users loaded yet, 
+      // but it would be changed for individual plant and all plants
+      // it loads the individual plant every time someone opens the plant page, but they could still
+      // see an errored description or image
+      // I as the admin would be the only one able to change it though
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -252,7 +265,7 @@ const userSlice = createSlice({
 
 // do I need setUser when the asyncThunk is handling it?
 
-export const { setUser, resetUser, addUser, updateUser, deleteUser } =
+export const { setUser, resetUser, addUser, updateUser, deleteUser, updateUserPlants } =
   userSlice.actions;
 
 export const userReducer = userSlice.reducer;

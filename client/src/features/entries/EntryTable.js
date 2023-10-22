@@ -25,7 +25,6 @@ const EntryTable = ({ entries, comments }) => {
   // const entryComments = comments.filter((comment) => comment.entry_id ==entry.id)
   // probably a more concise way of putting the comments in...
 
-console.log("entries from entryTable", entries)
   return (
     <div style={{ overflowY: 'scroll', maxHeight: '300px' }}>
     <TableContainer component={Card} sx={{backgroundColor:'C9CCD3'}} >

@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import config from "../../config";
-
-// const apiUrl = config.API_BASE_URL;
+import { updateUserPlants } from "../users/userSlice";
 
 export const fetchAllPlants = createAsyncThunk(
   "plants/fetchAllPlants",
@@ -10,7 +8,7 @@ export const fetchAllPlants = createAsyncThunk(
     try {
       const response = await fetch(`/plants`);
       const data = await response.json();
-    
+
       return data;
     } catch (error) {
       throw error;
@@ -31,7 +29,6 @@ export const fetchPlantById = createAsyncThunk(
   }
 );
 
-
 export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
   async (newPlant) => {
@@ -41,7 +38,7 @@ export const addPlantToApi = createAsyncThunk(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newPlant), 
+        body: JSON.stringify(newPlant),
       });
 
       if (!response.ok) {
@@ -55,31 +52,31 @@ export const addPlantToApi = createAsyncThunk(
   }
 );
 
-// Not sure I would want to use this except for switching the api plant
-// export const updatePlantInApi = createAsyncThunk(
-//   "user/updateUserInApi",
-//   async ({ plantId, updatedPlant }) => {
-//     try {
-//       const response = await fetch(`${apiUrl}/users/${plantId}`, {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(updatedPlant),
-//       });
+export const updatePlantInApi = createAsyncThunk(
+  "user/updateUserInApi",
+  async ({ plantId, updatedPlant }, thunkAPI) => {
+    try {
+      const response = await fetch(`/users/${plantId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedPlant),
+      });
 
-//       if (!response.ok) {
-//         const errorData = await response.json();
-//         throw new Error(errorData.message || "Update plant failed");
-//       }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Update plant failed");
+      }
 
-//       const updatedPlantData = await response.json();
-//       return updatedPlantData;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
+      const updatedPlantData = await response.json();
+      thunkAPI.dispatch(updateUserPlants(updatedPlantData))
+      return updatedPlantData;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 // want to make this availible only to admin
 export const deletePlantFromApi = createAsyncThunk(
@@ -99,9 +96,6 @@ export const deletePlantFromApi = createAsyncThunk(
     }
   }
 );
-
-
-
 
 const plantSlice = createSlice({
   name: "plant",
@@ -162,20 +156,23 @@ const plantSlice = createSlice({
         state.allPlants.push(action.payload);
         state.loadingIndividualPlant = false;
       })
-      
+
       .addCase(addPlantToApi.rejected, (state, action) => {
         state.loadingIndividualPlant = false;
         state.errorIndividualPlant = action.error.message;
+      })
+      .addCase(updatePlantInApi.fulfilled, (state, action) => {
+        state.individualPlant = action.payload;
+
+        updatedPlant = state.individualPlant;
+
+        state.allPlants = state.allPlants.map((plant) =>
+          plant.id === updatedPlant.id ? updatedPlant : plant
+        );
       });
   },
 });
 
-export const {
-  addPlant,
-  updatePlant,
-  deletePlant,
-} = plantSlice.actions;
+export const { addPlant, updatePlant, deletePlant } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;
-
-

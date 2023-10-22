@@ -13,8 +13,10 @@ const Plant = () => {
 
   // To-Do
   // add medium image Urls to existing plants and use them for the plant page image
-  // get plant comments so I can put it in EntryTable
+  // add edit and delete buttons for the admin
 
+  const user = useSelector((state) => state.user.loggedInUser);
+  console.log("user", user);
 
   // const plants = useSelector((state) => state.plant.allPlants);
   // const otherWay = plants[id-1]
@@ -24,16 +26,16 @@ const Plant = () => {
 
 
 
+  const handleDeletePlant = (id) => {
+    // dispatch the deletePlantFromApi
+    // ? Change user plant state ?
+    // maybe make a confirmation delete screen
 
-  // how can I get the entry.comments?
-// currently getting Plant.entries
-// could filter the comments, or get the plant model to have comments somehow
+  }
 
-useEffect(()=> {
-dispatch(fetchPlantById(id))
-console.log("plant", plant)
-},[])
-
+  useEffect(() => {
+    dispatch(fetchPlantById(id));
+  }, []);
 
   if (!plant) {
     return (
@@ -90,10 +92,7 @@ console.log("plant", plant)
       <div className="pos_top">
         <br />
         <br />
-        <img
-          className="img_deg"
-          src={plant.image_url}
-        ></img>
+        <img className="img_deg" src={plant.image_url}></img>
         <div className="text-box">
           <p className="desc">{plant.description}</p>
         </div>
@@ -106,26 +105,34 @@ console.log("plant", plant)
           <br />
           <br />
           <Grid container spacing={1}>
-            <Grid container item spacing={3} >
+            <Grid container item spacing={3}>
               <FormRow />
             </Grid>
           </Grid>
         </Box>
         <br />
-        <br />
+        <br />{" "}
+        {user.admin === true ? (
+          <Box display="flex" justifyContent="flex-start">
+            <Link to={`/plants/${plant.id}/edit`}>
+              <CommonButton>Edit Plant</CommonButton>
+            </Link>
+            <CommonButton style={{ marginLeft: "10px" }} onClick={handleDeletePlant}>
+              Delete Plant
+            </CommonButton>
+          </Box>
+        ) : null}
         <Box display="flex" justifyContent="flex-end">
-  <Link to={`/plants/${plant.id}/entries/new`}>
-    <CommonButton>Add an Entry</CommonButton>
-  </Link>
-</Box>
+          <Link to={`/plants/${plant.id}/entries/new`}>
+            <CommonButton>Add an Entry</CommonButton>
+          </Link>
+        </Box>
         <br />
         <Typography variant="h5" align="center">
           Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
         <br />
-
-        <EntryTable entries={plant.entries} comments={plant.comments}/>
-
+        <EntryTable entries={plant.entries} comments={plant.comments} />
         <br />
         <br />
       </div>

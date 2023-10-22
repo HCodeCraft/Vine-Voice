@@ -164,3 +164,26 @@ input[type='radio'] {
 .commentField {
 font-size: 1em;
 }
+
+.editBox {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.editLabel{
+  font-size: 1.5em;
+}
+
+.inputText{
+  font-size:1.25em;
+}
+
+.editInputs {
+  width: 100%;
+}
+
+/* .editForm {
+  width: 600px;
+} */

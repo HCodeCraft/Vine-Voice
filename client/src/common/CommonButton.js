@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@mui/material/Button';
 
-const CommonButton = ({children, color, disabled, size, sx, variant, onClick}) => {
+const CommonButton = ({children, color, disabled, size, sx, variant, onClick, style, type = 'button'}) => {
 
     const buttonStyles = {
         backgroundColor: '#4CAF50',
@@ -12,7 +12,7 @@ const CommonButton = ({children, color, disabled, size, sx, variant, onClick}) =
         }}
 
   return (
-    <Button color={color} disabled={disabled} size={size} variant={variant} sx={buttonStyles} onClick={onClick}>
+    <Button style={style} color={color} disabled={disabled} size={size} variant={variant} sx={buttonStyles} onClick={onClick} type={type}>
 {children}
     </Button>
   )
