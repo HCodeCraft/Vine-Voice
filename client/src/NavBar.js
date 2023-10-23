@@ -10,28 +10,22 @@ import { resetUser, logoutUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const NavBar = () => {
-  const [selectedTab, setSelectedTab] = useState(0); // Initialize with the default tab index
+  const [selectedTab, setSelectedTab] = useState(0);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const user = useSelector((state) => state.user.loggedInUser);
 
-
-
   useEffect(() => {
-    // Update the selected tab based on the current URL
-    if (location.pathname === `/users/${user?.id}`) {
-      setSelectedTab(0);
-    } else if (location.pathname === "/users/plants") {
-      setSelectedTab(1);
-    } else if (location.pathname === "/plants/new") {
-      setSelectedTab(2);
-    } else if (location.pathname === "/plants") {
-      setSelectedTab(3);
-    }
-    // Add more conditions as needed for other routes
-  }, [location.pathname]);
+    // Define routes and their corresponding tab indexes
+    const routes = {
+      [`/users/${user?.id}`]: 0,
+      "/users/plants": 1,
+      "/plants/new": 2,
+      "/plants": 3,
+    };
+    setSelectedTab(routes[location.pathname] || 0);
+  }, [location.pathname, user]);
 
   const handleTabClick = (event, value) => {
     setSelectedTab(value);
@@ -44,55 +38,58 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar
-      className="topbar"
-      sx={{ textTransform: "none", background: "#81C784" }}
-    >
+    <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
       <Toolbar>
         <Typography variant="h4">Vine Voice</Typography>
-        <Tabs indicatorColor="primary" value={selectedTab}>
-          <Tab
+        {user && (
+          <Tabs indicatorColor="primary" value={selectedTab}>
+            <Tab
+              sx={{ textTransform: "none" }}
+              label="My Profile"
+              component={Link}
+              to={`/users/${user.id}`}
+              value={0}
+            />
+            <Tab
+              sx={{ textTransform: "none" }}
+              label="My Plants"
+              component={Link}
+              to="/users/plants"
+              onClick={handleTabClick}
+              value={1}
+            />
+            <Tab
+              sx={{ textTransform: "none" }}
+              label="Add A Plant"
+              component={Link}
+              to="/plants/new"
+              onClick={handleTabClick}
+              value={2}
+            />
+            <Tab
+              sx={{ textTransform: "none" }}
+              label="Everyone's Plants"
+              component={Link}
+              to="/plants"
+              onClick={handleTabClick}
+              value={3}
+            />
+          </Tabs>
+        )}
+        {user && (
+          <Typography mr={3} ml={3}>
+            {user.username}
+          </Typography>
+        )}
+        {user && (
+          <Button
             sx={{ textTransform: "none" }}
-            label="My Profile"
-            component={Link}
-            to={`/users/${user?.id}`}
-            value={0}
-          />
-          <Tab
-            sx={{ textTransform: "none" }}
-            label="My Plants"
-            component={Link}
-            to="/users/plants"
-            onClick={handleTabClick}
-            value={1}
-          />
-          <Tab
-            sx={{ textTransform: "none" }}
-            label="Add A Plant"
-            component={Link}
-            to="/plants/new"
-            onClick={handleTabClick}
-            value={2}
-          />
-          <Tab
-            sx={{ textTransform: "none" }}
-            label="Everyone's Plants"
-            component={Link}
-            to="/plants"
-            onClick={handleTabClick}
-            value={3}
-          />
-        </Tabs>
-        <Typography mr={3} ml={3}>{user?.username}</Typography>
-      
-        <Button
-          sx={{ textTransform: "none" }}
-          variant="contained"
-          onClick={handleLogout}
-        >
-          Logout
-        </Button>
-        
+            variant="contained"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );

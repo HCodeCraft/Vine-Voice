@@ -42,9 +42,10 @@ const CreateAccount = () => {
       alert("Passwords don't match");
     }
     data.email = data.email.toLowerCase();
-// dispatch addUser to Api 
+    const newUser = data
+    dispatch(registerUserInApi(newUser))
 // any other states I need to update?
-// add a dialogue for if user doesn't have any plants
+// should I/ can I change the initial name of data to newUser?
     console.log('data', data)
   };
 

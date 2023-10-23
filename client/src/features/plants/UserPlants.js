@@ -2,22 +2,32 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material';
 import PlantCard from './PlantCard';
+import Unauthorized from '../../Unauthorized';
 
 const UserPlants = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   const plants = loggedInUser?.plants;
 
+  if (!loggedInUser){
+    return (
+      <Unauthorized/>
+    )
+  }
+
   if (!plants || plants.length === 0) {
     return (
-      <>
+      <div className='center'>
+        <br/>
+        <br/>
         <Typography variant="h4" align="center">
           You don't have any plants logged!
         </Typography>
-        <Typography>
+        <br/>
+        <Typography variant="h5">
           Feel free to browse Everyone's plants and add a plant, or add a new plant
         </Typography>
-      </>
+      </div>
     );
   }
 

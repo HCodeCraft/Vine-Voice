@@ -99,8 +99,24 @@ export const fetchUserById = createAsyncThunk(
 
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
-  async({ newUser}) => {
-    
+  async (newUser) => {
+    try {
+      const response = await fetch(`/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add user to API");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 )
 
@@ -270,7 +286,15 @@ const userSlice = createSlice({
         state.loading = false;
         // state.loggedIn = false;
         state.error = action.error.message;
-      });
+      })
+      .addCase(registerUserInApi.fulfilled, (state, action) => {
+        state.loggedInUser = action.payload
+        state.loggedIn = true
+  
+      })
+      .addCase(registerUserInApi.rejected, (state, action) => {
+        state.error = action.error.message;
+      })
   
   },
 });

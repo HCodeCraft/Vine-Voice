@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import PlantCard from "./PlantCard";
 import { Typography, Grid, Box } from "@mui/material";
+import Unauthorized from "../../Unauthorized";
 
 const AllPlants = () => {
 
@@ -11,13 +12,18 @@ const AllPlants = () => {
   const plants = useSelector((state) => state.plant.allPlants)
   const entries = useSelector((state) => state.entry.allEntries)
 
+  const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
 
 
-  useEffect(()=> {
-    console.log("useEffect Ran")
-fetchAllPlants()
-  },[plants])
+  if (!loggedInUser){
+    return (
+      <Unauthorized/>
+    )
+  }
+
+
+
 
 
     if (plants) {

@@ -166,7 +166,7 @@ const plantSlice = createSlice({
       .addCase(updatePlantInApi.fulfilled, (state, action) => {
         state.individualPlant = action.payload;
 
-        updatedPlant = state.individualPlant;
+        const updatedPlant = state.individualPlant;
 
         state.allPlants = state.allPlants.map((plant) =>
           plant.id === updatedPlant.id ? updatedPlant : plant

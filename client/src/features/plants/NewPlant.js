@@ -4,7 +4,7 @@ import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import { addPlantToApi } from "./plantSlice";
 import { addEntryToApi } from "../entries/entriesSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
   Container,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
+import Unauthorized from "../../Unauthorized";
 
 const NewPlant = () => {
   const navigate = useNavigate();
@@ -54,6 +55,16 @@ const NewPlant = () => {
     edible: false,
     medicinal: false,
   });
+
+  const loggedInUser = useSelector((state) => state.user.loggedInUser);
+
+
+
+  if (!loggedInUser){
+    return (
+      <Unauthorized/>
+    )
+  }
 
   const API_KEY = process.env.REACT_APP_API_KEY;
 
