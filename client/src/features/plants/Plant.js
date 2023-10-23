@@ -1,15 +1,17 @@
 import React, { useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import EntryTable from "../entries/EntryTable";
 import { fetchPlantById } from "./plantSlice";
+import { deletePlantFromApi } from "./plantSlice";
 
 const Plant = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const id = Number(params.id);
+  const navigate = useNavigate();
 
   // To-Do
   // add medium image Urls to existing plants and use them for the plant page image
@@ -27,10 +29,11 @@ const Plant = () => {
 
 
   const handleDeletePlant = (id) => {
-    // dispatch the deletePlantFromApi
+dispatch(deletePlantFromApi(plant.id))
     // ? Change user plant state ?
-    // maybe make a confirmation delete screen
 
+
+navigate(`/plants`)
   }
 
   useEffect(() => {
@@ -74,6 +77,11 @@ const Plant = () => {
       </React.Fragment>
     );
   }
+
+  const entriesDesc = plant.entries.slice().sort((a, b) => b.id - a.id);
+
+
+
 
   return (
     <>
@@ -132,7 +140,7 @@ const Plant = () => {
           Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
         <br />
-        <EntryTable entries={plant.entries} comments={plant.comments} />
+        <EntryTable entries={entriesDesc} comments={plant.comments} />
         <br />
         <br />
       </div>

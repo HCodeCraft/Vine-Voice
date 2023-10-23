@@ -24,7 +24,7 @@ const PlantCard = ({
   return (
     <Grid item xs={12} md={4} sm={4}>
       <Card sx={{ maxWidth: 345 }}>
-        <CardMedia sx={{ height: 140 }} image={image_url} />
+        <CardMedia sx={{ height: 200 }} image={image_url} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {commonName}

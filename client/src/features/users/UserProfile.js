@@ -4,12 +4,12 @@ import { Typography, Box, Container } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
+import Unauthorized from "../../Unauthorized";
 
 const UserProfile = () => {
   const params = useParams()
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.loggedInUser);
-  console.log("user from userProfile", user)
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [currentUser, setCurrentUser] = useState(false)
@@ -43,13 +43,19 @@ const UserProfile = () => {
   };
 
   useEffect(() => {
-    setStatusForm(false);
-  }, [user.status]);
-
-  useEffect(()=> {
-    params.id == user.id ? setCurrentUser(true) : setCurrentUser(false)
-
-  }, [params])
+    if (user) {
+      setStatusForm(false);
+    }
+  }, [user?.status]);
+  
+  useEffect(() => {
+    if (user && params.id === user.id) {
+      setCurrentUser(true);
+    } else {
+      setCurrentUser(false);
+    }
+  }, [user, params.id]);
+  
 
   return user ? (
     <Container>
@@ -99,7 +105,7 @@ const UserProfile = () => {
       {currentUser == true ? (<Link to={`/users/${user.id}/edit`}><CommonButton>Edit Info</CommonButton></Link>) : null}
     </Container>
   ) : (
-    <h1>UserInfo not loaded</h1>
+    <Unauthorized/>
   );
 };
 

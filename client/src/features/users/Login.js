@@ -18,7 +18,6 @@ import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entriesSlice";
 import { fetchAllComments } from "../comments/commentSlice";
 
-
 const Login = () => {
   const navigate = useNavigate();
 
@@ -30,19 +29,9 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  // const indUser = useSelector((state) => state.reducer.user.loggedInUser);
+  const loggedIn = useSelector((state) => state.user.loggedIn);
 
-
-
-  const loggedIn = useSelector((state) => state.user.loggedIn)
-  console.log("loggedIn", loggedIn)
-
-
-
-
-
-
-
+  const indUser = useSelector((state) => state.user.loggedInUser);
 
   const submitForm = async (data) => {
     try {
@@ -50,27 +39,26 @@ const Login = () => {
       if (loginUser.fulfilled.match(action)) {
         dispatch(fetchAllPlants());
         dispatch(fetchAllEntries());
-        dispatch(fetchAllComments())
+        dispatch(fetchAllComments());
+        navigate(`/users/plants`);
       }
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
     }
   };
-  
-  
-// I think I might need to make this wait until the login finishes
-useEffect(() => {
-  if (loggedIn === true) {
-    dispatch(fetchUserData());
-  }
-}, [loggedIn, dispatch]);
 
+  // I think I might need to make this wait until the login finishes
+  useEffect(() => {
+    if (loggedIn === true) {
+      dispatch(fetchUserData());
+    }
+  }, [loggedIn, dispatch]);
 
-// useEffect(() => {
-//   if (indUser) {
-//   navigate(`/users/${indUser.id}`)
+  // useEffect(() => {
+  //   if (indUser) {
+  //   navigate(`/users/${indUser.id}`)
 
-// }},[indUser])
+  // }},[indUser])
 
   const paperStyle = {
     padding: 20,
@@ -82,8 +70,8 @@ useEffect(() => {
 
   return (
     <>
-    <br/>
-    <br/>
+      <br />
+      <br />
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">

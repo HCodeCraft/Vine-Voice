@@ -11,6 +11,8 @@ const EditPlant = () => {
   const dispatch = useDispatch();
 
   const apiPlant = useSelector((state) => state.plant.individualPlant);
+  console.log("apiPlant", apiPlant)
+
 
   // To Do
   // make a change handler for sunlight so multiple options are added to array
@@ -41,6 +43,15 @@ const EditPlant = () => {
 
   useEffect(() => setPlant(apiPlant), []);
 
+
+useEffect(() => {
+  if (typeof plant.sunlight === 'string') {
+    const initialSelectedOptions = plant.sunlight.split(", ");
+    setSelectedSunlightOptions(initialSelectedOptions);
+  }
+}, [plant.sunlight]);
+
+
   const handlePlantChange = (e) => {
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -52,28 +63,33 @@ const EditPlant = () => {
   };
 
   const handleSunlightOptionChange = (e) => {
-    const option = e.target.value;
-    if (e.target.checked) {
-      setSelectedSunlightOptions([...selectedSunlightOptions, option]);
-    } else {
-      setSelectedSunlightOptions(
-        selectedSunlightOptions.filter((item) => item !== option)
-      );
-    }
+  const option = e.target.name;
+  const updatedOptions = [...selectedSunlightOptions];
 
-    setPlant({
-      ...plant,
-      sunlight: selectedSunlightOptions.join(", "),
-    });
-  };
+
+  if (e.target.checked) {
+    updatedOptions.push(option);
+  } else {
+    const index = updatedOptions.indexOf(option);
+    if (index !== -1) {
+      updatedOptions.splice(index, 1);
+    }
+  }
+
+  setPlant({
+    ...plant,
+    sunlight: updatedOptions.join(", "),
+  });
+};
 
   // const canSave = [common_name, scientific_name, image_url].every(Boolean) && !isLoading;
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
-    console.log("plant from onSavePlantClicked", plant);
-    // dispatch(updatePlantInApi(plant.id, plant));
-    // figure out which states to change - user.plant and ofc allplants and individualplant
+    const plantId = apiPlant.id
+    const updatedPlant = plant
+    dispatch(updatePlantInApi({plantId, updatedPlant}));
+
 
     // navigate(`/plants/${plant.id}`);
   };
@@ -167,7 +183,6 @@ const EditPlant = () => {
             type="checkbox"
             id="full_shade"
             name="full_shade"
-            value={plant.sunlight}
             onChange={handleSunlightOptionChange}
             checked={selectedSunlightOptions.includes("full_shade")}
           />
@@ -179,7 +194,7 @@ const EditPlant = () => {
             type="checkbox"
             id="part_shade"
             name="part_shade"
-            value={plant.sunlight}
+            value="part_shade"
             onChange={handleSunlightOptionChange}
             checked={selectedSunlightOptions.includes("part_shade")}
           />
@@ -191,7 +206,7 @@ const EditPlant = () => {
             type="checkbox"
             id="sun-part_shade"
             name="sun-part_shade"
-            value={plant.sunlight}
+            value="sun-part_shade"
             onChange={handleSunlightOptionChange}
             checked={selectedSunlightOptions.includes("sun-part_shade")}
           />
@@ -203,7 +218,7 @@ const EditPlant = () => {
             type="checkbox"
             id="full_sun"
             name="full_sun"
-            value={plant.sunlight}
+            value="full_sun"
             onChange={handleSunlightOptionChange}
             checked={selectedSunlightOptions.includes("full_sun")}
           />
@@ -259,12 +274,12 @@ const EditPlant = () => {
         <br />
         <br />
         <label className="editLabel">Yearly Cycle</label>
-        <select className="editLabel" name="cycle" onChange={handlePlantChange}>
+        <select className="editLabel" name="cycle" onChange={handlePlantChange} value={plant.cycle}>
           <option></option>
-          <option value={plant.cycle}>Perennial</option>
-          <option value={plant.cycle}>Annual</option>
-          <option value={plant.cycle}>Biennial</option>
-          <option value={plant.cycle}>Biannual</option>
+          <option >Perennial</option>
+          <option >Annual</option>
+          <option >Biennial</option>
+          <option >Biannual</option>
         </select>
         <br />
         <br />

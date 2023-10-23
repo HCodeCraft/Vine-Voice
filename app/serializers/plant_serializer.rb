@@ -19,15 +19,15 @@ has_many :entries
   
     sunlight = object.sunlight[0] if object.sunlight
   
-    if sunlight&.include?("full sun")
+    if sunlight&.include?("full_sun")
       emojis << "☀️ Full Sun"
     end
   
-    if sunlight&.include?("part shade")
+    if sunlight&.include?("part_shade")
       emojis << "🌤️ Part Shade"
     end
   
-    if sunlight&.include?("part sun/part shade")
+    if sunlight&.include?("sun-part_shade")
       emojis << "🌤️/🌥️ Part Sun/Part Shade"
     end
   

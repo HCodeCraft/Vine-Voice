@@ -14,13 +14,14 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from './userSlice'
-import Spinner from "../../Spinner";
+import { registerUserInApi } from './userSlice'
+
 
 const CreateAccount = () => {
-  const { loading, userInfo, error, success } = useSelector(
-    (state) => state.auth
-  );
+
+
+
+
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const {
@@ -30,14 +31,20 @@ const CreateAccount = () => {
     control, // Get the control object from useForm
   } = useForm();
 
-  // NEED TO HAVE AVATAR ON HERE TOO
+  // To-Do
+  // get addUserToApi Working
+  // Get avatar/ image url working
+  // redirect to user plants
+
 
   const onSubmit = (data) => {
     if (data.password !== data.password_confirmation) {
       alert("Passwords don't match");
     }
     data.email = data.email.toLowerCase();
-    dispatch(addUser(data));
+// dispatch addUser to Api 
+// any other states I need to update?
+// add a dialogue for if user doesn't have any plants
     console.log('data', data)
   };
 
@@ -51,7 +58,7 @@ const CreateAccount = () => {
 
   const paperStyle = {
     padding: 20,
-    height: "85vh",
+    height: "89vh",
     width: 400,
     margin: "20px auto",
   };
@@ -131,7 +138,22 @@ const CreateAccount = () => {
               })}
             />
             <p className="error_msg">{errors.password_confirmation?.message}</p>
-            <br />
+          
+        
+            <Button variant="contained">Add Avatar from image</Button>
+            {/* avatar_url */}
+            <br/>
+            <br/>
+            <TextField
+              label="Add avatar from url"
+              placeholder="Enter image url"
+              fullWidth
+              type="text"
+              id=""
+              {...register("image")}
+            />
+            <br/>
+            <br/>
             <Controller
               name="devEmails"
               control={control}
@@ -200,9 +222,9 @@ const CreateAccount = () => {
               variant="contained"
               style={btnstyle}
               onSubmit={handleSubmit}
-              disabled={loading}
+           
             >
-              {loading ? <Spinner /> : "Sign Up"}
+              Sign Up
             </Button>
           </form>
         </Paper>

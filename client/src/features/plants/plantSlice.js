@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { updateUserPlants } from "../users/userSlice";
+import { updateUserPlant } from "../users/userSlice";
+import { deleteUserPlant } from "../users/userSlice";
 
 export const fetchAllPlants = createAsyncThunk(
   "plants/fetchAllPlants",
@@ -56,7 +57,7 @@ export const updatePlantInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ plantId, updatedPlant }, thunkAPI) => {
     try {
-      const response = await fetch(`/users/${plantId}`, {
+      const response = await fetch(`/plants/${plantId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -70,10 +71,10 @@ export const updatePlantInApi = createAsyncThunk(
       }
 
       const updatedPlantData = await response.json();
-      thunkAPI.dispatch(updateUserPlants(updatedPlantData))
+      thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
     } catch (error) {
-      throw error;
+      return thunkAPI.rejectWithValue(error.message || "Update plant failed");
     }
   }
 );
@@ -81,12 +82,13 @@ export const updatePlantInApi = createAsyncThunk(
 // want to make this availible only to admin
 export const deletePlantFromApi = createAsyncThunk(
   "plants/deletePlantFromApi",
-  async (plantId) => {
+  async (plantId, thunkAPI) => {
     try {
       const response = await fetch(`/plants/${plantId}`, {
         method: "DELETE",
       });
       if (response.ok) {
+        thunkAPI.dispatch(deleteUserPlant(plantId))
         console.log("Plant deleted successfully.");
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
@@ -169,7 +171,15 @@ const plantSlice = createSlice({
         state.allPlants = state.allPlants.map((plant) =>
           plant.id === updatedPlant.id ? updatedPlant : plant
         );
-      });
+      })
+      .addCase(deletePlantFromApi.fulfilled, (state, action) => {
+        // delete from allPlants,
+        deletedPlantId = action.payload
+
+        state.allPlants = state.allPlants.filter((plant) => plant.id !== deletedPlantId)
+
+        // delete from userPlants (do I need to include deleting the entries and comments?)
+      })
   },
 });
 
