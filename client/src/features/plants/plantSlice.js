@@ -138,6 +138,17 @@ const plantSlice = createSlice({
         (plant) => plant.id !== action.payload.id
       );
     },
+    updateEntryInPlant: (state, action) => {
+   
+        const updatedEntry = action.payload;
+
+        // update the plant's entries with updatedEntry
+  
+        state.plant.individualPlant.entries =  state.plant.individualPlant.entries.map((entry) =>
+          entry.id === updatedEntry.id ? updatedEntry : entry
+        )
+      },
+
   },
   extraReducers: (builder) => {
     builder
@@ -221,6 +232,6 @@ const plantSlice = createSlice({
   },
 });
 
-export const { addPlant, updatePlant, deletePlant } = plantSlice.actions;
+export const { addPlant, updatePlant, deletePlant, updateEntryInPlant } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;

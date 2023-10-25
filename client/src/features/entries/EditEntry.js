@@ -12,6 +12,7 @@ import {
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
+import { updateEntryInApi } from "./entriesSlice";
 
 const EditEntry = () => {
   const params = useParams();
@@ -34,10 +35,15 @@ const EditEntry = () => {
 
   /*** To Do
 Make a space where the uploaded image will be displayed
+Set up the image upload
 
 
   /****/
   const apiEntry = useSelector((state) => state.entry.individualEntry);
+
+  const allPlants = useSelector((state) => state.plant.allPlants)
+
+  const plant = allPlants.find((plant) => plant.id === apiEntry.plant_id)
 
   useEffect(() => {
     setEntry(apiEntry);
@@ -59,9 +65,13 @@ Make a space where the uploaded image will be displayed
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("entry from in HS", entry);
+    const entryId = entry.id
+    const updatedEntry = entry
+    dispatch(updateEntryInApi({entryId, updatedEntry}))
+// what kind of state needs to be updated? IndividualEntry, allEntries, IndividualPlant.entry
+// replacing the stuff
 
-    // navigate(`/plants/${entry.id}`);
+    navigate(`/plants/${entry.id}`);
   };
 
   const boxStyle = {
@@ -74,10 +84,10 @@ Make a space where the uploaded image will be displayed
       <br />
       <br />
       <Box sx={boxStyle}>
-        <Typography variant="h5">Edit Your Entry for:</Typography>
+        <Typography variant="h5" style={{ textAlign: "center" }} >Edit Your Entry for:</Typography>
         <br />
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form noValidate autoComplete="off" onSubmit={handleSubmit} className='editBox'>
           <TextField
             label="Nickname"
             name="nickname"
@@ -89,6 +99,9 @@ Make a space where the uploaded image will be displayed
           />
           <br />
           <br />
+          <Typography variant='h5'>the {plant.common_name}</Typography>
+          <Typography variant='h6'>from {entry.create_date}</Typography>
+          <br/>
           <TextField
             label="Location"
             name="location"

@@ -79,10 +79,10 @@ const NewEntry = () => {
       <br />
       <br />
       <Box sx={boxStyle}>
-        <Typography variant="h5">Your Plant's Details</Typography>
+        <Typography variant="h5" style={{ textAlign: "center" }}>Your Plant's Details</Typography>
         <br />
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+        <form noValidate autoComplete="off" onSubmit={handleSubmit} className='editBox'>
           <TextField
             label="Nickname"
             name="nickname"

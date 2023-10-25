@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { updateEntryInPlant } from "../plants/plantSlice";
 
 export const fetchAllEntries = createAsyncThunk(
   "entries/fetchAllEntries",
@@ -30,7 +31,7 @@ export const fetchEntryById = createAsyncThunk(
 
 export const updateEntryInApi = createAsyncThunk(
   "entry/updateEntryInApi",
-  async ({ entryId, updatedEntry }) => {
+  async ({ entryId, updatedEntry }, thunkAPI) => {
     try {
       const response = await fetch(`/entries/${entryId}`, {
         method: "PATCH",
@@ -46,6 +47,7 @@ export const updateEntryInApi = createAsyncThunk(
       }
 
       const updatedEntryData = await response.json();
+      thunkAPI.dispatch(updateEntryInPlant(updatedEntryData))
       return updatedEntryData;
     } catch (error) {
       throw error;
@@ -191,6 +193,23 @@ const entrySlice = createSlice({
         state.loadingIndividualEntry = false;
         state.errorIndividualEntry = action.error.message;
       })
+      .addCase(updateEntryInApi.fulfilled, (state, action) => {
+
+        const updatedEntry = action.payload;
+      
+        state.individualEntry = updatedEntry;
+      
+        state.allEntries = state.allEntries.map((entry) =>
+          entry.id === updatedEntry.id ? updatedEntry : entry
+        );
+      
+        state.loadingIndividualEntry = false;
+      })
+      .addCase(updateEntryInApi.rejected, (state, action) => {
+        state.loadingIndividualEntry = false;
+        state.errorIndividualEntry = action.error.message;
+      })
+      
   },
 });
 
