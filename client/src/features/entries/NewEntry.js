@@ -14,6 +14,8 @@ import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
 import { addEntryToApi } from "./entriesSlice";
+import { addPlantToUser } from "../users/userSlice";
+import { addEntryToPlant } from "../plants/plantSlice";
 
 // I have a feeling i'll need to update plant state so it will have the entry, using useSelector
 // and useEffect probably
@@ -52,16 +54,19 @@ const NewEntry = () => {
     setEntry({ ...entry, health: num });
   };
 
-  const addEntry = (entry) => {
-    console.log("AddEntry was triggered")
-    dispatch(addEntryToApi(entry));
-  };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit =  (e) => {
     e.preventDefault();
 
-    await addEntry(entry);
-    navigate(`/plants`);
+   dispatch(addEntryToApi(entry))
+   .then(() => dispatch(addEntryToPlant()))
+   .then(() => dispatch(addPlantToUser()))
+   // Make an asyncthunk in users that would go into state and get the right plant
+   // and add it to user's plants on fulfilled
+
+    // have plants loaded in, find the plant the entry is on, then dispatch something to 
+    // push that to the loggedInUser's plants array
+    navigate(`/plants/${entry.plant_id}`);
   };
 
   const boxStyle = {
@@ -105,7 +110,8 @@ const NewEntry = () => {
             color="secondary"
             className="classes-field"
             multiline
-            rows={4}
+            rows={10}
+            columns={12}
             onChange={handleEntryChange}
           />
           <br />

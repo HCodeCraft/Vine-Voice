@@ -17,7 +17,6 @@ import NavBar from "./NavBar";
 import Home from "./features/users/Home";
 import { Grid, Container } from "@mui/material";
 
-
 function App() {
   return (
     <>
@@ -31,25 +30,24 @@ function App() {
             <Route path="/users/new" element={<CreateAccount />} />
 
             {/* protected routes */}
-        
-              <Route path="/home" element={<Home />} />
-              <Route path="/plants" element={<AllPlants />} />
-              <Route path="/users/:id" element={<UserProfile />} />
-              <Route path="/plants/:id/edit" element={<EditPlant />} />
-              <Route
-                path="/plants/:plant_id/entries/:id/edit"
-                element={<EditEntry />}
-              />
-              <Route path="/plants/:id" element={<Plant />} />
-              <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
-              <Route
-                path="/plants/:plant_id/entries/new"
-                element={<NewEntry />}
-              />
-              <Route path="/users/plants" element={<UserPlants />} />
-              <Route path="/plants/new" element={<NewPlant />} />
-              <Route path="/users/:id/edit" element={<EditProfile />} />
-      
+
+            <Route path="/home" element={<Home />} />
+            <Route path="/plants" element={<AllPlants />} />
+            <Route path="/users/:id" element={<UserProfile />} />
+            <Route path="/plants/:id/edit" element={<EditPlant />} />
+            <Route
+              path="/plants/:plant_id/entries/:id/edit"
+              element={<EditEntry />}
+            />
+            <Route path="/plants/:id" element={<Plant />} />
+            <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
+            <Route
+              path="/plants/:plant_id/entries/new"
+              element={<NewEntry />}
+            />
+            <Route path="/users/plants" element={<UserPlants />} />
+            <Route path="/plants/new" element={<NewPlant />} />
+            <Route path="/users/:id/edit" element={<EditProfile />} />
           </Routes>
         </Grid>
       </Container>

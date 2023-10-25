@@ -149,6 +149,22 @@ export const updateUserInApi = createAsyncThunk(
 // I want to get the data for all the users and also an individual user
 // individual user for the user page, but when would I be using all the users? Just to change the user state
 
+export const addPlantToUser = createAsyncThunk("user/addPlantToUser", (_, { getState }) => {
+  // get the entry's plant and add that plant to the loggedInUser.plants array
+  // what does this function need to know? The entry info (state.entry.individualEntry)
+  const entry = getState().entry.individualEntry.plant.id
+  console.log("entry from addPlantToUser")
+  const allPlants = getState().plant.allPlants
+  console.log("Allplants from APTU", allPlants)
+  const newPlant = allPlants.find((plant) => plant.id === entry.plant_id)
+  console.log("newPlant from APTU", newPlant)
+
+  return newPlant
+
+  // when this resolves the action.payload will be the plant to add and
+  // the extraReducer will add that plant to user.plants array
+})
+
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -202,7 +218,10 @@ const userSlice = createSlice({
       // it loads the individual plant every time someone opens the plant page, but they could still
       // see an errored description or image
       // I as the admin would be the only one able to change it though
-    
+
+    // addPlantToUser: (state, action) => {
+    //   const 
+    // }
   },
   extraReducers: (builder) => {
     builder
@@ -295,11 +314,16 @@ const userSlice = createSlice({
       .addCase(registerUserInApi.rejected, (state, action) => {
         state.error = action.error.message;
       })
+      .addCase(addPlantToUser.fulfilled, (state, action) => {
+        state.loggedInUser.plants.push(action.payload)
+      })
+      .addCase(addPlantToUser.rejected, (state, action) => {
+        state.error = action.error.message
+      })
   
   },
 });
 
-// do I need setUser when the asyncThunk is handling it?
 
 export const { setUser, resetUser, addUser, updateUser, deleteUser, updateUserPlant, deleteUserPlant } =
   userSlice.actions;

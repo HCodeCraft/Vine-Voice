@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { FaSquare } from "react-icons/fa";
@@ -9,16 +9,16 @@ import { useDispatch } from "react-redux";
 import { fetchEntryById } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
 
+
 const Entry = () => {
   const params = useParams();
   const commentBox = useRef(null);
   const entryId = Number(params.id);
   const dispatch = useDispatch();
 
-
-
   const [commentForm, setCommentForm] = useState(false);
   const [comment, setComment] = useState("");
+  const [currentUser, setCurrentUser] = useState(false);
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
@@ -32,12 +32,23 @@ const Entry = () => {
     comments: [],
   });
 
-  const indEntry = useSelector((state) => state.entry.individualEntry);
-  console.log("indEntry", indEntry)
-  const indEntryComments = useSelector((state) => state.entry.individualEntry.comments)
-  console.log("indEntryComments", indEntryComments)
+  const entryUsername = useSelector(
+    (state) => state.entry.individualEntry.username
+  );
 
+  const indEntryComments = useSelector(
+    (state) => state.entry.individualEntry.comments
+  );
 
+  const user = useSelector((state) => state.user.loggedInUser);
+
+  useEffect(() => {
+    if (entryUsername === user.username) {
+      setCurrentUser(true);
+    } else {
+      setCurrentUser(false);
+    }
+  }, []);
 
   const scrollToSection = (elementRef) => {
     window.scrollTo({
@@ -79,22 +90,22 @@ const Entry = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-  
+
     const newComment = {
       text: comment,
       entry_id: entryId,
     };
-  
+
     try {
       const resultAction = await dispatch(addCommentToApi(newComment, entryId));
-  
+
       if (addCommentToApi.fulfilled.match(resultAction)) {
         const updatedEntry = resultAction.payload;
-          // Update the entry with the new comment
-        setComment("");  // Clear the comment input
+        // Update the entry with the new comment
+        setComment(""); // Clear the comment input
         setCommentForm(false);
 
-        return updatedEntry  // Close the comment form
+        return updatedEntry; // Close the comment form
       } else {
         console.log("error", resultAction.error);
       }
@@ -102,7 +113,6 @@ const Entry = () => {
       console.error("An error occurred:", error);
     }
   };
-  
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
@@ -139,6 +149,18 @@ const Entry = () => {
           : "No Problems :)"}
       </Typography>
       <br />
+      <br/>
+      <br/>
+      {currentUser ? (
+        <>
+        <Link to={`edit`}><CommonButton>Edit Entry</CommonButton></Link>
+       
+          <CommonButton style={{ marginLeft: "10px" }}>Delete Entry</CommonButton>
+          <br />
+        </>
+      ) : null}
+      <br/>
+      <br/>
       <Typography
         sx={{
           border: `1px solid ${entry.open_to_advice ? "green" : "red"}`,
@@ -149,17 +171,9 @@ const Entry = () => {
         {entry.open_to_advice ? "I'm open to advice!" : "No advice, please"}
       </Typography>
       <br />
-      <br />
-      <br />
-      {/* Include conditional UI for user */}
-      {/* {user && (
-        <>
-          <CommonButton>Edit Entry</CommonButton>
-          <CommonButton>Delete Entry</CommonButton>
-          <br />
 
-        </>
-      )} */}
+
+
       <br />
       <Typography variant="h5">Comments:</Typography>
       <br />

@@ -6,6 +6,7 @@ import Unauthorized from '../../Unauthorized';
 
 const UserPlants = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  // const entries = useSelector((state) => state.entry.allEntries)
 
   const plants = loggedInUser?.plants;
 
@@ -25,7 +26,7 @@ const UserPlants = () => {
         </Typography>
         <br/>
         <Typography variant="h5">
-          Feel free to browse Everyone's plants and add a plant, or add a new plant
+          Feel free to browse Everyone's plants and add an entry for your plant, or add a new plant
         </Typography>
       </div>
     );

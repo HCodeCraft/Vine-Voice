@@ -12,15 +12,24 @@ import {
 } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 const PlantCard = ({
   commonName,
   image_url,
   sciName,
   short_description,
-  entries,
   id,
 }) => {
+
+  const plants = useSelector((state) => state.plant.allPlants)
+
+  console.log("allPlants", plants)
+
+  const plant = plants.find((plant) => plant.id === id)
+
+  const entries = useSelector((state) => state.entry.allEntries)
+ 
   return (
     <Grid item xs={12} md={4} sm={4}>
       <Card sx={{ maxWidth: 345 }}>
@@ -34,9 +43,9 @@ const PlantCard = ({
             {short_description}
           </Typography>
           <Typography variant="subtitle2">
-            {entries?.length > 1
-              ? `${entries?.length} entries`
-              : `${entries?.length} entry`}
+            {plant?.entries.length > 1
+              ? `${plant.entries?.length} entries`
+              : `${plant.entries?.length} entry`}
           </Typography>
           <Link to={`/plants/${id}`}>
             <CommonButton>Show More</CommonButton>

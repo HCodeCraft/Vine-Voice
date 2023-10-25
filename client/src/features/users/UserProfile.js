@@ -52,12 +52,8 @@ const UserProfile = () => {
   useEffect(() => {
     if (Number(params.id) === user.id) {
       setCurrentUser(true);
-      console.log("params id", params.id, "user id", user.id)
-      console.log("currentUser", currentUser)
     } else {
       setCurrentUser(false);
-      console.log("params id", params.id, "user id", user.id)
-      console.log("currentUser", currentUser)
     }
   }, []);
 

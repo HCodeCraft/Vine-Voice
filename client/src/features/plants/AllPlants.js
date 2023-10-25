@@ -14,6 +14,8 @@ const AllPlants = () => {
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
+  console.log("plants", plants)
+
 
 
   if (!loggedInUser){
@@ -34,7 +36,6 @@ const AllPlants = () => {
           image_url={plant.image_url}
           sciName={plant.scientific_name}
           short_description={plant.short_description}
-          entries={plant.entries}
           id={plant.id}
         />
       ));

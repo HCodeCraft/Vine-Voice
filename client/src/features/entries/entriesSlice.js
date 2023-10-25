@@ -166,6 +166,8 @@ const entrySlice = createSlice({
         state.individualEntry = newEntry;
 
         state.loadingIndividualEntry = false;
+
+       
       })
       .addCase(addEntryToApi.rejected, (state, action) => {
         state.loadingIndividualEntry = false;

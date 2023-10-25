@@ -79,6 +79,18 @@ export const updatePlantInApi = createAsyncThunk(
   }
 );
 
+export const addEntryToPlant = createAsyncThunk(
+  "user/addEntryPlant",
+  (_, { getState }) => {
+    // get the entry's plant and add that plant to the loggedInUser.plants array
+    // what does this function need to know? The entry info (state.entry.individualEntry)
+    const entry = getState().entry.individualEntry
+    
+
+    return entry
+  }
+);
+
 // want to make this availible only to admin
 export const deletePlantFromApi = createAsyncThunk(
   "plants/deletePlantFromApi",
@@ -88,7 +100,7 @@ export const deletePlantFromApi = createAsyncThunk(
         method: "DELETE",
       });
       if (response.ok) {
-        thunkAPI.dispatch(deleteUserPlant(plantId))
+        thunkAPI.dispatch(deleteUserPlant(plantId));
         console.log("Plant deleted successfully.");
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
@@ -108,6 +120,7 @@ const plantSlice = createSlice({
     loadingIndividualPlant: false,
     errorAllPlants: null,
     errorIndividualPlant: null,
+    error: null,
   },
   reducers: {
     addPlant: (state, action) => {
@@ -174,12 +187,37 @@ const plantSlice = createSlice({
       })
       .addCase(deletePlantFromApi.fulfilled, (state, action) => {
         // delete from allPlants,
-        deletedPlantId = action.payload
+        deletedPlantId = action.payload;
 
-        state.allPlants = state.allPlants.filter((plant) => plant.id !== deletedPlantId)
+        state.allPlants = state.allPlants.filter(
+          (plant) => plant.id !== deletedPlantId
+        );
 
         // delete from userPlants (do I need to include deleting the entries and comments?)
       })
+      .addCase(addEntryToPlant.fulfilled, (state, action) => {
+     const plantId = action.payload.plant_id
+     const entry = action.payload
+        
+      
+        // Update the individualPlant with the new entry
+        state.individualPlant.entries.push(entry);
+      
+        // Find the plant and update it with the new entry in allPlants
+        const plantToUpdate = state.allPlants.find((plant) => plant.id === plantId);
+      
+        if (plantToUpdate) {
+          if (!plantToUpdate.entries) {
+            plantToUpdate.entries = [];
+          }
+          plantToUpdate.entries.push(entry);
+        }
+      })
+      
+
+      .addCase(addEntryToPlant.rejected, (state, action) => {
+        state.error = action.error.message;
+      });
   },
 });
 
