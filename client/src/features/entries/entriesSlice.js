@@ -70,8 +70,10 @@ export const addEntryToApi = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Failed to add entry to API");
       }
-      console.log("data from addEntry", data);
+  
       const data = await response.json();
+          
+      console.log("data from addEntry", data);
       return data;
     } catch (error) {
       throw error;

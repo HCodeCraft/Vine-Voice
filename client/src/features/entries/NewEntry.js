@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
@@ -16,6 +16,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { addEntryToApi } from "./entriesSlice";
 import { addPlantToUser } from "../users/userSlice";
 import { addEntryToPlant } from "../plants/plantSlice";
+import TagsInput from "../../TagsInput";
 
 // I have a feeling i'll need to update plant state so it will have the entry, using useSelector
 // and useEffect probably
@@ -37,9 +38,32 @@ const NewEntry = () => {
     open_to_advice: false,
   });
 
+  const [tags, setTags] = useState([])
+
+  const handleKeyDown = (e) => {
+      if(e.key !== 'Enter') return
+      const value = e.target.value
+      if(!value.trim()) return
+      setTags([...tags, value])
+      e.target.value=''
+  }
+  
+  const removeTag = (index) => {
+      setTags(tags.filter((el, i) => i !== index))
+  }
+
+  useEffect(() => {
+    setEntry({ ...entry, problems: tags });
+    console.log("entry.problems", entry.problems) // Update entry.problems when tags change
+  }, [tags]);
+
   // Testing
 
   //
+
+  const allPlants = useSelector((state) => state.plant.allPlants);
+
+  const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
 
   const handleEntryChange = (e) => {
     const value =
@@ -54,17 +78,19 @@ const NewEntry = () => {
     setEntry({ ...entry, health: num });
   };
 
-
-  const handleSubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    setEntry({ ...entry, problems: tags });
 
-   dispatch(addEntryToApi(entry))
-   .then(() => dispatch(addEntryToPlant()))
-   .then(() => dispatch(addPlantToUser()))
-   // Make an asyncthunk in users that would go into state and get the right plant
-   // and add it to user's plants on fulfilled
 
-    // have plants loaded in, find the plant the entry is on, then dispatch something to 
+    console.log("entry from handleSubmit", entry);
+    dispatch(addEntryToApi(entry))
+      .then(() => dispatch(addEntryToPlant()))
+      .then(() => dispatch(addPlantToUser()));
+    // Make an asyncthunk in users that would go into state and get the right plant
+    // and add it to user's plants on fulfilled
+
+    // have plants loaded in, find the plant the entry is on, then dispatch something to
     // push that to the loggedInUser's plants array
     navigate(`/plants/${entry.plant_id}`);
   };
@@ -79,10 +105,20 @@ const NewEntry = () => {
       <br />
       <br />
       <Box sx={boxStyle}>
-        <Typography variant="h5" style={{ textAlign: "center" }}>Your Plant's Details</Typography>
+        <Typography variant="h5" style={{ textAlign: "center" }}>
+          Adding an Entry for your
+        </Typography>
+        <Typography variant="h5" style={{ textAlign: "center" }}>
+          {plant.common_name}
+        </Typography>
         <br />
 
-        <form noValidate autoComplete="off" onSubmit={handleSubmit} className='editBox'>
+        <form
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          className="editBox"
+        >
           <TextField
             label="Nickname"
             name="nickname"
@@ -129,14 +165,17 @@ const NewEntry = () => {
             <HealthRating rating={entry.health} changeRating={changeRating} />
           </div>
           <br />
-          <TextField
+          {/* <TextField
             label="Problems (seperate with a ',')"
             name="problems"
             variant="outlined"
             color="secondary"
             className="classes-field"
             onChange={handleEntryChange}
-          />
+          /> */}
+          <br/>
+          <Typography>Enter problems...</Typography>
+  <TagsInput tags={tags} handleKeyDown={handleKeyDown} removeTag={removeTag} />
           <br />
           <br />
           <FormGroup>

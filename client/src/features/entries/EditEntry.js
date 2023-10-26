@@ -71,7 +71,7 @@ Set up the image upload
 // what kind of state needs to be updated? IndividualEntry, allEntries, IndividualPlant.entry
 // replacing the stuff
 
-    navigate(`/plants/${entry.id}`);
+    navigate(`/plants/${plant.id}`);
   };
 
   const boxStyle = {

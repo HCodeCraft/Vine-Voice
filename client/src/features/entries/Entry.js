@@ -9,7 +9,6 @@ import { useDispatch } from "react-redux";
 import { fetchEntryById } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
 
-
 const Entry = () => {
   const params = useParams();
   const commentBox = useRef(null);
@@ -41,6 +40,8 @@ const Entry = () => {
   );
 
   const user = useSelector((state) => state.user.loggedInUser);
+
+  console.log("entry", entry);
 
   useEffect(() => {
     if (entryUsername === user.username) {
@@ -88,6 +89,16 @@ const Entry = () => {
   // // make a delete button and delete handler for all comments if it's user's plant
   // // only show username if it's not current user's
 
+  const handleDeleteEntry = (id) => {
+// call the dispatch that deletes the entry
+// delete it from plant.entry also
+// probably eventually from user.entry too
+
+// navigate to the plant page
+
+
+  }
+
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
@@ -121,10 +132,12 @@ const Entry = () => {
       <br />
       <br />
       <Typography variant="h4" align="center">
+        {"An Entry for "}
+
         {entry.nickname}
       </Typography>
-      <Typography>{entry.username}'s</Typography>
-      <Typography align="center">Entry from {entry.create_date}</Typography>
+      <Typography>{entry.username}'s plant</Typography>
+      <Typography align="center">from {entry.create_date}</Typography>
       <br />
       <img
         className="entry_pic"
@@ -149,18 +162,22 @@ const Entry = () => {
           : "No Problems :)"}
       </Typography>
       <br />
-      <br/>
-      <br/>
+      <br />
+      <br />
       {currentUser ? (
         <>
-        <Link to={`edit`}><CommonButton>Edit Entry</CommonButton></Link>
-       
-          <CommonButton style={{ marginLeft: "10px" }}>Delete Entry</CommonButton>
+          <Link to={`edit`}>
+            <CommonButton>Edit Entry</CommonButton>
+          </Link>
+
+          <CommonButton style={{ marginLeft: "10px" }} onClick={handleDeleteEntry}>
+            Delete Entry
+          </CommonButton>
           <br />
         </>
       ) : null}
-      <br/>
-      <br/>
+      <br />
+      <br />
       <Typography
         sx={{
           border: `1px solid ${entry.open_to_advice ? "green" : "red"}`,
@@ -171,8 +188,6 @@ const Entry = () => {
         {entry.open_to_advice ? "I'm open to advice!" : "No advice, please"}
       </Typography>
       <br />
-
-
 
       <br />
       <Typography variant="h5">Comments:</Typography>
