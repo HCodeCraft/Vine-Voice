@@ -32,17 +32,24 @@ const UserPlants = () => {
     );
   }
 
-  const content = plants.map((plant) => (
-    <PlantCard
-      key={plant.id}
-      commonName={plant.common_name}
-      image_url={plant.image_url}
-      sciName={plant.scientific_name}
-      short_description={plant.short_description}
-      entries={loggedInUser.entries.filter((entry) => entry.plant_id === plant.id)}
-      id={plant.id}
-    />
-  ));
+  const content = plants?.map((plant) => {
+    if (!plant) {
+      return null; // Skip rendering if plant is undefined
+    }
+  
+    return (
+      <PlantCard
+        key={plant.id}
+        commonName={plant.common_name}
+        image_url={plant.image_url}
+        sciName={plant.scientific_name}
+        short_description={plant.short_description}
+        entries={loggedInUser.entries.filter((entry) => entry.plant_id === plant.id)}
+        id={plant.id}
+      />
+    );
+  });
+  
 
   return (
     <>

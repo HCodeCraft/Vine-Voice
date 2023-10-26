@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { FaSquare } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { addCommentToApi } from "../comments/commentSlice";
 import { useDispatch } from "react-redux";
-import { fetchEntryById } from "./entriesSlice";
+import { fetchEntryById, deleteEntryFromApi } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
+import { deleteEntryInPlant } from "../plants/plantSlice";
 
 const Entry = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const commentBox = useRef(null);
   const entryId = Number(params.id);
   const dispatch = useDispatch();
@@ -31,17 +33,33 @@ const Entry = () => {
     comments: [],
   });
 
+  useEffect(() => {
+    const fetchEntry = async () => {
+      const result = await dispatch(fetchEntryById(entryId));
+      setEntry(result.payload); 
+    };
+
+    fetchEntry();
+  }, []);
+
+
   const entryUsername = useSelector(
-    (state) => state.entry.individualEntry.username
+    (state) => state.entry.individualEntry?.username
   );
 
   const indEntryComments = useSelector(
-    (state) => state.entry.individualEntry.comments
+    (state) => state.entry.individualEntry?.comments
   );
+
+  const plant = useSelector((state) => state.plant.individualPlant)
+  console.log("plant from in Entry", plant)
+
 
   const user = useSelector((state) => state.user.loggedInUser);
 
-  console.log("entry", entry);
+ 
+
+
 
   useEffect(() => {
     if (entryUsername === user.username) {
@@ -58,21 +76,8 @@ const Entry = () => {
     });
   };
 
-  // need to add boolean if the curretly logged in user is the author of the entry
-  // s/he can delete everyone's comment and also edit the entry
 
-  // if a person made the comment, they can delete it
 
-  useEffect(() => {
-    const fetchEntry = async () => {
-      const result = await dispatch(fetchEntryById(entryId));
-      setEntry(result.payload); // Assuming the entry data is in payload
-    };
-
-    fetchEntry();
-  }, []);
-
-  // fetch the individual entry? then use that for the useSelector
 
   const handleCommentClick = async () => {
     await setCommentForm((prevCommentForm) => !prevCommentForm);
@@ -89,12 +94,22 @@ const Entry = () => {
   // // make a delete button and delete handler for all comments if it's user's plant
   // // only show username if it's not current user's
 
-  const handleDeleteEntry = (id) => {
-// call the dispatch that deletes the entry
+  // If user's entry s/he can delete everyone's comment and also edit the entry
+  // if a person made the comment, they can delete it
+
+
+
+  const handleDeleteEntry = (entryId) => {
+    dispatch(deleteEntryFromApi(entryId))
+    .then(dispatch(deleteEntryInPlant(entryId)))
+// call the dispatch that deletes the entry from allEntries - ?? individualEntry to null
+
 // delete it from plant.entry also
 // probably eventually from user.entry too
 
 // navigate to the plant page
+navigate(`/plants/${params.plant_id}`)
+
 
 
   }
@@ -127,16 +142,18 @@ const Entry = () => {
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
-  return (
+  return entry ? (
     <section className="section" align="center">
       <br />
       <br />
       <Typography variant="h4" align="center">
         {"An Entry for "}
-
+  
         {entry.nickname}
       </Typography>
-      <Typography>{entry.username}'s plant</Typography>
+      <Typography variant="h5">
+        {currentUser ? "My" : `${entry.username}'s`} {plant.common_name}
+      </Typography>
       <Typography align="center">from {entry.create_date}</Typography>
       <br />
       <img
@@ -157,9 +174,11 @@ const Entry = () => {
       <br />
       <Typography>
         Problems:{" "}
-        {entry.problems?.length > 0
-          ? entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
-          : "No Problems :)"}
+        {entry.problems && entry.problems.length > 0 ? (
+          entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
+        ) : (
+          "No Problems :)"
+        )}
       </Typography>
       <br />
       <br />
@@ -169,8 +188,8 @@ const Entry = () => {
           <Link to={`edit`}>
             <CommonButton>Edit Entry</CommonButton>
           </Link>
-
-          <CommonButton style={{ marginLeft: "10px" }} onClick={handleDeleteEntry}>
+  
+          <CommonButton style={{ marginLeft: "10px" }} onClick={() => handleDeleteEntry(entryId)}>
             Delete Entry
           </CommonButton>
           <br />
@@ -188,11 +207,10 @@ const Entry = () => {
         {entry.open_to_advice ? "I'm open to advice!" : "No advice, please"}
       </Typography>
       <br />
-
       <br />
       <Typography variant="h5">Comments:</Typography>
       <br />
-      {commentForm == false ? (
+      {commentForm === false ? (
         <>
           {" "}
           <CommonButton onClick={handleCommentClick}>
@@ -201,7 +219,7 @@ const Entry = () => {
           <br />
         </>
       ) : null}
-      {indEntryComments.length > 0 ? (
+      {indEntryComments && indEntryComments.length > 0 ? (
         indEntryComments.map((comment, index) => (
           <div key={index}>
             <CommentCard
@@ -220,7 +238,7 @@ const Entry = () => {
           <Typography>No comments yet.</Typography>
         </>
       )}
-
+  
       {commentForm === true ? (
         <div ref={commentBox} className="commentBox">
           <br />
@@ -239,13 +257,13 @@ const Entry = () => {
           <br />
         </div>
       ) : null}
-
+  
       <br />
       <br />
       <br />
       <br />
     </section>
-  );
-};
+  ) : null;
+      }
 
 export default Entry;

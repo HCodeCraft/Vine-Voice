@@ -15,7 +15,8 @@ const UserProfile = () => {
   const [currentUser, setCurrentUser] = useState(false)
 
 
- 
+ // fetch user by id on login with useEffect
+ // change JSX
 
 
 

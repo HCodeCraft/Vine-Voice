@@ -18,23 +18,19 @@ const Plant = () => {
   // add edit and delete buttons for the admin
 
   const user = useSelector((state) => state.user.loggedInUser);
-  console.log("user", user);
-
-  // const plants = useSelector((state) => state.plant.allPlants);
-  // const otherWay = plants[id-1]
-  // was this way faster?
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
-
+  const allPlants = useSelector((state) => state.plant.allPlants)
+  console.log("allPlants from Plant", allPlants)
+  console.log("checking if entry still there")
 
   const handleDeletePlant = (id) => {
-dispatch(deletePlantFromApi(plant.id))
+    dispatch(deletePlantFromApi(plant.id));
     // ? Change user plant state ?
 
-
-navigate(`/plants`)
-  }
+    navigate(`/plants`);
+  };
 
   useEffect(() => {
     dispatch(fetchPlantById(id));
@@ -80,9 +76,6 @@ navigate(`/plants`)
 
   const entriesDesc = plant.entries.slice().sort((a, b) => b.id - a.id);
 
-
-
-
   return (
     <>
       <br />
@@ -125,7 +118,10 @@ navigate(`/plants`)
             <Link to={`/plants/${plant.id}/edit`}>
               <CommonButton>Edit Plant</CommonButton>
             </Link>
-            <CommonButton style={{ marginLeft: "10px" }} onClick={handleDeletePlant}>
+            <CommonButton
+              style={{ marginLeft: "10px" }}
+              onClick={handleDeletePlant}
+            >
               Delete Plant
             </CommonButton>
           </Box>

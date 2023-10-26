@@ -181,13 +181,15 @@ const entrySlice = createSlice({
         state.loadingIndividualEntry = true;
       })
       .addCase(deleteEntryFromApi.fulfilled, (state, action) => {
-        // Assuming action.payload is the commentId of the deleted comment
+       
         const deletedEntryId = action.payload;
 
-        // Update your state to remove the deleted comment by its commentId
+     
         state.allEntries = state.allEntries.filter(
           (entry) => entry.entryId !== deletedEntryId
         );
+
+        // state.individualEntry = null
 
         state.loadingIndividualEntry = false;
       })

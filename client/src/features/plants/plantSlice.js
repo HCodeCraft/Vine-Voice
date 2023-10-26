@@ -84,10 +84,9 @@ export const addEntryToPlant = createAsyncThunk(
   (_, { getState }) => {
     // get the entry's plant and add that plant to the loggedInUser.plants array
     // what does this function need to know? The entry info (state.entry.individualEntry)
-    const entry = getState().entry.individualEntry
-    
+    const entry = getState().entry.individualEntry;
 
-    return entry
+    return entry;
   }
 );
 
@@ -139,16 +138,38 @@ const plantSlice = createSlice({
       );
     },
     updateEntryInPlant: (state, action) => {
-   
-        const updatedEntry = action.payload;
+      const updatedEntry = action.payload;
 
-        // update the plant's entries with updatedEntry
-  
-        state.plant.individualPlant.entries =  state.plant.individualPlant.entries.map((entry) =>
+      // update the plant's entries with updatedEntry
+
+      state.plant.individualPlant.entries =
+        state.plant.individualPlant.entries.map((entry) =>
           entry.id === updatedEntry.id ? updatedEntry : entry
-        )
-      },
-
+        );
+    },
+    deleteEntryInPlant: (state, action) => {
+      const deletedEntryId = action.payload;
+    
+      // Remove the entry from individualPlant.entries
+      const updatedEntries = state.individualPlant.entries.filter(
+        (entry) => entry.id !== deletedEntryId
+      );
+    
+      // Return a new state object with updated allPlants and individualPlant
+      return {
+        ...state,
+        individualPlant: {
+          ...state.individualPlant,
+          entries: updatedEntries,
+        },
+        allPlants: state.allPlants.map((plant) =>
+          plant.id === state.individualPlant.id
+            ? { ...plant, entries: updatedEntries }
+            : plant
+        ),
+      };
+    }
+    
   },
   extraReducers: (builder) => {
     builder
@@ -207,16 +228,17 @@ const plantSlice = createSlice({
         // delete from userPlants (do I need to include deleting the entries and comments?)
       })
       .addCase(addEntryToPlant.fulfilled, (state, action) => {
-     const plantId = action.payload.plant_id
-     const entry = action.payload
-        
-      
+        const plantId = action.payload.plant_id;
+        const entry = action.payload;
+
         // Update the individualPlant with the new entry
         state.individualPlant.entries.push(entry);
-      
+
         // Find the plant and update it with the new entry in allPlants
-        const plantToUpdate = state.allPlants.find((plant) => plant.id === plantId);
-      
+        const plantToUpdate = state.allPlants.find(
+          (plant) => plant.id === plantId
+        );
+
         if (plantToUpdate) {
           if (!plantToUpdate.entries) {
             plantToUpdate.entries = [];
@@ -224,7 +246,6 @@ const plantSlice = createSlice({
           plantToUpdate.entries.push(entry);
         }
       })
-      
 
       .addCase(addEntryToPlant.rejected, (state, action) => {
         state.error = action.error.message;
@@ -232,6 +253,12 @@ const plantSlice = createSlice({
   },
 });
 
-export const { addPlant, updatePlant, deletePlant, updateEntryInPlant } = plantSlice.actions;
+export const {
+  addPlant,
+  updatePlant,
+  deletePlant,
+  updateEntryInPlant,
+  deleteEntryInPlant,
+} = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;

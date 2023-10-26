@@ -24,11 +24,15 @@ const PlantCard = ({
 
   const plants = useSelector((state) => state.plant.allPlants)
 
-  console.log("allPlants", plants)
 
   const plant = plants.find((plant) => plant.id === id)
 
-  const entries = useSelector((state) => state.entry.allEntries)
+  const PlantEntries = plant.entries
+  // plant is coming from allPlants 
+
+// doesn't work to get entries from indPlant because there's only one plant that's indplant
+// while multiple plants are shown on allPlants page
+// I am getting the id, so I could fetch Plant by id but that would be a lot of fetches
  
   return (
     <Grid item xs={12} md={4} sm={4}>

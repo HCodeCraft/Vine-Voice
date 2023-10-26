@@ -150,20 +150,17 @@ export const updateUserInApi = createAsyncThunk(
 // individual user for the user page, but when would I be using all the users? Just to change the user state
 
 export const addPlantToUser = createAsyncThunk("user/addPlantToUser", (_, { getState }) => {
-  // get the entry's plant and add that plant to the loggedInUser.plants array
-  // what does this function need to know? The entry info (state.entry.individualEntry)
-  const entry = getState().entry.individualEntry.plant.id
-  console.log("entry from addPlantToUser")
-  const allPlants = getState().plant.allPlants
-  console.log("Allplants from APTU", allPlants)
-  const newPlant = allPlants.find((plant) => plant.id === entry.plant_id)
-  console.log("newPlant from APTU", newPlant)
-
-  return newPlant
-
-  // when this resolves the action.payload will be the plant to add and
-  // the extraReducer will add that plant to user.plants array
-})
+  const entry = getState().entry.individualEntry;
+  const allPlants = getState().plant.allPlants;
+  
+  const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
+  
+  if (!newPlant) {
+    return Promise.reject("Plant not found");
+  }
+  
+  return newPlant;
+});
 
 const userSlice = createSlice({
   name: "user",
