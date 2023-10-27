@@ -23,14 +23,47 @@ class UsersController < ApplicationController
       render json: user
     end
 
-
-    def show
-      if @current_user
-      render json: @current_user
+    def public_profile
+      user = User.find_by(id: params[:id])
+    
+      if user
+        if user.privacy === true
+          render json: user.slice(:username, :name, :avatar_url, :status)
+        else
+          render json: user
+        end
       else
-          render json: {error: "You must be logged in to access"}
+        render json: { errors: ["User not found"] }, status: :not_found
       end
     end
+
+
+    def show
+      user = User.find_by(id: params[:id])
+    
+      if user
+        if user.privacy === true
+          render json: user.slice(:username, :name, :avatar_url, :status)
+        else
+          render json: user
+        end
+      else
+        render json: { errors: ["User not found"] }, status: :not_found
+      end
+    end
+    
+
+    # def show
+    #   if @current_user
+    #   render json: @current_user
+    #   else
+    #       render json: {error: "You must be logged in to access"}
+    #   end
+    # end
+
+
+    
+    
 
     def destroy
       user = find_user

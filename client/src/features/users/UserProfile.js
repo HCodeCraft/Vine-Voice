@@ -5,22 +5,47 @@ import CommonButton from "../../common/CommonButton";
 import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
+import { fetchUserById } from "./userSlice";
 
 const UserProfile = () => {
-  const params = useParams()
+  const params = useParams();
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.loggedInUser);
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const [currentUser, setCurrentUser] = useState(false)
+  const [currentUser, setCurrentUser] = useState(false);
+  const [user, setUser] = useState({});
+  const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  const individualUser = useSelector((state) => state.user.individualUser);
 
+  console.log("individualUser", individualUser);
+  // fetch user by id on login with useEffect
+  // change JSX so that this page has dynamic content
+  // can make it use user if user matches the params, otherwise, fetchUserById
 
- // fetch user by id on login with useEffect
- // change JSX
+  const userId = Number(params.id);
+  console.log("userId", userId);
 
+  console.log("loggedInUser", loggedInUser);
+  console.log("currentUser", currentUser);
 
+  useEffect(() => {
+    if (userId === loggedInUser.id) {
+      setCurrentUser(true);
+      setUser(loggedInUser);
+    } else {
+      console.log("params id when user isn't logged in", userId);
+      dispatch(fetchUserById(userId)).then((response) => {
+        setUser(response.payload); // Update user with the fetched data
+        setCurrentUser(false);
+      });
+    }
+  }, [userId]);
 
+  useEffect(() => {}, []);
 
+  // Make Username profile Title Stylized like the plan
+  // add status bubble div
+  // add email if it's present
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
@@ -49,67 +74,82 @@ const UserProfile = () => {
       setStatusForm(false);
     }
   }, [user?.status]);
-  
-  useEffect(() => {
-    if (Number(params.id) === user.id) {
-      setCurrentUser(true);
-    } else {
-      setCurrentUser(false);
-    }
-  }, []);
 
   // used to be [user, params.id]
-  
 
   return user ? (
     <Container>
       <Box>
         <br />
-        <Typography variant="h4">My Profile</Typography>
+        <Typography variant="h4">
+          {currentUser ? "My" : `${user.username}'s`} Profile
+        </Typography>
       </Box>
       <br />
-      <Box>
+      <div>
         <br />
         <Typography variant="h5">
-          I have {user.plants?.length} plants logged!
+          {currentUser ? `I have` : "They have"}{" "}
+          {user.plants?.length > 0 ? user.plants.length : `no`} plants logged!
         </Typography>
-        <br />
-        {statusForm === false ? (
-          <>
-            <Typography variant="h5">My status: "{user.status}"</Typography>
-            <CommonButton onClick={() => handleStatusFormClick()}>
-              Edit
-            </CommonButton>
-          </>
+        <br />{" "}
+        {currentUser === true ? (
+          statusForm === false ? (
+            <>
+              <Typography variant="subtitle1">My status:</Typography>
+              <div className="statusBubble">
+                <div className="status-txt">
+                <Typography variant="h7">{user.status}</Typography>
+                </div>
+              </div>
+              <br/>
+              <CommonButton onClick={() => handleStatusFormClick()}>
+                Edit
+              </CommonButton>
+            </>
+          ) : (
+            <>
+              <Typography variant="h5">Status: </Typography>
+              <textarea
+                rows={5}
+                cols={20}
+                name="status"
+                value={newStatus}
+                onChange={handleStatusChange}
+                type="text"
+              />
+              <br />
+              <CommonButton onClick={handleStatusEditSubmit}>
+                Set Status
+              </CommonButton>
+            </>
+          )
         ) : (
           <>
-            <Typography variant="h5">Status: </Typography>
-            <textarea
-              rows={5}
-              cols={20}
-              name="status"
-              value={newStatus}
-              onChange={handleStatusChange}
-              type="text"
-            />
-            <br />
-            <CommonButton onClick={handleStatusEditSubmit}>
-              Set Status
-            </CommonButton>
+            <Typography variant="subtitle1">Their status:</Typography>
+            <div className="statusBubble">
+              <Typography variant="h6">{user.status}</Typography>
+            </div>{" "}
           </>
         )}
         <br />
         <br />
         <br />
-        <Typography variant="h5">{user.username}</Typography>
+        <Typography variant="h5">
+          {"Username:"} {user.username}{" "}
+        </Typography>
         <br />
-        <Typography variant="h5">{user.name}</Typography>
+        <Typography variant="h5"> {"Name:"} {user.name}</Typography>
         <br />
-      </Box>
-      {currentUser == true ? (<Link to={`/users/${user.id}/edit`}><CommonButton>Edit Info</CommonButton></Link>) : null}
+      </div>
+      {currentUser == true ? (
+        <Link to={`/users/${user.id}/edit`}>
+          <CommonButton>Edit Info</CommonButton>
+        </Link>
+      ) : null}
     </Container>
   ) : (
-    <Unauthorized/>
+    <Unauthorized />
   );
 };
 

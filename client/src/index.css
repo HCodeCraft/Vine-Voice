@@ -231,3 +231,25 @@ font-size: 1em;
   border: none;
   outline: none;
 }
+
+.statusBubble {
+  background-color: #bdb8b8;
+  height: 160%; /* Adjust height to fit the content */
+  width: 150%; /* Adjust width to fit the content */
+  display: inline-block; 
+  border-radius: 45%;/* Make it inline so it wraps around the content */
+}
+
+
+/* .statusBubble::after {
+  content:"";
+  display: block;
+  padding-bottom: 100%;
+} */
+
+.status-txt{
+/* position: absolute;
+bottom: 50%;
+width: 100%; */
+text-align: center;
+}

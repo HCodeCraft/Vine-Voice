@@ -2,10 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
 
-// const apiUrl = config.API_BASE_URL;
-
-
-// idk if I should use reducers since all my actions are asyncThunks
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
@@ -30,30 +26,28 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const fetchUserData = createAsyncThunk(
+  "user/fetchUserData",
+  async (_) => {
+    try {
+      const response = await fetch(`/me`);
 
+      console.log("fetchUserData is running");
 
-export const fetchUserData = createAsyncThunk('user/fetchUserData', async (_) => {
-  try {
-    const response = await fetch(`/me`);
+      if (!response.ok) {
+        const errorData = await response.json(); // Retrieve the error data
+        throw new Error(errorData.message || "fetchUserData failed");
+      }
 
-    console.log("fetchUserData is running")
-
-    if (!response.ok) {
-      const errorData = await response.json(); // Retrieve the error data
-      throw new Error(errorData.message || "fetchUserData failed");
+      // If the response is okay, return the user data
+      const userData = await response.json();
+      console.log("userDatat from fetchUserData", userData);
+      return userData;
+    } catch (error) {
+      throw error;
     }
-
-    // If the response is okay, return the user data
-    const userData = await response.json();
-    console.log("userDatat from fetchUserData", userData)
-    return userData;
-  } catch (error) {
-    throw error;
   }
-});
-
-
-
+);
 
 export const logoutUser = createAsyncThunk("user/logout", async () => {
   try {
@@ -96,6 +90,10 @@ export const fetchUserById = createAsyncThunk(
     }
   }
 );
+// I know typing in the backendurl is messing with the session, but otherwise how could I put in that
+// url for fetching? if I put `users/${userId}` it will send the request to localhost:4000
+// all the other requests have been working (with localhost:4000) - I think that's because of my CORS
+// With the request using localhost:4000, it says not authorized
 
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
@@ -118,13 +116,13 @@ export const registerUserInApi = createAsyncThunk(
       throw error;
     }
   }
-)
+);
 
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
     try {
-      console.log("url trying to send to", `/users/${userId}`)
+      console.log("url trying to send to", `/users/${userId}`);
       const response = await fetch(`/users/${userId}`, {
         method: "PATCH",
         headers: {
@@ -149,23 +147,27 @@ export const updateUserInApi = createAsyncThunk(
 // I want to get the data for all the users and also an individual user
 // individual user for the user page, but when would I be using all the users? Just to change the user state
 
-export const addPlantToUser = createAsyncThunk("user/addPlantToUser", (_, { getState }) => {
-  const entry = getState().entry.individualEntry;
-  const allPlants = getState().plant.allPlants;
-  
-  const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
-  
-  if (!newPlant) {
-    return Promise.reject("Plant not found");
+export const addPlantToUser = createAsyncThunk(
+  "user/addPlantToUser",
+  (_, { getState }) => {
+    const entry = getState().entry.individualEntry;
+    const allPlants = getState().plant.allPlants;
+
+    const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
+
+    if (!newPlant) {
+      return Promise.reject("Plant not found");
+    }
+
+    return newPlant;
   }
-  
-  return newPlant;
-});
+);
 
 const userSlice = createSlice({
   name: "user",
   initialState: {
     allUsers: [],
+    individualUser: null,
     loggedInUser: null,
     loggedIn: null,
     loadingAllUsers: false,
@@ -174,7 +176,7 @@ const userSlice = createSlice({
     errorIndividualUser: null,
     loading: null,
     error: null,
-    pending: null
+    pending: null,
   },
   reducers: {
     resetUser: (state) => {
@@ -203,21 +205,23 @@ const userSlice = createSlice({
 
       state.loggedInUser.plants = state.loggedInUser.plants.map((plant) =>
         plant.id === updatedPlant.id ? updatedPlant : Plant
-      )
+      );
     },
     deleteUserPlant: (state, action) => {
-      const deletedPlantId = action.payload
+      const deletedPlantId = action.payload;
 
-      state.loggedInUser.plants = state.loggedInUser.plants.filter((plant) => plant.id !== deletedPlantId)
-    }
-      // I probably need to change it for all users, but I don't have all users loaded yet, 
-      // but it would be changed for individual plant and all plants
-      // it loads the individual plant every time someone opens the plant page, but they could still
-      // see an errored description or image
-      // I as the admin would be the only one able to change it though
+      state.loggedInUser.plants = state.loggedInUser.plants.filter(
+        (plant) => plant.id !== deletedPlantId
+      );
+    },
+    // I probably need to change it for all users, but I don't have all users loaded yet,
+    // but it would be changed for individual plant and all plants
+    // it loads the individual plant every time someone opens the plant page, but they could still
+    // see an errored description or image
+    // I as the admin would be the only one able to change it though
 
     // addPlantToUser: (state, action) => {
-    //   const 
+    //   const
     // }
   },
   extraReducers: (builder) => {
@@ -253,7 +257,7 @@ const userSlice = createSlice({
         state.loading = false;
         // state.individualUser = action.payload;
         state.loggedIn = true;
-        state.loggedInUser = action.payload
+        state.loggedInUser = action.payload;
         state.success = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -304,25 +308,29 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(registerUserInApi.fulfilled, (state, action) => {
-        state.loggedInUser = action.payload
-        state.loggedIn = true
-  
+        state.loggedInUser = action.payload;
+        state.loggedIn = true;
       })
       .addCase(registerUserInApi.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(addPlantToUser.fulfilled, (state, action) => {
-        state.loggedInUser.plants.push(action.payload)
+        state.loggedInUser.plants.push(action.payload);
       })
       .addCase(addPlantToUser.rejected, (state, action) => {
-        state.error = action.error.message
-      })
-  
+        state.error = action.error.message;
+      });
   },
 });
 
-
-export const { setUser, resetUser, addUser, updateUser, deleteUser, updateUserPlant, deleteUserPlant } =
-  userSlice.actions;
+export const {
+  setUser,
+  resetUser,
+  addUser,
+  updateUser,
+  deleteUser,
+  updateUserPlant,
+  deleteUserPlant,
+} = userSlice.actions;
 
 export const userReducer = userSlice.reducer;
