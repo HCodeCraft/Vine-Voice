@@ -26,7 +26,7 @@ const UserProfile = () => {
   console.log("userId", userId);
 
   console.log("loggedInUser", loggedInUser);
-  console.log("currentUser", currentUser);
+
 
   useEffect(() => {
     if (userId === loggedInUser.id) {
@@ -39,9 +39,14 @@ const UserProfile = () => {
         setCurrentUser(false);
       });
     }
-  }, [userId]);
+  }, [loggedInUser]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (user) {
+      setStatusForm(false);
+    }
+  }, [user?.status]);
+  
 
   // Make Username profile Title Stylized like the plan
   // add status bubble div
@@ -66,6 +71,7 @@ const UserProfile = () => {
 
     try {
       await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
+      setStatusForm(false)
     } catch (error) {}
   };
 
@@ -81,6 +87,7 @@ const UserProfile = () => {
     <Container>
       <Box>
         <br />
+        <br/>
         <Typography variant="h4">
           {currentUser ? "My" : `${user.username}'s`} Profile
         </Typography>
@@ -97,11 +104,13 @@ const UserProfile = () => {
           statusForm === false ? (
             <>
               <Typography variant="subtitle1">My status:</Typography>
+              <br/>
               <div className="statusBubble">
                 <div className="status-txt">
                 <Typography variant="h7">{user.status}</Typography>
                 </div>
               </div>
+              <br/>
               <br/>
               <CommonButton onClick={() => handleStatusFormClick()}>
                 Edit
@@ -128,7 +137,7 @@ const UserProfile = () => {
           <>
             <Typography variant="subtitle1">Their status:</Typography>
             <div className="statusBubble">
-              <Typography variant="h6">{user.status}</Typography>
+              <Typography variant="h6" align={'center'}>{user.status}</Typography>
             </div>{" "}
           </>
         )}
@@ -141,6 +150,8 @@ const UserProfile = () => {
         <br />
         <Typography variant="h5"> {"Name:"} {user.name}</Typography>
         <br />
+        {user.privacy !== true ? <Typography variant="h5">{user.email}</Typography> : null}
+          <br/>
       </div>
       {currentUser == true ? (
         <Link to={`/users/${user.id}/edit`}>

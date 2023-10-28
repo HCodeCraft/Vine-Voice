@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-
+import Restricted from "../../Restricted";
+import Unauthorized from "../../Unauthorized";
 import { updatePlantInApi } from "./plantSlice";
 
 const EditPlant = () => {
@@ -12,6 +13,21 @@ const EditPlant = () => {
 
   const apiPlant = useSelector((state) => state.plant.individualPlant);
   console.log("apiPlant", apiPlant)
+
+  const user = useSelector((state) => state.user.loggedInUser)
+  console.log("user", user)
+
+  if (!user){
+    return (
+      <Unauthorized/>
+    )
+  }
+
+  if (user.admin !== true) {
+    return (
+      <Restricted/>
+    )
+  }
 
 
   // To Do
@@ -95,7 +111,7 @@ useEffect(() => {
   };
 
 
-  return (
+  return  (
     <section className="editBox">
       <h2>Edit {apiPlant.common_name}</h2>
       <img className="img_deg" src={apiPlant.image_url}></img>

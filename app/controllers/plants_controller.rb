@@ -26,23 +26,27 @@ class PlantsController < ApplicationController
     render json: plant, status: :created
   end
 
-
-
   def update
     if @current_user.admin === true
-    plant = find_plant
-    plant.update(plant_params)
-    render json: plant
+      plant = find_plant
+      plant.update(plant_params)
+      render json: plant
     else
-      return json: {"You are not authorized to preform this action"}
+      render json: { error: "You are not authorized to perform this action" }, status: :unauthorized
     end
   end
 
   def destroy
-    plant = find_plant
-    plant.destroy
-    head :no_content
+    if @current_user.admin === true
+      plant = find_plant
+      deletedPlantId = plant.id
+      plant.destroy
+      render json: { deletedPlantId: deletedPlantId }
+    else
+      render json: { error: "You are not authorized to perform this action" }
+    end
   end
+  
 
   private
 

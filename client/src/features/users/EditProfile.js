@@ -24,8 +24,9 @@ const EditProfile = () => {
     name: "",
     image: "",
     email: "",
-    recieve_dev_emails: null,
+    recieve_dev_emails: false,
     status: "",
+    privacy: false,
   });
 
   useEffect(() => {
@@ -73,6 +74,7 @@ const EditProfile = () => {
         <Box sx={boxStyle}>
           <Typography variant="h5">Edit My User Details</Typography>
           <br />
+
           <form noValidate autoComplete="off" onSubmit={handleSubmit}>
             <Box mb={2}>
               {" "}
@@ -82,33 +84,29 @@ const EditProfile = () => {
                 <input type="file" hidden />
               </Button>
             </Box>
+            <br /> {/* Add margin bottom */}
+            <TextField
+              label="Username"
+              name="username"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={user.username}
+              onChange={handleUserChange}
+            />
             <br />
-            <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
-              <TextField
-                label="Username"
-                name="username"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                value={user.username}
-                onChange={handleUserChange}
-              />
-            </Box>
-            <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
-              <TextField
-                label="Name"
-                name="name"
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                value={user.name}
-                onChange={handleUserChange}
-              />
-            </Box>
+            <br /> {/* Add margin bottom */}
+            <TextField
+              label="Name"
+              name="name"
+              variant="outlined"
+              color="secondary"
+              fullWidth
+              value={user.name}
+              onChange={handleUserChange}
+            />
+            <br />
+            <br />
             <Box mb={2}>
               {" "}
               {/* Add margin bottom */}
@@ -137,20 +135,23 @@ const EditProfile = () => {
                 onChange={handleUserChange}
               />
             </Box>
+            <input
+              name="privacy"
+              type="checkbox"
+              checked={user.privacy}
+              onChange={handleUserChange}
+            ></input>
+            <label>Hide Email on Profile</label>
             <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={user.recieve_dev_emails}
-                    onChange={handleUserChange}
-                    color="primary" 
-                    checkedColor="primary" 
-                  />
-                }
-                label="Receive Dev Emails"
-              />
+              <br/>
+              <input
+                name="recieve_dev_emails"
+                type="checkbox"
+                checked={user.recieve_dev_emails}
+                onChange={handleUserChange}
+              ></input>
+              <label>Receive Dev Emails</label>
+              <br/>
             </Box>
             <CommonButton onClick={handleSubmit}>Submit</CommonButton>
           </form>

@@ -76,7 +76,7 @@ class UsersController < ApplicationController
   
     # missing :password_confirmation
     def user_params
-      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :admin, :id)
+      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :id)
     end
 
     # It said unpermitted parameters: entries, plants, user so I added them, although not sure need them

@@ -101,6 +101,7 @@ export const deletePlantFromApi = createAsyncThunk(
       if (response.ok) {
         thunkAPI.dispatch(deleteUserPlant(plantId));
         console.log("Plant deleted successfully.");
+        return plantId
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
       }
@@ -219,7 +220,8 @@ const plantSlice = createSlice({
       })
       .addCase(deletePlantFromApi.fulfilled, (state, action) => {
         // delete from allPlants,
-        deletedPlantId = action.payload;
+        const deletedPlantId = action.payload
+
 
         state.allPlants = state.allPlants.filter(
           (plant) => plant.id !== deletedPlantId
