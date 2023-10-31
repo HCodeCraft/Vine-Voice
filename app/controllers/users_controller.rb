@@ -12,16 +12,29 @@ class UsersController < ApplicationController
     end
 
     def index
-      render json: User.all
+      render json: User.all.with_attached_image
     end
   
 
     # need to make an update action
+    # def update
+    #   user = User.find_by(id:params[:id])
+    #   user.update(user_params)
+    #   render json: user
+    # end
+
     def update
-      user = User.find_by(id:params[:id])
-      user.update(user_params)
-      render json: user
+      user = User.find_by(id: params[:id])
+      if user.update(user_params)
+        logger.info("User updated successfully: #{user.inspect}")
+
+        render json: user
+      else
+        logger.error("User update failed: #{user.errors.full_messages}")
+        render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+      end
     end
+    
 
     def public_profile
       user = User.find_by(id: params[:id])
@@ -39,6 +52,7 @@ class UsersController < ApplicationController
 
 
     def show
+      # not sure I need .with_attached_image
       user = User.find_by(id: params[:id])
     
       if user
@@ -76,7 +90,7 @@ class UsersController < ApplicationController
   
     # missing :password_confirmation
     def user_params
-      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :id)
+      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :id, :admin)
     end
 
     # It said unpermitted parameters: entries, plants, user so I added them, although not sure need them

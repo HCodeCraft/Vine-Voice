@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
+
 // when I have multiple users I'll want to just show the most recent entry per user
 
 const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
@@ -22,7 +23,7 @@ const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 const EntryTable = ({ entries, comments }) => {
   // const entryComments = comments.filter((comment) => comment.entry_id ==entry.id)
   // probably a more concise way of putting the comments in...
-
+console.log("entries fro entrytable", entries)
   return (
     <div style={{ overflowY: "scroll", maxHeight: "300px" }}>
       <TableContainer component={Card} sx={{ backgroundColor: "C9CCD3" }}>
@@ -45,7 +46,7 @@ const EntryTable = ({ entries, comments }) => {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell align="center">{row.create_date}</TableCell>
-                <TableCell align="center">{row.username}</TableCell>
+                <TableCell align="center"><Link to={`/users/${row.user_id}`}>{row.username}</Link></TableCell>
                 <TableCell align="center">
                   {row.image ? row.image : "No Picture"}
                 </TableCell>
@@ -66,7 +67,7 @@ const EntryTable = ({ entries, comments }) => {
                     : "0"}
                 </TableCell>
                 <TableCell align="center">
-                  <Link to={`entries/${row.id}`}>
+                  <Link to={`entries/${row.user_id}`}>
                     <CommonButton>Show More</CommonButton>
                   </Link>
                 </TableCell>

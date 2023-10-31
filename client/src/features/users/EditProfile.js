@@ -36,6 +36,13 @@ const EditProfile = () => {
     }
   }, [currentUser]);
 
+  // Testing
+  useEffect(() => {
+    console.log("user", user);
+  }, [user]);
+
+  /////
+
   const boxStyle = {
     backgroundColor: "#f5f5f5",
     padding: "30px",
@@ -56,9 +63,40 @@ const EditProfile = () => {
     dispatch(updateUserInApi(editedUserId, editedUser));
   };
 
+  /// How do I need to change this to accomidate the image upload?
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   const updatedUser = user;
+  //   updateUser({ userId: currentUser.id, updatedUser });
+
+  //   navigate(`/users/${user.id}`);
+  //   // Handle form submission here
+  //   // i'll use updateUserInApi and make sure there are extended reducers
+  // };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    const updatedUser = user;
+
+    console.log("handleSubmit is running")
+    const updatedUser = new FormData();
+
+    if (user.image) {
+      updatedUser.append("user[image]", user.image);
+    }
+
+    updatedUser.append("user[username]", user.username);
+    updatedUser.append("user[name]", user.name);
+    updatedUser.append("user[email]", user.email);
+    updatedUser.append("user[recieve_dev_emails]", user.recieve_dev_emails);
+    updatedUser.append("user[status]", user.status);
+    updatedUser.append("user[privacy]", user.privacy);
+    console.log("updatedUser in submit", updatedUser);
+    for (var pair of updatedUser.entries() ){
+      console.log(pair[0] + ',' + pair[1])
+
+      // The slice isn't getting the updatedUser data 
+    }
     updateUser({ userId: currentUser.id, updatedUser });
 
     navigate(`/users/${user.id}`);
@@ -75,16 +113,24 @@ const EditProfile = () => {
           <Typography variant="h5">Edit My User Details</Typography>
           <br />
 
-          <form noValidate autoComplete="off" onSubmit={handleSubmit}>
+          <form noValidate autoComplete="off" onSubmit={() => handleSubmit} encType="multipart/form-data">
             <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
-              <Button variant="contained" component="label" color="primary">
-                Change Profile Picture
-                <input type="file" hidden />
-              </Button>
+              <label htmlFor="image">Add Avatar from image</label>
+              <input
+                type="file"
+                name="image"
+                id="image"
+                accept=".jpg, .jpeg, .png, .webp"
+                onChange={(e) => {
+                  const selectedFile = e.target.files[0];
+                  setUser({
+                    ...user,
+                    image: selectedFile,
+                  });
+                }}
+              />
             </Box>
-            <br /> {/* Add margin bottom */}
+            <br />
             <TextField
               label="Username"
               name="username"
@@ -95,7 +141,7 @@ const EditProfile = () => {
               onChange={handleUserChange}
             />
             <br />
-            <br /> {/* Add margin bottom */}
+            <br />
             <TextField
               label="Name"
               name="name"
@@ -108,8 +154,6 @@ const EditProfile = () => {
             <br />
             <br />
             <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
               <TextField
                 label="Status"
                 name="status"
@@ -123,8 +167,6 @@ const EditProfile = () => {
               />
             </Box>
             <Box mb={2}>
-              {" "}
-              {/* Add margin bottom */}
               <TextField
                 label="Email"
                 name="email"
@@ -136,22 +178,23 @@ const EditProfile = () => {
               />
             </Box>
             <input
+              id="privacy"
               name="privacy"
               type="checkbox"
               checked={user.privacy}
               onChange={handleUserChange}
-            ></input>
-            <label>Hide Email on Profile</label>
+            />
+            <label htmlFor="privacy">Hide Email on Profile</label>
             <Box mb={2}>
-              <br/>
               <input
+                id="receive_dev_emails"
                 name="recieve_dev_emails"
                 type="checkbox"
                 checked={user.recieve_dev_emails}
                 onChange={handleUserChange}
-              ></input>
-              <label>Receive Dev Emails</label>
-              <br/>
+              />
+              <label htmlFor="receive_dev_emails">Receive Dev Emails</label>
+              <br />
             </Box>
             <CommonButton onClick={handleSubmit}>Submit</CommonButton>
           </form>

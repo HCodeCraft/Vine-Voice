@@ -5,6 +5,7 @@ class Plant < ApplicationRecord
     accepts_nested_attributes_for :entries
 
 
+
   
 
 end

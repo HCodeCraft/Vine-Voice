@@ -6,6 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
 import { fetchUserById } from "./userSlice";
+import ProfileImage from "../../ProfileImage";
 
 const UserProfile = () => {
   const params = useParams();
@@ -17,15 +18,12 @@ const UserProfile = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
   const individualUser = useSelector((state) => state.user.individualUser);
 
-  console.log("individualUser", individualUser);
+ 
   // fetch user by id on login with useEffect
   // change JSX so that this page has dynamic content
   // can make it use user if user matches the params, otherwise, fetchUserById
 
   const userId = Number(params.id);
-  console.log("userId", userId);
-
-  console.log("loggedInUser", loggedInUser);
 
 
   useEffect(() => {
@@ -46,7 +44,6 @@ const UserProfile = () => {
       setStatusForm(false);
     }
   }, [user?.status]);
-  
 
   // Make Username profile Title Stylized like the plan
   // add status bubble div
@@ -63,15 +60,12 @@ const UserProfile = () => {
 
   const handleStatusEditSubmit = async (e) => {
     e.preventDefault();
-    const updatedUser = {
-      user: {
-        status: newStatus,
-      },
-    };
+
+    const updatedUser = new FormData()
 
     try {
       await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
-      setStatusForm(false)
+      setStatusForm(false);
     } catch (error) {}
   };
 
@@ -83,11 +77,19 @@ const UserProfile = () => {
 
   // used to be [user, params.id]
 
-  return user ? (
+  if (user.errors) {
+    return (
+      <>
+        <Typography variant="h4">User not found</Typography>
+      </>
+    );
+  }
+
+  return user.username ? (
     <Container>
       <Box>
         <br />
-        <br/>
+        <br />
         <Typography variant="h4">
           {currentUser ? "My" : `${user.username}'s`} Profile
         </Typography>
@@ -97,21 +99,23 @@ const UserProfile = () => {
         <br />
         <Typography variant="h5">
           {currentUser ? `I have` : "They have"}{" "}
-          {user.plants?.length > 0 ? user.plants.length : `no`} plants logged!
+          {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
+          {user.plants.length === 1 ? `plant` : `plants`} logged!
         </Typography>
         <br />{" "}
         {currentUser === true ? (
           statusForm === false ? (
             <>
+              {user.image ? <ProfileImage /> : null}
               <Typography variant="subtitle1">My status:</Typography>
-              <br/>
+              <br />
               <div className="statusBubble">
                 <div className="status-txt">
-                <Typography variant="h7">{user.status}</Typography>
+                  <Typography variant="h7">{user.status}</Typography>
                 </div>
               </div>
-              <br/>
-              <br/>
+              <br />
+              <br />
               <CommonButton onClick={() => handleStatusFormClick()}>
                 Edit
               </CommonButton>
@@ -137,7 +141,9 @@ const UserProfile = () => {
           <>
             <Typography variant="subtitle1">Their status:</Typography>
             <div className="statusBubble">
-              <Typography variant="h6" align={'center'}>{user.status}</Typography>
+              <Typography variant="h6" align={"center"}>
+                {user.status}
+              </Typography>
             </div>{" "}
           </>
         )}
@@ -148,15 +154,26 @@ const UserProfile = () => {
           {"Username:"} {user.username}{" "}
         </Typography>
         <br />
-        <Typography variant="h5"> {"Name:"} {user.name}</Typography>
+        <Typography variant="h5">
+          {" "}
+          {"Name:"} {user.name}
+        </Typography>
         <br />
-        {user.privacy !== true ? <Typography variant="h5">{user.email}</Typography> : null}
-          <br/>
+        {user.privacy !== true ? (
+          <Typography variant="h5">{user.email}</Typography>
+        ) : null}
+        <br />
       </div>
       {currentUser == true ? (
         <Link to={`/users/${user.id}/edit`}>
           <CommonButton>Edit Info</CommonButton>
         </Link>
+      ) : null}
+
+      {loggedInUser.admin || currentUser ? (
+        <>
+          <CommonButton style={{ marginLeft: "3px" }}>Delete User</CommonButton>
+        </>
       ) : null}
     </Container>
   ) : (

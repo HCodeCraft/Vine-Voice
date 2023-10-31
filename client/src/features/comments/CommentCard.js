@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCommentInApi } from "./commentSlice";
 import { deleteCommentFromApi } from "../comments/commentSlice";
+import { Link } from 'react-router-dom'
 
 /// want to put the logic for this seperately especially so I can set the review edit form to each one
 
@@ -13,6 +14,8 @@ const CommentCard = ({ comment, setComment }) => {
 
 
   const oneComment = indEntryComments.find(indComment => comment.id == indComment.id);
+
+  console.log("oneComment", oneComment)
  
 
   const dispatch = useDispatch();
@@ -54,14 +57,16 @@ const CommentCard = ({ comment, setComment }) => {
       <br />
       <div className="comment_box">
         <br />
+        <Link to={`/users/${comment.user_id}`}>
         <Typography
           align="left"
           sx={{
             textDecoration: "underline",
           }}
         >
-          {comment.username}
+          {comment.username} 
         </Typography>
+        </Link>
         <Typography align="left" variant="subtitle1">
           {comment.create_date}
         </Typography>

@@ -253,3 +253,11 @@ bottom: 50%;
 width: 100%; */
 text-align: center;
 }
+
+.latest-image {
+  width: 300px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+
+}

@@ -101,10 +101,7 @@ export const registerUserInApi = createAsyncThunk(
     try {
       const response = await fetch(`/users`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newUser),
+        body: newUser
       });
 
       if (!response.ok) {
@@ -122,13 +119,10 @@ export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
     try {
-      console.log("url trying to send to", `/users/${userId}`);
+    
       const response = await fetch(`/users/${userId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
+        body: updatedUser
       });
 
       if (!response.ok) {
@@ -144,8 +138,26 @@ export const updateUserInApi = createAsyncThunk(
     }
   }
 );
-// I want to get the data for all the users and also an individual user
-// individual user for the user page, but when would I be using all the users? Just to change the user state
+
+export const deleteUserFromApi = createAsyncThunk(
+  "users/deleteUserFromApi",
+  async (userId) => {
+    try {
+      const response = await fetch(`/users/${userId}`, {
+        method: "DELETE",
+      });
+      if (response.ok) {
+      
+        console.log("User deleted successfully.");
+        return userId
+      } else {
+        throw new Error(`Failed to delete plant: ${response.status}`);
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+);
 
 export const addPlantToUser = createAsyncThunk(
   "user/addPlantToUser",
@@ -162,6 +174,8 @@ export const addPlantToUser = createAsyncThunk(
     return newPlant;
   }
 );
+
+
 
 const userSlice = createSlice({
   name: "user",
@@ -319,7 +333,21 @@ const userSlice = createSlice({
       })
       .addCase(addPlantToUser.rejected, (state, action) => {
         state.error = action.error.message;
-      });
+      })
+      .addCase(deleteUserFromApi.fulfilled, (state, action) => {
+        // delete from allPlants,
+        const deletedUserId = action.payload
+
+        // not sure if I need this
+        state.allUsers = state.allUsers.filter(
+          (user) => user.id !== deletedUserId
+        );
+
+
+      })
+      .addCase(deleteUserFromApi.rejected, (state, action) => {
+
+      })
   },
 });
 

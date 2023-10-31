@@ -31,20 +31,39 @@ const CreateAccount = () => {
   } = useForm();
 
   // To-Do
-  // get addUserToApi Working
   // Get avatar/ image url working
   // redirect to user plants
 
   const onSubmit = (data) => {
     if (data.password !== data.password_confirmation) {
-      alert("Passwords don't match");
+      alert("Passwords don't match")
+      return;
+    } else {
+      data.email = data.email.toLowerCase();
+      const newUser = new FormData();
+      newUser.append("user[image]", data.image[0]);
+      newUser.append("user[username]", data.username);
+      newUser.append("user[name]", data.name);
+      newUser.append("user[password]", data.password);
+      newUser.append("user[password_confirmation]", data.password_confirmation);
+  
+      dispatch(registerUserInApi(newUser));
+      reset();
+      navigate(`/users/plants`);
     }
-    data.email = data.email.toLowerCase();
-    const newUser = data;
-    dispatch(registerUserInApi(newUser));
-    reset();
-    navigate(`/users/plants`)
   };
+  
+
+  // const onSubmit = (data) => {
+  //   if (data.password !== data.password_confirmation) {
+  //     alert("Passwords don't match");
+  //   }
+  //   data.email = data.email.toLowerCase();
+  //   const newUser = data;
+  //   dispatch(registerUserInApi(newUser));
+  //   reset();
+  //   navigate(`/users/plants`)
+  // };
 
   const handleOpen = () => {
     setOpen(true);
@@ -56,7 +75,7 @@ const CreateAccount = () => {
 
   const paperStyle = {
     padding: 20,
-    height: "89vh",
+    height: "100vh",
     width: 400,
     margin: "20px auto",
   };
@@ -98,7 +117,6 @@ const CreateAccount = () => {
               })}
             />
             <p className="error_msg">{errors.email?.message}</p>
-
             <TextField
               label="First Name (optional)"
               placeholder="Enter First Name"
@@ -136,8 +154,8 @@ const CreateAccount = () => {
               })}
             />
             <p className="error_msg">{errors.password_confirmation?.message}</p>
-
-            <Button variant="contained">Add Avatar from image</Button>
+            <label>Add Avatar from image</label>
+            <input type="file" name="image" id="image"/>
             {/* avatar_url */}
             <br />
             <br />
@@ -159,6 +177,18 @@ const CreateAccount = () => {
                 <label>
                   <input type="checkbox" {...field} />
                   Recieve Developer Emails
+                </label>
+              )}
+            /> <br/>
+            <br/>
+                        <Controller
+              name="privacy"
+              control={control}
+              defaultValue={false} // Initial value of the checkbox
+              render={({ field }) => (
+                <label>
+                  <input type="checkbox" {...field} />
+                 Hide Email in Profile
                 </label>
               )}
             />
