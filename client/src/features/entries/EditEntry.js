@@ -22,7 +22,7 @@ const EditEntry = () => {
     nickname: "",
     location: "",
     notes: "",
-    image: "",
+    picture: "",
     plant_id: Number(params.plant_id),
     health: null,
     problems: [],
@@ -130,7 +130,7 @@ Set up the image upload
           <Button variant="contained" component="label" color="primary">
             {" "}
             Change Picture
-            <input type="file" hidden />
+            <input type="file" hidden name="picture" id="picture" />
             {/* need to add an onchange to this */}
           </Button>
           <br />

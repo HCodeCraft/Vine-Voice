@@ -15,16 +15,30 @@ class EntriesController < ApplicationController
       
       def create
         @current_user = User.find_by(id: session[:user_id])
-        Rails.logger.debug("Current User: #{@current_user.inspect}")
-        new_entry = @current_user.entries.create!(entry_params)
-        render json: new_entry
+   
+        @new_entry = @current_user.entries.create!(entry_params)
+    
+        render json: EntrySerializer.new(@new_entry).serializable_hash[:data][:attributes]
       end
+
+      # def create
+      #   @current_user = User.find_by(id: session[:user_id])
+   
+      #   new_entry = @current_user.entries.create!(entry_params)
+    
+      #   render json: new_entry
+      # end
+
+      
+
       
       def update
         entry = find_entry
         entry.update(entry_params)
+    
         render json: entry
       end
+
       
       def destroy
         entry = find_entry
@@ -39,7 +53,7 @@ class EntriesController < ApplicationController
       end
       
       def entry_params
-        params.require(:entry).permit(:nickname, :location, :notes, :image, :user_id, :plant_id,  :open_to_advice, :health, problems: [])
+        params.require(:entry).permit(:nickname, :location, :notes, :picture_url, :user_id, :plant_id,  :open_to_advice, :health, problems: [])
       end
       
 end

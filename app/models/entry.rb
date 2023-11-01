@@ -2,7 +2,8 @@ class Entry < ApplicationRecord
     belongs_to :user
     belongs_to :plant
     has_many :comments
-    # has_one_attached :image
+    has_one_attached :picture
+
 
 
     def username

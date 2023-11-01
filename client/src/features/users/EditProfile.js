@@ -22,7 +22,7 @@ const EditProfile = () => {
   const [user, setUser] = useState({
     username: "",
     name: "",
-    image: "",
+    avatar: "",
     email: "",
     recieve_dev_emails: false,
     status: "",
@@ -81,8 +81,8 @@ const EditProfile = () => {
     console.log("handleSubmit is running")
     const updatedUser = new FormData();
 
-    if (user.image) {
-      updatedUser.append("user[image]", user.image);
+    if (user.avatar) {
+      updatedUser.append("user[avatar]", user.avatar);
     }
 
     updatedUser.append("user[username]", user.username);
@@ -115,17 +115,17 @@ const EditProfile = () => {
 
           <form noValidate autoComplete="off" onSubmit={() => handleSubmit} encType="multipart/form-data">
             <Box mb={2}>
-              <label htmlFor="image">Add Avatar from image</label>
+              <label htmlFor="avatar">Add Image for avatar</label>
               <input
                 type="file"
-                name="image"
-                id="image"
+                name="avatar"
+                id="avatar"
                 accept=".jpg, .jpeg, .png, .webp"
                 onChange={(e) => {
                   const selectedFile = e.target.files[0];
                   setUser({
                     ...user,
-                    image: selectedFile,
+                    avatar: selectedFile,
                   });
                 }}
               />

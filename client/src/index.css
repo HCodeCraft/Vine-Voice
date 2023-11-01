@@ -261,3 +261,8 @@ text-align: center;
   display: block;
 
 }
+
+.avatarBig{
+  width: 200px;
+  height: 200px;
+}

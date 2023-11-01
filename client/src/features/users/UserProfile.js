@@ -25,6 +25,8 @@ const UserProfile = () => {
 
   const userId = Number(params.id);
 
+  console.log("user", user)
+
 
   useEffect(() => {
     if (userId === loggedInUser.id) {
@@ -100,7 +102,7 @@ const UserProfile = () => {
         <Typography variant="h5">
           {currentUser ? `I have` : "They have"}{" "}
           {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
-          {user.plants.length === 1 ? `plant` : `plants`} logged!
+          {user.plants?.length === 1 ? `plant` : `plants`} logged!
         </Typography>
         <br />{" "}
         {currentUser === true ? (
@@ -150,6 +152,7 @@ const UserProfile = () => {
         <br />
         <br />
         <br />
+        <img src={user.avatar_url} className="avatarBig"/>
         <Typography variant="h5">
           {"Username:"} {user.username}{" "}
         </Typography>

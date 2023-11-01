@@ -12,30 +12,41 @@ class UsersController < ApplicationController
     end
 
     def index
-      render json: User.all.with_attached_image
+      render json: User.all
     end
   
 
-    # need to make an update action
-    # def update
-    #   user = User.find_by(id:params[:id])
-    #   user.update(user_params)
-    #   render json: user
-    # end
 
+
+
+
+    # would need to do something to delete the previous avatar
     def update
       user = User.find_by(id: params[:id])
       if user.update(user_params)
-        logger.info("User updated successfully: #{user.inspect}")
 
-        render json: user
+# there was a problem with this line wrong number of arguments, given 3 expected 0
+        render json: UserSerializer.new(user).serializable_hash[:data][:attributes]
       else
-        logger.error("User update failed: #{user.errors.full_messages}")
+
         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
       end
     end
     
 
+#     def update
+#       user = User.find_by(id: params[:id])
+#       if user.update(user_params)
+# byebug
+# # there was a problem with this line wrong number of arguments, given 3 expected 0
+#         render json: user
+#       else
+
+#         render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+#       end
+#     end
+
+    # delete this??
     def public_profile
       user = User.find_by(id: params[:id])
     
@@ -88,9 +99,9 @@ class UsersController < ApplicationController
   
     private
   
-    # missing :password_confirmation
+    # added avatar
     def user_params
-      params.require(:user).permit(:username, :password,  :name, :avatar_url, :image, :privacy, :email, :recieve_dev_emails, :status, :id, :admin)
+      params.require(:user).permit(:username, :password,  :name, :avatar_url, :privacy, :email, :recieve_dev_emails, :status, :id, :admin, :avatar)
     end
 
     # It said unpermitted parameters: entries, plants, user so I added them, although not sure need them
