@@ -6,14 +6,12 @@ import {
   TextField,
   Button,
   Typography,
-  FormControlLabel,
-  Checkbox,
   Dialog,
   DialogContent,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { registerUserInApi } from "./userSlice";
 import { useNavigate } from "react-router-dom";
 
@@ -41,7 +39,11 @@ const CreateAccount = () => {
     } else {
       data.email = data.email.toLowerCase();
       const newUser = new FormData();
-      newUser.append("user[image]", data.image[0]);
+    
+      if (data.avatar) {
+        newUser.append("user[avatar]", data.avatar);
+      }
+
       newUser.append("user[username]", data.username);
       newUser.append("user[name]", data.name);
       newUser.append("user[password]", data.password);
@@ -54,16 +56,6 @@ const CreateAccount = () => {
   };
   
 
-  // const onSubmit = (data) => {
-  //   if (data.password !== data.password_confirmation) {
-  //     alert("Passwords don't match");
-  //   }
-  //   data.email = data.email.toLowerCase();
-  //   const newUser = data;
-  //   dispatch(registerUserInApi(newUser));
-  //   reset();
-  //   navigate(`/users/plants`)
-  // };
 
   const handleOpen = () => {
     setOpen(true);
@@ -157,16 +149,6 @@ const CreateAccount = () => {
             <label>Add Avatar from image</label>
             <input type="file" name="image" id="image"/>
             {/* avatar_url */}
-            <br />
-            <br />
-            <TextField
-              label="Add avatar from url"
-              placeholder="Enter image url"
-              fullWidth
-              type="text"
-              id=""
-              {...register("image")}
-            />
             <br />
             <br />
             <Controller

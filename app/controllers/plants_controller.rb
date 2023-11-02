@@ -2,11 +2,10 @@ class PlantsController < ApplicationController
   before_action :authorize
 
   def index
-    Rails.logger.debug("Session contents in plant: #{session.inspect}")
-
     render json: Plant.all
   end
 
+  
   def show
     plant = find_plant
     render json: plant
@@ -46,7 +45,6 @@ class PlantsController < ApplicationController
       render json: { error: "You are not authorized to perform this action" }
     end
   end
-  
 
   private
 
@@ -56,7 +54,5 @@ class PlantsController < ApplicationController
 
   def plant_params
     params.require(:plant).permit(:common_name, :scientific_name, :image_url, :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous_to_humans, :poisonous_to_pets, :edible, :medicinal, :med_image_url, :id, :sunlight, entries_attributes: [:nickname, :location, :notes, :image, :user_id, :plant_id, :health, :problems, :open_to_advice])
-
-    # , :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous, :edible, :medicinal)
   end
 end

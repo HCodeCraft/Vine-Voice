@@ -8,6 +8,8 @@ import Unauthorized from "../../Unauthorized";
 
 const AllPlants = () => {
 
+  // const state = useSelector((state) => state)
+  // console.log("state", state)
 
   const plants = useSelector((state) => state.plant.allPlants)
   const entries = useSelector((state) => state.entry.allEntries)

@@ -1,5 +1,4 @@
 class CommentSerializer < ActiveModel::Serializer
-  include JSONAPI::Serializer
   attributes :text, :username, :create_date, :id, :entry_id, :user_id
   belongs_to :entry
 

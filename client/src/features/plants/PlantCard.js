@@ -27,7 +27,7 @@ const PlantCard = ({
 
   const plant = plants.find((plant) => plant.id === id)
 
-  const PlantEntries = plant.entries
+  // const PlantEntries = plant.entries
   // plant is coming from allPlants 
 
 // doesn't work to get entries from indPlant because there's only one plant that's indplant
@@ -47,7 +47,7 @@ const PlantCard = ({
             {short_description}
           </Typography>
           <Typography variant="subtitle2">
-            {plant?.entries.length > 1
+            {plant?.entries?.length > 1
               ? `${plant.entries?.length} entries`
               : `${plant.entries?.length} entry`}
           </Typography>

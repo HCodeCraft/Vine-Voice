@@ -1,11 +1,12 @@
 class EntrySerializer < ActiveModel::Serializer
-  include JSONAPI::Serializer
-  attributes :id, :nickname, :location, :notes, :plant_id, :health, :problems, :open_to_advice, :create_date, :picture_url
+  include Rails.application.routes.url_helpers
+  attributes :id, :nickname, :location, :notes, :plant_id, :health, :problems, :open_to_advice, :create_date, :picture
   has_many :comments
 
-  def picture_url
-    Rails.application.routes.url_helpers.url_for(picture) if picture.attached?
+  def picture
+    rails_blob_path(object.picture, only_path:true) if object.picture.attached?
   end
+
 
   def create_date
     created_at = object.created_at

@@ -35,6 +35,7 @@ const Login = () => {
 
   const submitForm = async (data) => {
     try {
+      console.log("data from login user submit", data)
       const action = await dispatch(loginUser(data));
       if (loginUser.fulfilled.match(action)) {
         dispatch(fetchAllPlants());

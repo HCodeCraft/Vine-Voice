@@ -152,7 +152,7 @@ const UserProfile = () => {
         <br />
         <br />
         <br />
-        <img src={user.avatar_url} className="avatarBig"/>
+        <img src={user.avatar} className="avatarBig"/>
         <Typography variant="h5">
           {"Username:"} {user.username}{" "}
         </Typography>
