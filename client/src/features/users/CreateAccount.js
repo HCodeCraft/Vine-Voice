@@ -26,6 +26,7 @@ const CreateAccount = () => {
     formState: { errors },
     control,
     reset,
+    ref,
   } = useForm();
 
   // To-Do
@@ -33,29 +34,34 @@ const CreateAccount = () => {
   // redirect to user plants
 
   const onSubmit = (data) => {
+    console.log("data from onSubmit", data);
     if (data.password !== data.password_confirmation) {
-      alert("Passwords don't match")
+      alert("Passwords don't match");
       return;
     } else {
       data.email = data.email.toLowerCase();
       const newUser = new FormData();
-    
-      if (data.avatar) {
-        newUser.append("user[avatar]", data.avatar);
+
+      if (data.avatar && data.avatar[0]) {
+        newUser.append("user[avatar]", data.avatar[0]);
       }
 
       newUser.append("user[username]", data.username);
       newUser.append("user[name]", data.name);
       newUser.append("user[password]", data.password);
+      newUser.append("user[privacy]", data.privacy);
+      newUser.append("user[email]", data.email);
+      newUser.append("user[recieve_dev_emails]", data.recieve_dev_emails);
       newUser.append("user[password_confirmation]", data.password_confirmation);
-  
+
+      for (var pair of newUser.entries()) {
+        console.log(pair[0] + "," + pair[1]);
+      }
       dispatch(registerUserInApi(newUser));
       reset();
       navigate(`/users/plants`);
     }
   };
-  
-
 
   const handleOpen = () => {
     setOpen(true);
@@ -114,12 +120,11 @@ const CreateAccount = () => {
               placeholder="Enter First Name"
               fullWidth
               type="text"
-              id="first_name"
-              {...register("first_name")}
+              id="name"
+              {...register("name")}
             />
             <br />
             <br />
-
             <TextField
               label="Password"
               placeholder="Enter Password"
@@ -131,7 +136,6 @@ const CreateAccount = () => {
               })}
             />
             <p className="error_msg">{errors.password?.message}</p>
-
             <TextField
               label="Password confirmation"
               placeholder="Enter Password Again"
@@ -146,9 +150,25 @@ const CreateAccount = () => {
               })}
             />
             <p className="error_msg">{errors.password_confirmation?.message}</p>
-            <label>Add Avatar from image</label>
-            <input type="file" name="image" id="image"/>
-            {/* avatar_url */}
+            <label htmlFor="avatar">Add Avatar from image</label>
+            <Controller
+              name="avatar"
+              control={control}
+              defaultValue={[]}
+              render={({ field }) => (
+                <>
+                  <input
+                    type="file"
+                    id="avatar"
+                    onChange={(e) => {
+                      field.onChange(e.target.files);
+                    }}
+                    accept=".jpg, .jpeg, .png, .webp"
+                  />
+                  {errors.avatar && <span>{errors.avatar.message}</span>}
+                </>
+              )}
+            />
             <br />
             <br />
             <Controller
@@ -161,16 +181,17 @@ const CreateAccount = () => {
                   Recieve Developer Emails
                 </label>
               )}
-            /> <br/>
-            <br/>
-                        <Controller
+            />{" "}
+            <br />
+            <br />
+            <Controller
               name="privacy"
               control={control}
               defaultValue={false} // Initial value of the checkbox
               render={({ field }) => (
                 <label>
                   <input type="checkbox" {...field} />
-                 Hide Email in Profile
+                  Hide Email in Profile
                 </label>
               )}
             />

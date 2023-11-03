@@ -31,30 +31,30 @@ const NewEntry = () => {
     nickname: "",
     location: "",
     notes: "",
-    image: "",
+    picture: "",
     plant_id: Number(params.plant_id),
     health: null,
     problems: [],
     open_to_advice: false,
   });
 
-  const [tags, setTags] = useState([])
+  const [tags, setTags] = useState([]);
 
   const handleKeyDown = (e) => {
-      if(e.key !== 'Enter') return
-      const value = e.target.value
-      if(!value.trim()) return
-      setTags([...tags, value])
-      e.target.value=''
-  }
-  
+    if (e.key !== "Enter") return;
+    const value = e.target.value;
+    if (!value.trim()) return;
+    setTags([...tags, value]);
+    e.target.value = "";
+  };
+
   const removeTag = (index) => {
-      setTags(tags.filter((el, i) => i !== index))
-  }
+    setTags(tags.filter((el, i) => i !== index));
+  };
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-    console.log("entry.problems", entry.problems) // Update entry.problems when tags change
+    console.log("entry.problems", entry.problems); // Update entry.problems when tags change
   }, [tags]);
 
   // Testing
@@ -81,6 +81,21 @@ const NewEntry = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setEntry({ ...entry, problems: tags });
+
+    const newEntry = new FormData()
+
+    if (entry.picture) {
+      newEntry.append("entry[picture]", entry.picture);
+    }
+
+    newEntry.append("entry[nickname]", entry.nickname);
+    newEntry.append("entry[location]", entry.location);
+    newEntry.append("entry[notes]", entry.notes);
+
+
+    // health, problems, open to advice
+
+
 
 
     console.log("entry from handleSubmit", entry);
@@ -128,7 +143,6 @@ const NewEntry = () => {
             onChange={handleEntryChange}
           />
           <br />
-          <br />
           <TextField
             label="Location"
             name="location"
@@ -137,7 +151,6 @@ const NewEntry = () => {
             className="classes-field"
             onChange={handleEntryChange}
           />
-          <br />
           <br />
           <TextField
             label="Notes"
@@ -151,13 +164,23 @@ const NewEntry = () => {
             onChange={handleEntryChange}
           />
           <br />
-          <br />
-          <Button variant="contained" component="label" color="primary">
+          <label htmlFor="picture">
             {" "}
-            Upload a picture
-            <input type="file" hidden />
-            {/* need to add an onchange to this */}
-          </Button>
+            <Typography variant="h6">Add Picture</Typography>
+          </label>
+          <input
+            type="file"
+            name="picture"
+            id="picture"
+            accept=".jpg, .jpeg, .png, .webp, .wdp"
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              setEntry({
+                ...entry,
+                picture: selectedFile,
+              });
+            }}
+          />
           <br />
           <br />
           <div className="health_box">
@@ -173,9 +196,13 @@ const NewEntry = () => {
             className="classes-field"
             onChange={handleEntryChange}
           /> */}
-          <br/>
+          <br />
           <Typography>Enter problems...</Typography>
-  <TagsInput tags={tags} handleKeyDown={handleKeyDown} removeTag={removeTag} />
+          <TagsInput
+            tags={tags}
+            handleKeyDown={handleKeyDown}
+            removeTag={removeTag}
+          />
           <br />
           <br />
           <FormGroup>

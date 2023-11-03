@@ -98,6 +98,7 @@ export const fetchUserById = createAsyncThunk(
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
   async (newUser) => {
+    console.log("newUser from registerUser", newUser)
     try {
       const response = await fetch(`/users`, {
         method: "POST",

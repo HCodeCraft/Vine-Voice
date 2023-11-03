@@ -1,6 +1,6 @@
 class EntrySerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
-  attributes :id, :nickname, :location, :notes, :plant_id, :health, :problems, :open_to_advice, :create_date, :picture
+  attributes :id, :nickname, :location, :notes, :plant_id, :health, :problems, :open_to_advice, :create_date, :picture, :username, :user_id
   has_many :comments
 
   def picture
