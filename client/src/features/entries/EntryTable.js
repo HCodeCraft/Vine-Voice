@@ -23,7 +23,7 @@ const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 const EntryTable = ({ entries, comments }) => {
   // const entryComments = comments.filter((comment) => comment.entry_id ==entry.id)
   // probably a more concise way of putting the comments in...
-console.log("entries fro entrytable", entries)
+
   return (
     <div style={{ overflowY: "scroll", maxHeight: "300px" }}>
       <TableContainer component={Card} sx={{ backgroundColor: "C9CCD3" }}>
@@ -67,7 +67,7 @@ console.log("entries fro entrytable", entries)
                     : "0"}
                 </TableCell>
                 <TableCell align="center">
-                  <Link to={`entries/${row.user_id}`}>
+                  <Link to={`entries/${row.id}`}>
                     <CommonButton>Show More</CommonButton>
                   </Link>
                 </TableCell>

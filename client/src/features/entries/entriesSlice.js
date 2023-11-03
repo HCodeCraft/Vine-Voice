@@ -35,10 +35,7 @@ export const updateEntryInApi = createAsyncThunk(
     try {
       const response = await fetch(`/entries/${entryId}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedEntry),
+        body: updatedEntry,
       });
 
       if (!response.ok) {

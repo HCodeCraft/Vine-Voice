@@ -22,8 +22,7 @@ const Plant = () => {
   const plant = useSelector((state) => state.plant.individualPlant);
 
   const allPlants = useSelector((state) => state.plant.allPlants)
-  console.log("allPlants from Plant", allPlants)
-  console.log("checking if entry still there")
+
 
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));

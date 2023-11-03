@@ -46,7 +46,10 @@ const NewEntry = () => {
     if (!value.trim()) return;
     setTags([...tags, value]);
     e.target.value = "";
+
+    setEntry({ ...entry, problems: [...entry.problems, ...tags] });
   };
+  
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -54,7 +57,6 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-    console.log("entry.problems", entry.problems); // Update entry.problems when tags change
   }, [tags]);
 
   // Testing
@@ -80,7 +82,8 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setEntry({ ...entry, problems: tags });
+  
+
 
     const newEntry = new FormData()
 
@@ -94,15 +97,17 @@ const NewEntry = () => {
     newEntry.append("entry[health]", entry.health);
     newEntry.append("entry[problems]", entry.problems);
     newEntry.append("entry[open_to_advice]", entry.open_to_advice);
+    newEntry.append("entry[plant_id]", entry.plant_id)
 
-    dispatch(addEntryToApi(entry))
+    for (var pair of newEntry.entries() ){
+      console.log(pair[0] + ',' + pair[1])
+
+      // The slice isn't getting the updatedUser data 
+    }
+    dispatch(addEntryToApi(newEntry))
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));
-    // Make an asyncthunk in users that would go into state and get the right plant
-    // and add it to user's plants on fulfilled
 
-    // have plants loaded in, find the plant the entry is on, then dispatch something to
-    // push that to the loggedInUser's plants array
     navigate(`/plants/${entry.plant_id}`);
   };
 
@@ -184,16 +189,8 @@ const NewEntry = () => {
             <HealthRating rating={entry.health} changeRating={changeRating} />
           </div>
           <br />
-          {/* <TextField
-            label="Problems (seperate with a ',')"
-            name="problems"
-            variant="outlined"
-            color="secondary"
-            className="classes-field"
-            onChange={handleEntryChange}
-          /> */}
           <br />
-          <Typography>Enter problems...</Typography>
+          <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
             tags={tags}
             handleKeyDown={handleKeyDown}

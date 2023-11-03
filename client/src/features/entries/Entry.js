@@ -52,10 +52,12 @@ const Entry = () => {
   );
 
   const plant = useSelector((state) => state.plant.individualPlant)
-  console.log("plant from in Entry", plant)
+
 
 
   const user = useSelector((state) => state.user.loggedInUser);
+
+  console.log("User from Entry", user)
 
  
 
@@ -158,7 +160,7 @@ navigate(`/plants/${params.plant_id}`)
       <br />
       <img
         className="entry_pic"
-        src="https://i.etsystatic.com/28032647/r/il/fcc31d/3031288866/il_1588xN.3031288866_dy56.jpg"
+        src={entry.picture}
         alt="Entry"
       />
       <br />

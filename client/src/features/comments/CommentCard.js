@@ -15,7 +15,7 @@ const CommentCard = ({ comment, setComment }) => {
 
   const oneComment = indEntryComments.find(indComment => comment.id == indComment.id);
 
-  console.log("oneComment", oneComment)
+
  
 
   const dispatch = useDispatch();

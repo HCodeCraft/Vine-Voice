@@ -6,4 +6,8 @@ class Comment < ApplicationRecord
         self.user.username
     end
 
+    def avatar_thumbnail
+        self.user.avatar_thumbnail
+    end
+
 end

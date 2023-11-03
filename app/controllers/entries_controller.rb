@@ -36,6 +36,7 @@ class EntriesController < ApplicationController
   private
 
   def find_entry
+    @current_user = User.find_by(id: session[:user_id])
     entry = @current_user.entries.find_by(id: params[:id])
   end
 
