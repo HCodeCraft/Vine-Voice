@@ -91,14 +91,10 @@ const NewEntry = () => {
     newEntry.append("entry[nickname]", entry.nickname);
     newEntry.append("entry[location]", entry.location);
     newEntry.append("entry[notes]", entry.notes);
+    newEntry.append("entry[health]", entry.health);
+    newEntry.append("entry[problems]", entry.problems);
+    newEntry.append("entry[open_to_advice]", entry.open_to_advice);
 
-
-    // health, problems, open to advice
-
-
-
-
-    console.log("entry from handleSubmit", entry);
     dispatch(addEntryToApi(entry))
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));

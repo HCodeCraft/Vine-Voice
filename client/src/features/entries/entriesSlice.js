@@ -61,10 +61,7 @@ export const addEntryToApi = createAsyncThunk(
     try {
       const response = await fetch(`/entries`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newEntry),
+        body: newEntry,
       });
 
       if (!response.ok) {
