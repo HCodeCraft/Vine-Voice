@@ -17,13 +17,15 @@ const SmallPlantCard = ({
 
   return (
     <Grid item xs={12} md={4} sm={4}>
-      <Card
-        sx={{
-          maxWidth: 200,
-          height: 430,
-          backgroundColor: activeCard == index ? "green" : "default",
-        }}
-      >
+<Card
+  sx={{
+    width: 200,
+    height: 445,
+    margin: "10px",
+    backgroundColor: activeCard === index ? "green" : "default",
+  }}
+>
+
         <CardMedia sx={{ height: 140 }} image={image_url} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">

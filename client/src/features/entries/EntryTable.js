@@ -25,7 +25,7 @@ const EntryTable = ({ entries, comments }) => {
   // probably a more concise way of putting the comments in...
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "300px" }}>
+    <div style={{ overflowY: "scroll", maxHeight: "300px", maxWidth: "800px", overflowX:"scroll" }}>
       <TableContainer component={Card} sx={{ backgroundColor: "C9CCD3" }}>
         <Table aria-label="table of entries" stickyHeader>
           <TableHead>

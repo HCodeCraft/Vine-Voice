@@ -55,6 +55,7 @@ export const updateEntryInApi = createAsyncThunk(
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
   async (newEntry) => {
+    console.log("newEntry from in addEntryToApi", newEntry)
     try {
       const response = await fetch(`/entries`, {
         method: "POST",

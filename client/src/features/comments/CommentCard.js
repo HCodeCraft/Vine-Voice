@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateCommentInApi } from "./commentSlice";
 import { deleteCommentFromApi } from "../comments/commentSlice";
 import { Link } from 'react-router-dom'
+import default_avatar  from "../../defaultleaf.png"
 
 /// want to put the logic for this seperately especially so I can set the review edit form to each one
 
@@ -56,27 +57,35 @@ const CommentCard = ({ comment, setComment }) => {
     <>
       <br />
       <div className="comment_box">
-        <br />
+        <div className='flex-comment-box'>
+            <div className="comment-avatar-box">
+                <img className="avatar" src={comment.avatar_thumbnail ? comment.avatar_thumbnail : default_avatar }/>
+            </div>
+            <div className='comment-text-box'>
         <Link to={`/users/${comment.user_id}`}>
         <Typography
           align="left"
+  
           sx={{
             textDecoration: "underline",
+            verticalAlign: 'top',
+          
           }}
         >
           {comment.username} 
         </Typography>
         </Link>
-        <Typography align="left" variant="subtitle1">
+        <Typography align="left" sx={{ verticalAlign: 'top'}} variant="subtitle1">
           {comment.create_date}
         </Typography>
+        <div className='btn-box'>
         <Typography variant="h6" align="left">
           {editForm == true ? (
             <>
               <textarea
                 className="commentField"
                 rows={5}
-                cols={70}
+                cols={30}
                 name="reviewtext"
                 value={commentText}
                 onChange={handleCommentChange}
@@ -101,7 +110,10 @@ const CommentCard = ({ comment, setComment }) => {
             </CommonButton>
           </>
         ) : null}
+        </div>
         <br />
+        </div>
+        </div>
       </div>
     </>
   ) : null

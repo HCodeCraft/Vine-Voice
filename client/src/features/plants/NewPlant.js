@@ -33,12 +33,12 @@ const NewPlant = () => {
     nickname: "",
     location: "",
     notes: "",
-    image: "",
+    picture: "",
     plant_id: null,
     health: null,
-    problems: [],
     open_to_advice: false,
   });
+  // took out problems: ""
   const [plant, setPlant] = useState({
     id: null, // not sure if I should have this < but otherwise how could I set it?
     common_name: "",
@@ -187,10 +187,17 @@ const NewPlant = () => {
     } else {
       // being sure to add the entry also as a combined post
 
+      setEntry({
+        ...entry,
+        plant_id: plant.id
+      });
+      
+
       const newPlantWithEntry = {
         ...plant,
-        entry,
+        entries_attributes: [entry], // Wrap entry in an array
       };
+      
 
       addPlant(newPlantWithEntry);
     }
@@ -247,15 +254,17 @@ const NewPlant = () => {
                   activeCard={activeCard}
                   selectedPlant={selectedPlant}
                   index={index}
+      
                 />
               ))}
             </>
           )}
           <br />
+          <div className="small-plant-card-container"/>
           {apiForm &&
             speciesList.length > 0 &&
             speciesList.map((p_plant, index) => (
-              <SmallPlantCard
+              <SmallPlantCard className='small-plant-card'
                 plant={p_plant}
                 commonName={p_plant.common_name}
                 sciName={p_plant.scientific_name[0]}
@@ -284,7 +293,7 @@ const NewPlant = () => {
       <br />
       <div className="entry_box">
         {entryForm === true ? (
-          <>
+          <div className='entryBox'>
             <Typography variant="h5">Your Plant's Details</Typography>
             <br />
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -347,10 +356,11 @@ const NewPlant = () => {
               </FormGroup>
               <CommonButton onClick={handleSubmit}>Submit</CommonButton>
             </form>
-          </>
+            </div>
         ) : null}
         <br />
         <br />
+     
       </div>
     </Container>
   );

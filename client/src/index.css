@@ -34,9 +34,9 @@ margin-top: 2%;
 
 
 .pos_top{
-  width:60%;
+  width:45%;
   position:absolute;
-  left: 20%;
+  left: 25%;
   top: 15%;
 }
 
@@ -63,7 +63,7 @@ margin-top: 2%;
 
 .result {
   display:flex;
-  
+  flex-wrap:wrap;
 }
 
 .btnbox {
@@ -241,16 +241,8 @@ font-size: 1em;
 }
 
 
-/* .statusBubble::after {
-  content:"";
-  display: block;
-  padding-bottom: 100%;
-} */
 
 .status-txt{
-/* position: absolute;
-bottom: 50%;
-width: 100%; */
 text-align: center;
 }
 
@@ -265,4 +257,21 @@ text-align: center;
 .avatarBig{
   width: 200px;
   height: 200px;
+}
+
+.entryBox{
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 2%;
+}
+
+.small-plant-card-container {
+  display: flex; /* To make them display in a row */
+  flex-wrap: wrap; /* Wrap cards to the next line if the container is not wide enough */
+  gap: 10px; /* This sets the space between the cards */
+}
+
+/* Additional styling for SmallPlantCard components if needed */
+.small-plant-card {
+padding:2%;
 }

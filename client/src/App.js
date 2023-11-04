@@ -22,7 +22,7 @@ function App() {
     <>
       <NavBar />
       <Container maxWidth="1g" style={{ marginTop: "50px" }}>
-        <Grid container spacing={5} style={{ marginTop: "20px" }}>
+        {/* <Grid container spacing={0} style={{ marginTop: "20px" }}> */}
           <Routes>
             {/* public routes */}
             <Route path="/" element={<Welcome />} />
@@ -49,7 +49,7 @@ function App() {
             <Route path="/plants/new" element={<NewPlant />} />
             <Route path="/users/:id/edit" element={<EditProfile />} />
           </Routes>
-        </Grid>
+        {/* </Grid> */}
       </Container>
     </>
   );

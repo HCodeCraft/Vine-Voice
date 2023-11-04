@@ -15,7 +15,7 @@ class EntriesController < ApplicationController
   def create
     @current_user = User.find_by(id: session[:user_id])
 
-    new_entry = @current_user.entries.create!(entry_params)
+    new_entry = @current_user.entries.create(entry_params)
 
     render json: new_entry
   end

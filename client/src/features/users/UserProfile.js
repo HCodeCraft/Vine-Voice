@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
 import { fetchUserById } from "./userSlice";
-import ProfileImage from "../../ProfileImage";
+import default_avatar from "../../defaultleaf.png"
 
 const UserProfile = () => {
   const params = useParams();
@@ -108,7 +108,6 @@ const UserProfile = () => {
         {currentUser === true ? (
           statusForm === false ? (
             <>
-              {user.image ? <ProfileImage /> : null}
               <Typography variant="subtitle1">My status:</Typography>
               <br />
               <div className="statusBubble">
@@ -152,7 +151,7 @@ const UserProfile = () => {
         <br />
         <br />
         <br />
-        <img src={user.avatar} className="avatarBig"/>
+        <img src={user.avatar ? user.avatar : default_avatar} className="avatarBig"/>
         <Typography variant="h5">
           {"Username:"} {user.username}{" "}
         </Typography>

@@ -57,7 +57,6 @@ const Entry = () => {
 
   const user = useSelector((state) => state.user.loggedInUser);
 
-  console.log("User from Entry", user)
 
  
 
@@ -143,6 +142,8 @@ navigate(`/plants/${params.plant_id}`)
   };
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
+
+  console.log("entry", entry)
 
   return entry ? (
     <section className="section" align="center">

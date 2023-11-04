@@ -32,23 +32,24 @@ const NewEntry = () => {
     location: "",
     notes: "",
     picture: "",
+    problems: [],
     plant_id: Number(params.plant_id),
     health: null,
-    problems: [],
     open_to_advice: false,
   });
 
   const [tags, setTags] = useState([]);
 
-  const handleKeyDown = (e) => {
+  const handleTagsChange = (e) => {
     if (e.key !== "Enter") return;
     const value = e.target.value;
     if (!value.trim()) return;
     setTags([...tags, value]);
-    e.target.value = "";
-
-    setEntry({ ...entry, problems: [...entry.problems, ...tags] });
+    setEntry({ ...entry, problems: [...entry.problems, value] }); 
+    e.target.value = ""; 
   };
+
+
   
 
   const removeTag = (index) => {
@@ -57,6 +58,7 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
+    console.log("entry.problems", entry.problems)
   }, [tags]);
 
   // Testing
@@ -67,12 +69,14 @@ const NewEntry = () => {
 
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
 
+
+
   const handleEntryChange = (e) => {
-    const value =
-      e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    const { name, value, type, checked } = e.target;
+    const newValue = type === "checkbox" ? checked : value;
     setEntry({
       ...entry,
-      [e.target.name]: value,
+      [name]: newValue,
     });
   };
 
@@ -84,32 +88,32 @@ const NewEntry = () => {
     e.preventDefault();
   
 
-
-    const newEntry = new FormData()
-
-    if (entry.picture) {
-      newEntry.append("entry[picture]", entry.picture);
+    const newEntry = new FormData();
+    for (const key in entry) {
+      if (entry[key] !== null) {
+        if (key === 'problems' && Array.isArray(entry[key])) {
+          newEntry.append(`entry[${key}]`, JSON.stringify(entry[key]));
+        } else {
+          newEntry.append(`entry[${key}]`, entry[key]);
+        }
+      }
     }
-
-    newEntry.append("entry[nickname]", entry.nickname);
-    newEntry.append("entry[location]", entry.location);
-    newEntry.append("entry[notes]", entry.notes);
-    newEntry.append("entry[health]", entry.health);
-    newEntry.append("entry[problems]", entry.problems);
-    newEntry.append("entry[open_to_advice]", entry.open_to_advice);
-    newEntry.append("entry[plant_id]", entry.plant_id)
-
+  
+    console.log("newEntry", newEntry);
+  
     for (var pair of newEntry.entries() ){
-      console.log(pair[0] + ',' + pair[1])
+      console.log(pair[0] + ' ' + pair[1])
 
-      // The slice isn't getting the updatedUser data 
     }
+
     dispatch(addEntryToApi(newEntry))
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));
 
     navigate(`/plants/${entry.plant_id}`);
   };
+
+
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -193,7 +197,8 @@ const NewEntry = () => {
           <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
             tags={tags}
-            handleKeyDown={handleKeyDown}
+            handleTagsChange={handleTagsChange}
+            // handleKeyDown={handleKeyDown}
             removeTag={removeTag}
           />
           <br />

@@ -6,8 +6,15 @@ class Comment < ApplicationRecord
         self.user.username
     end
 
+
     def avatar_thumbnail
-        self.user.avatar_thumbnail
-    end
+        if self.user.avatar.attached?
+          variant = self.user.avatar.variant(resize_to_limit: [120, 120]).processed
+          Rails.application.routes.url_helpers.rails_representation_url(variant, only_path: true)
+        end
+      end
+      
+      
+      
 
 end
