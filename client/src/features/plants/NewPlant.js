@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import { addPlantToApi } from "./plantSlice";
@@ -287,7 +287,11 @@ const NewPlant = () => {
                     : null
                 }
               />
+
             ))}
+            {apiForm &&
+            speciesList.length > 0 && <div className='noneBtnBox' ><Link to={`/plants/none`}><CommonButton size='large' >None of these are my plant</CommonButton></Link> </div>}
+          
         </div>
       </section>
       <br />

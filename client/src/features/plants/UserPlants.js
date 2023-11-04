@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 import PlantCard from './PlantCard';
 import Unauthorized from '../../Unauthorized';
 
@@ -53,12 +53,17 @@ const UserPlants = () => {
 
   return (
     <>
+          <Grid container spacing={0} style={{ marginTop: "20px" }}>
       <Box sx={{ width: '100%', maxWidth: '100%' }}>
         <Typography variant="h4" align="center">
           My Plants
         </Typography>
-      </Box>
+        </Box>
+        <Grid container spacing={2}>
       {content}
+      </Grid>
+
+      </Grid>
     </>
   );
 };

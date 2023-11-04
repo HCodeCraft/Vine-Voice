@@ -73,10 +73,10 @@ padding: 16px;
 }
 
 .none_btn_box{
-  display: flex;
+  /* display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10px;
+  padding: 10px; */
 }
 
 .classes-field{
@@ -275,3 +275,16 @@ text-align: center;
 .small-plant-card {
 padding:2%;
 }
+
+.noneBtnBox{
+width:100%;
+display:flex;
+justify-content: center;
+align-items: center;
+padding:3%
+}
+
+.rosepic{
+  width: 50%;
+}
+

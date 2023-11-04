@@ -16,12 +16,13 @@ import Entry from "./features/entries/Entry";
 import NavBar from "./NavBar";
 import Home from "./features/users/Home";
 import { Grid, Container } from "@mui/material";
+import NoPlant from "./features/plants/NoPlant";
 
 function App() {
   return (
     <>
       <NavBar />
-      <Container maxWidth="1g" style={{ marginTop: "50px" }}>
+      {/* <Container maxWidth="100%" style={{ marginTop: "50px" }}> */}
         {/* <Grid container spacing={0} style={{ marginTop: "20px" }}> */}
           <Routes>
             {/* public routes */}
@@ -47,10 +48,11 @@ function App() {
             />
             <Route path="/users/plants" element={<UserPlants />} />
             <Route path="/plants/new" element={<NewPlant />} />
+            <Route path="/plants/none" element={<NoPlant />} />
             <Route path="/users/:id/edit" element={<EditProfile />} />
           </Routes>
         {/* </Grid> */}
-      </Container>
+      {/* </Container> */}
     </>
   );
 }
