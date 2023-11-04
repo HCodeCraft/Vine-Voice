@@ -55,9 +55,12 @@ const UserPlants = () => {
     <>
           <Grid container spacing={0} style={{ marginTop: "20px" }}>
       <Box sx={{ width: '100%', maxWidth: '100%' }}>
+        <br/>
+        <br/>
         <Typography variant="h4" align="center">
           My Plants
         </Typography>
+        <br/>
         </Box>
         <Grid container spacing={2}>
       {content}

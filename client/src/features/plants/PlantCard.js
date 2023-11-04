@@ -35,8 +35,8 @@ const PlantCard = ({
 // I am getting the id, so I could fetch Plant by id but that would be a lot of fetches
  
   return (
-    <Grid item xs={12} md={4} sm={4}>
-      <Card sx={{ maxWidth: 345 }}>
+    <Grid item xs={12} sm={6} md={2} lg={2} >
+      <Card sx={{ maxWidth: 345, height: 600}}>
         <CardMedia sx={{ height: 200 }} image={image_url} />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
