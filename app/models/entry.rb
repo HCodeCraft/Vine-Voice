@@ -4,7 +4,10 @@ class Entry < ApplicationRecord
     has_many :comments
     has_one_attached :picture
 
-
+    validates :nickname, length: { maximum: 20 }
+    validates :location, length: { maximum: 30 }
+    validates :notes, length: { maximum: 750 }
+    validate :validate_problems_limit
 
     def username
         self.user.username
@@ -13,4 +16,13 @@ class Entry < ApplicationRecord
     def user_id
         self.user.id
     end
+  
+    private
+  
+    def validate_problems_limit
+      if problems.length > 10
+        errors.add(:problems, "can't have more than 10 items")
+      end
+    end
+
 end

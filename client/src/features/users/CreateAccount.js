@@ -82,6 +82,8 @@ const CreateAccount = () => {
   return (
     <>
       <Grid>
+        <br/>
+        <br/>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
             <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>

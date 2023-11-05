@@ -158,7 +158,8 @@ input[type='radio'] {
 }
 
 .cBox {
-  padding:5px
+  padding:5px;
+  font-size: 1.5em;
 }
 
 .commentField {

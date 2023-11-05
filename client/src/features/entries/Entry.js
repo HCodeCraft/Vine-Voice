@@ -246,8 +246,8 @@ navigate(`/plants/${params.plant_id}`)
         <div ref={commentBox} className="commentBox">
           <br />
           <textarea
-            rows={5}
-            cols={20}
+            rows={10}
+            cols={50}
             name="text"
             value={comment.text}
             onChange={handleCommentChange}
