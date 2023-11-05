@@ -62,12 +62,3 @@ const PlantCard = ({
 
 export default PlantCard;
 
-// <Grid item xs={3}>
-//   <Card>
-//     <Box>
-//       <Typography variant="h5">{commonName}</Typography>
-//       <Typography variant="subtitle1">{sciName}</Typography>
-//     </Box>
-//     <img className="img" src={image_url}></img>
-//   </Card>
-// </Grid>

@@ -281,7 +281,8 @@ width:100%;
 display:flex;
 justify-content: center;
 align-items: center;
-padding:3%
+padding:3%;
+z-index: 1;
 }
 
 .rosepic{

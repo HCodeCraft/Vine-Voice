@@ -58,12 +58,8 @@ const NewPlant = () => {
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
-
-
-  if (!loggedInUser){
-    return (
-      <Unauthorized/>
-    )
+  if (!loggedInUser) {
+    return <Unauthorized />;
   }
 
   const API_KEY = process.env.REACT_APP_API_KEY;
@@ -137,6 +133,10 @@ const NewPlant = () => {
     setEntry({ ...entry, health: num });
   };
 
+  useEffect(() => {
+    myApiData ? console.log("myApiData.length", myApiData.length) : null;
+  }, [myApiData]);
+
   const onSearchClick = async (e) => {
     e.preventDefault();
     setResultForm(true);
@@ -146,17 +146,13 @@ const NewPlant = () => {
       const localResponse = await axios.get(`/search.json?q=${searchName}`);
       console.log("Local API Data:", localResponse.data);
       setMyApiData(localResponse.data);
-
-      if (myApiData.length === 0) {
-        setApiForm(true);
-        speciesListRequest();
-      }
     } catch (error) {
       console.error("API Error:", error);
     }
   };
 
   const speciesListRequest = async () => {
+    console.log("SpeciesLisRequest was clicked");
     setResultForm(false);
     setApiForm(true);
 
@@ -189,30 +185,29 @@ const NewPlant = () => {
 
       setEntry({
         ...entry,
-        plant_id: plant.id
+        plant_id: plant.id,
       });
-      
 
       const newPlantWithEntry = {
         ...plant,
         entries_attributes: [entry], // Wrap entry in an array
       };
-      
 
       addPlant(newPlantWithEntry);
     }
 
-    // will I need to reload plant and user state or will redux to dit for me? 
-
+    // will I need to reload plant and user state or will redux to dit for me?
   };
 
   useEffect(() => {
-    console.log("plant from in UE", plant);
-  }, [plant]);
+    console.log("apiForm", apiForm, "resultForm", resultForm);
+  }, [apiForm, resultForm]);
 
   return (
     <Container>
       <section>
+        <br />
+        <br />
         <br />
         <Typography variant="h4">Search for a Plant</Typography>
         <br />
@@ -231,40 +226,41 @@ const NewPlant = () => {
         </form>
         <br />
         <div className="result">
-          {resultForm && myApiData.length > 0 && (
-            <>
+          <>
+            {myApiData.map((db_plant, index) => (
+              <SmallPlantCard
+                id={db_plant.id}
+                key={db_plant.id}
+                plant={db_plant}
+                commonName={db_plant.common_name}
+                sciName={db_plant.scientific_name}
+                image_url={db_plant.image_url}
+                handleSelectedPlant={handleSelectedPlant}
+                activeCard={activeCard}
+                selectedPlant={selectedPlant}
+                index={index}
+              />
+            ))}
+            {apiForm === false && resultForm === true && (
               <div className="none_btn_box">
                 <CommonButton
                   size="small"
                   variant="contained"
                   onClick={() => speciesListRequest()}
                 >
-                  None of these are my plant
+                  None of these are my plant my db
                 </CommonButton>
               </div>
-              {myApiData.map((db_plant, index) => (
-                <SmallPlantCard
-                  id={db_plant.id}
-                  key={db_plant.id}
-                  plant={db_plant}
-                  commonName={db_plant.common_name}
-                  sciName={db_plant.scientific_name}
-                  image_url={db_plant.image_url}
-                  handleSelectedPlant={handleSelectedPlant}
-                  activeCard={activeCard}
-                  selectedPlant={selectedPlant}
-                  index={index}
-      
-                />
-              ))}
-            </>
-          )}
+            )}
+          </>
+
           <br />
-          <div className="small-plant-card-container"/>
+          <div className="small-plant-card-container" />
           {apiForm &&
             speciesList.length > 0 &&
             speciesList.map((p_plant, index) => (
-              <SmallPlantCard className='small-plant-card'
+              <SmallPlantCard
+                className="small-plant-card"
                 plant={p_plant}
                 commonName={p_plant.common_name}
                 sciName={p_plant.scientific_name[0]}
@@ -287,17 +283,22 @@ const NewPlant = () => {
                     : null
                 }
               />
-
             ))}
-            {apiForm &&
-            speciesList.length > 0 && <div className='noneBtnBox' ><Link to={`/plants/none`}><CommonButton size='large' >None of these are my plant</CommonButton></Link> </div>}
-          
+          {apiForm && !resultForm && (
+            <div className="noneBtnBox">
+              <Link to={`/plants/none`}>
+                <CommonButton size="large">
+                  None of these are my plant after apidata
+                </CommonButton>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
       <br />
       <div className="entry_box">
         {entryForm === true ? (
-          <div className='entryBox'>
+          <div className="entryBox">
             <Typography variant="h5">Your Plant's Details</Typography>
             <br />
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -360,11 +361,10 @@ const NewPlant = () => {
               </FormGroup>
               <CommonButton onClick={handleSubmit}>Submit</CommonButton>
             </form>
-            </div>
+          </div>
         ) : null}
         <br />
         <br />
-     
       </div>
     </Container>
   );
