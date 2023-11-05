@@ -1,5 +1,5 @@
 class User < ApplicationRecord
-  has_many :entries
+  has_many :entries, dependent: :destroy
   has_many :comments
   has_many :plants, -> { distinct }, through: :entries
   has_secure_password
@@ -13,7 +13,5 @@ class User < ApplicationRecord
   def avatar_url
     Rails.application.routes.url_helpers.url_for(avatar) if avatar.attached?
 end
-
-
 
 end

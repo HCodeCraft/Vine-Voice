@@ -113,6 +113,7 @@ useEffect(() => {
 
   return  (
     <section className="editBox">
+      <br/>
       <h2>Edit {apiPlant.common_name}</h2>
       <img className="img_deg" src={apiPlant.image_url}></img>
       <form className="editForm" onSubmit={onSavePlantClicked}>

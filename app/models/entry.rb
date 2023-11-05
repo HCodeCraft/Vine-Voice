@@ -1,12 +1,12 @@
 class Entry < ApplicationRecord
     belongs_to :user
     belongs_to :plant
-    has_many :comments
+    has_many :comments, dependent: :destroy
     has_one_attached :picture
 
     validates :nickname, length: { maximum: 20 }
     validates :location, length: { maximum: 30 }
-    validates :notes, length: { maximum: 750 }
+    validates :notes, presence: true, length: { maximum: 750 }
     validate :validate_problems_limit
 
     def username
