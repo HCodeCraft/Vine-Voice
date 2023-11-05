@@ -21,10 +21,6 @@ const NoPlant = () => {
         <h1>Please provide: </h1>
         <ol>
           <h2>
-            {" "}
-            <li>your username</li>{" "}
-          </h2>
-          <h2>
             <li>The plant's common name </li>
           </h2>
           <h2>

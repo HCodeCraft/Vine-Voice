@@ -4,15 +4,13 @@ import {
   Card,
   Typography,
   Box,
-  Container,
-  CardActionArea,
   CardContent,
   CardMedia,
   Button,
 } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useSelector } from "react-redux";
 
 const PlantCard = ({
   commonName,
@@ -21,24 +19,17 @@ const PlantCard = ({
   short_description,
   id,
 }) => {
+  const plants = useSelector((state) => state.plant.allPlants);
 
-  const plants = useSelector((state) => state.plant.allPlants)
+  const plant = plants.find((plant) => plant.id === id);
 
-
-  const plant = plants.find((plant) => plant.id === id)
-
-  // const PlantEntries = plant.entries
-  // plant is coming from allPlants 
-
-// doesn't work to get entries from indPlant because there's only one plant that's indplant
-// while multiple plants are shown on allPlants page
-// I am getting the id, so I could fetch Plant by id but that would be a lot of fetches
- 
   return (
-    <Grid item xs={12} sm={6} md={2} lg={2} >
-      <Card sx={{ maxWidth: 345, height: 600}}>
+    <Grid item xs={12} sm={6} md={2} lg={2}>
+      <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <CardMedia sx={{ height: 200 }} image={image_url} />
-        <CardContent>
+        <CardContent
+          style={{ flex: 1, display: "flex", flexDirection: "column" }}
+        >
           <Typography gutterBottom variant="h5" component="div">
             {commonName}
           </Typography>
@@ -46,14 +37,32 @@ const PlantCard = ({
           <Typography variant="body2" color="text.secondary">
             {short_description}
           </Typography>
-          <Typography variant="subtitle2">
-            {plant?.entries?.length > 1
-              ? `${plant.entries?.length} entries`
-              : `${plant.entries?.length} entry`}
-          </Typography>
-          <Link to={`/plants/${id}`}>
-            <CommonButton>Show More</CommonButton>
-          </Link>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              flexGrow: 1,
+              alignItems: "center",
+            }}
+          >
+            <div>
+              <Typography variant="subtitle2">
+                {plant?.entries?.length > 0
+                  ? `${plant.entries.length} ${
+                      plant.entries.length > 1 ? "entries" : "entry"
+                    }`
+                  : "no entries yet"}
+              </Typography>
+            </div>
+            <br />
+            <div>
+              <Link to={`/plants/${id}`}>
+                <CommonButton>Show More</CommonButton>
+              </Link>
+            </div>
+          </Box>
         </CardContent>
       </Card>
     </Grid>
@@ -61,4 +70,3 @@ const PlantCard = ({
 };
 
 export default PlantCard;
-
