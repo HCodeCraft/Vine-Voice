@@ -12,31 +12,8 @@ const EditPlant = () => {
   const dispatch = useDispatch();
 
   const apiPlant = useSelector((state) => state.plant.individualPlant);
-  console.log("apiPlant", apiPlant)
 
-  const user = useSelector((state) => state.user.loggedInUser)
-  console.log("user", user)
-
-  if (!user){
-    return (
-      <Unauthorized/>
-    )
-  }
-
-  if (user.admin !== true) {
-    return (
-      <Restricted/>
-    )
-  }
-
-
-  // To Do
-  // make a change handler for sunlight so multiple options are added to array
-  // also get it so the original sunlight options are shown, maybe a textbox? So can standardize
-  // add the editPlant function code
-  // add the redirect to the plantpage
-  // test if everything is working
-  // figure out which state needs to change
+  const user = useSelector((state) => state.user.loggedInUser);
 
   const [plant, setPlant] = useState({
     common_name: "",
@@ -59,14 +36,28 @@ const EditPlant = () => {
 
   useEffect(() => setPlant(apiPlant), []);
 
+  useEffect(() => {
+    if (typeof plant.sunlight === "string") {
+      const initialSelectedOptions = plant.sunlight.split(", ");
+      setSelectedSunlightOptions(initialSelectedOptions);
+    }
+  }, [plant.sunlight]);
 
-useEffect(() => {
-  if (typeof plant.sunlight === 'string') {
-    const initialSelectedOptions = plant.sunlight.split(", ");
-    setSelectedSunlightOptions(initialSelectedOptions);
+  if (!user) {
+    return <Unauthorized />;
   }
-}, [plant.sunlight]);
 
+  if (user.admin !== true) {
+    return <Restricted />;
+  }
+
+  // To Do
+  // make a change handler for sunlight so multiple options are added to array
+  // also get it so the original sunlight options are shown, maybe a textbox? So can standardize
+  // add the editPlant function code
+  // add the redirect to the plantpage
+  // test if everything is working
+  // figure out which state needs to change
 
   const handlePlantChange = (e) => {
     const value =
@@ -79,41 +70,38 @@ useEffect(() => {
   };
 
   const handleSunlightOptionChange = (e) => {
-  const option = e.target.name;
-  const updatedOptions = [...selectedSunlightOptions];
+    const option = e.target.name;
+    const updatedOptions = [...selectedSunlightOptions];
 
-
-  if (e.target.checked) {
-    updatedOptions.push(option);
-  } else {
-    const index = updatedOptions.indexOf(option);
-    if (index !== -1) {
-      updatedOptions.splice(index, 1);
+    if (e.target.checked) {
+      updatedOptions.push(option);
+    } else {
+      const index = updatedOptions.indexOf(option);
+      if (index !== -1) {
+        updatedOptions.splice(index, 1);
+      }
     }
-  }
 
-  setPlant({
-    ...plant,
-    sunlight: updatedOptions.join(", "),
-  });
-};
+    setPlant({
+      ...plant,
+      sunlight: updatedOptions.join(", "),
+    });
+  };
 
   // const canSave = [common_name, scientific_name, image_url].every(Boolean) && !isLoading;
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
-    const plantId = apiPlant.id
-    const updatedPlant = plant
-    dispatch(updatePlantInApi({plantId, updatedPlant}));
-
+    const plantId = apiPlant.id;
+    const updatedPlant = plant;
+    dispatch(updatePlantInApi({ plantId, updatedPlant }));
 
     // navigate(`/plants/${plant.id}`);
   };
 
-
-  return  (
+  return (
     <section className="editBox">
-      <br/>
+      <br />
       <h2>Edit {apiPlant.common_name}</h2>
       <img className="img_deg" src={apiPlant.image_url}></img>
       <form className="editForm" onSubmit={onSavePlantClicked}>
@@ -191,6 +179,61 @@ useEffect(() => {
         />
         <br />
         <br />
+        <label className="editLabel">Water Recommendation:</label>
+        <div>
+          <input
+            type="radio"
+            id="frequent"
+            name="water_rec"
+            value="frequent"
+            checked={plant.water_rec === "frequent"}
+            onChange={handlePlantChange}
+          />
+          <label htmlFor="frequent" className="inputText">
+            Frequent
+          </label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="average"
+            name="water_rec"
+            value="average"
+            checked={plant.water_rec === "average"}
+            onChange={handlePlantChange}
+          />
+          <label htmlFor="average" className="inputText">
+            Average
+          </label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="minimum"
+            name="water_rec"
+            value="minimum"
+            checked={plant.water_rec === "minimum"}
+            onChange={handlePlantChange}
+          />
+          <label htmlFor="minimum" className="inputText">
+            Minimum
+          </label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="none"
+            name="water_rec"
+            value="none"
+            checked={plant.water_rec === "none"}
+            onChange={handlePlantChange}
+          />
+          <label htmlFor="none" className="inputText">
+            None
+          </label>
+        </div>
+        <br/>
+        <br/>
         <div>
           <label htmlFor="sunlight" className="editLabel">
             Sunlight
@@ -247,7 +290,7 @@ useEffect(() => {
         <br />
         <label className="editLabel"> Edible</label>
         <input
-        name="edible"
+          name="edible"
           type="checkbox"
           checked={plant.edible}
           onChange={handlePlantChange}
@@ -256,7 +299,7 @@ useEffect(() => {
         <br />
         <label className="editLabel">Indoor</label>
         <input
-        name="indoor"
+          name="indoor"
           type="checkbox"
           checked={plant.indoor}
           onChange={handlePlantChange}
@@ -265,7 +308,7 @@ useEffect(() => {
         <br />
         <label className="editLabel">Medicinal</label>
         <input
-        name="medicinal"
+          name="medicinal"
           type="checkbox"
           checked={plant.medicinal}
           onChange={handlePlantChange}
@@ -274,7 +317,7 @@ useEffect(() => {
         <br />
         <label className="editLabel">Poisionous To Humans</label>
         <input
-        name="poisonous_to_humans"
+          name="poisonous_to_humans"
           type="checkbox"
           checked={plant.poisonous_to_humans}
           onChange={handlePlantChange}
@@ -283,7 +326,7 @@ useEffect(() => {
         <br />
         <label className="editLabel">Poisonous To Pets</label>
         <input
-        name="poisonous_to_pets"
+          name="poisonous_to_pets"
           type="checkbox"
           checked={plant.poisonous_to_pets}
           onChange={handlePlantChange}
@@ -291,20 +334,28 @@ useEffect(() => {
         <br />
         <br />
         <label className="editLabel">Yearly Cycle</label>
-        <select className="editLabel" name="cycle" onChange={handlePlantChange} value={plant.cycle}>
+        <select
+          className="editLabel"
+          name="cycle"
+          onChange={handlePlantChange}
+          value={plant.cycle}
+        >
           <option></option>
-          <option >Perennial</option>
-          <option >Annual</option>
-          <option >Biennial</option>
-          <option >Biannual</option>
+          <option>Perennial</option>
+          <option>Annual</option>
+          <option>Biennial</option>
+          <option>Biannual</option>
         </select>
         <br />
         <br />
         <button
           type="submit"
+          className="save-btn"
           // disabled={!canSave}
-        > Save
-</button>
+        >
+          {" "}
+          Save
+        </button>
       </form>
       <br />
       <br />

@@ -94,7 +94,7 @@ display: block
 /* font-family: 'Cabin', sans-serif;
 font-family: 'Open Sans', sans-serif; */
 
-input[type='radio'] {
+.display_none {
   display: none;
 }
 
@@ -290,3 +290,8 @@ z-index: 1;
   width: 50%;
 }
 
+.save-btn{
+  font-size: 24px;
+  padding: 10px;
+  background-color:#81C784;
+}
