@@ -86,32 +86,27 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
 
-    const newEntry = new FormData();
-    for (const key in entry) {
-      if (entry[key] !== null) {
-        if (key === 'problems' && Array.isArray(entry[key])) {
-          newEntry.append(`entry[${key}]`, JSON.stringify(entry[key]));
-        } else {
-          newEntry.append(`entry[${key}]`, entry[key]);
-        }
+  const newEntry = new FormData();
+  for (const key in entry) {
+    if (entry[key] !== null) {
+      if (key === 'problems' && Array.isArray(entry[key])) {
+        entry[key].forEach((problem) => {
+          newEntry.append('entry[problems][]', problem);
+        });
+      } else {
+        newEntry.append(`entry[${key}]`, entry[key]);
       }
     }
+  }
   
-    console.log("newEntry", newEntry);
-  
-    for (var pair of newEntry.entries() ){
-      console.log(pair[0] + ' ' + pair[1])
-
-    }
-
     dispatch(addEntryToApi(newEntry))
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));
-
+  
     navigate(`/plants/${entry.plant_id}`);
   };
+  
 
 
 
@@ -122,6 +117,8 @@ const NewEntry = () => {
 
   return (
     <>
+    <br/>
+    <br/>
       <br />
       <br />
       <Box sx={boxStyle}>

@@ -41,6 +41,6 @@ class EntriesController < ApplicationController
   end
 
   def entry_params
-    params.require(:entry).permit(:nickname, :location, :notes, :user_id, :plant_id, :open_to_advice, :picture, :health, problems: [])
+    params.require(:entry).permit(:nickname, :location, :notes, :user_id, :plant_id, :open_to_advice, :picture, :health, :problems => [])
   end
 end
