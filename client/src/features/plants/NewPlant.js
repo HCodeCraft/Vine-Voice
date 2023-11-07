@@ -86,6 +86,42 @@ const NewPlant = () => {
 
   ////
 
+  
+  const resetEntryAndPlant = () => {
+    const defaultValues = {
+      entry: {
+        nickname: "",
+        location: "",
+        notes: "",
+        picture: null,
+        plant_id: null,
+        health: null,
+        open_to_advice: false,
+        problems: [],
+      },
+      plant: {
+        id: null,
+        common_name: "",
+        scientific_name: "",
+        image_url: "",
+        med_image_url: "",
+        description: "",
+        water_rec: "",
+        sunlight: [],
+        indoor: false,
+        cycle: "",
+        poisonous_to_humans: false,
+        poisonous_to_animals: false,
+        edible: false,
+        medicinal: false,
+      },
+    };
+  
+    setEntry({ ...defaultValues.entry });
+    setPlant({ ...defaultValues.plant });
+  };
+
+
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
@@ -151,6 +187,12 @@ const NewPlant = () => {
       }
     }
     dispatch(addEntryToApi(newEntry));
+
+    // redirect to the plant page
+    // navigate to entry.plant_id
+    // set Entry form and plant to blank
+    resetEntryAndPlant()
+navigate(`/plants/${entry.plant_id}`)
   };
 
   const onSearchNameChanged = (e) => {
@@ -234,9 +276,7 @@ const NewPlant = () => {
     // will I need to reload plant and user state or will redux to dit for me?
   };
 
-  useEffect(() => {
-    console.log("apiForm", apiForm, "resultForm", resultForm);
-  }, [apiForm, resultForm]);
+
 
   return (
     <Container>
