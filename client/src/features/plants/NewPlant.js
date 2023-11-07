@@ -17,6 +17,7 @@ import {
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import Unauthorized from "../../Unauthorized";
+import TagsInput from "../../TagsInput";
 
 const NewPlant = () => {
   const navigate = useNavigate();
@@ -33,10 +34,11 @@ const NewPlant = () => {
     nickname: "",
     location: "",
     notes: "",
-    picture: "",
+    picture: null,
     plant_id: null,
     health: null,
     open_to_advice: false,
+    problems:[]
   });
   // took out problems: ""
   const [plant, setPlant] = useState({
@@ -56,11 +58,33 @@ const NewPlant = () => {
     medicinal: false,
   });
 
+
+  const [tags, setTags] = useState([]);
+
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   if (!loggedInUser) {
     return <Unauthorized />;
   }
+
+
+  const handleTagsChange = (e) => {
+    if (e.key !== "Enter") return;
+    const value = e.target.value;
+    if (!value.trim()) return;
+    setTags([...tags, value]);
+    setEntry({ ...entry, problems: [...entry.problems, value] });
+    e.target.value = "";
+  };
+
+  const removeTag = (index) => {
+    setTags(tags.filter((el, i) => i !== index));
+  };
+  /// To Do
+  //Add TabsInput to NewEntry area
+  // change Entry to formdata
+
+  ////
 
   const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -113,7 +137,20 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
-    dispatch(addEntryToApi(entry));
+    // change to formdata
+    const newEntry = new FormData();
+    for (const key in entry) {
+      if (entry[key] !== null) {
+        if (key === "problems" && Array.isArray(entry[key])) {
+          entry[key].forEach((problem) => {
+            newEntry.append("entry[problems][]", problem);
+          });
+        } else {
+          newEntry.append(`entry[${key}]`, entry[key]);
+        }
+      }
+    }
+    dispatch(addEntryToApi(newEntry));
   };
 
   const onSearchNameChanged = (e) => {
@@ -163,8 +200,6 @@ const NewPlant = () => {
       await setSpeciesList(externalResponse.data.data);
 
       // Eventually I want only the elements of speciesList that are not in myApiData
-
-      // I want to have the entry form pop up after the user clicks "This is my plant~"
     } catch (error) {
       console.error("API Error:", error);
     }
@@ -206,7 +241,9 @@ const NewPlant = () => {
   return (
     <Container>
       <section>
-        <Typography variant="h4" style={{ marginTop: "3em" }}>Search for a Plant</Typography>
+        <Typography variant="h4" style={{ marginTop: "3em" }}>
+          Search for a Plant
+        </Typography>
         <br />
         <form>
           <label htmlFor="commonName">Enter your plant's common name:</label>
@@ -325,11 +362,23 @@ const NewPlant = () => {
                 onChange={handleEntryChange}
               />
               <br />
-              <Button variant="contained" component="label" color="primary">
-                {" "}
-                Upload a picture
-                <input type="file" hidden />
-              </Button>
+              <label htmlFor="picture">
+            {" "}
+            <Typography variant="h6">Add a Picture</Typography>
+          </label>
+          <input
+            type="file"
+            name="picture"
+            id="picture"
+            accept=".jpg, .jpeg, .png, .webp, .wdp"
+            onChange={(e) => {
+              const selectedFile = e.target.files[0];
+              setEntry({
+                ...entry,
+                picture: selectedFile,
+              });
+            }}
+          />
               <br />
               <div className="health_box">
                 <Typography variant="h6">Health Rating</Typography>
@@ -339,12 +388,11 @@ const NewPlant = () => {
                 />
               </div>
               <br />
-              <TextField
-                label="Problems (separate with a ',')"
-                name="problems"
-                variant="outlined"
-                color="secondary"
-                onChange={handleEntryChange}
+              <Typography>Enter problems... press enter to add</Typography>
+              <TagsInput
+                tags={tags}
+                handleTagsChange={handleTagsChange}
+                removeTag={removeTag}
               />
               <br />
               <FormGroup>

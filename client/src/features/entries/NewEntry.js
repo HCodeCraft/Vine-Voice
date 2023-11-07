@@ -45,12 +45,9 @@ const NewEntry = () => {
     const value = e.target.value;
     if (!value.trim()) return;
     setTags([...tags, value]);
-    setEntry({ ...entry, problems: [...entry.problems, value] }); 
-    e.target.value = ""; 
+    setEntry({ ...entry, problems: [...entry.problems, value] });
+    e.target.value = "";
   };
-
-
-  
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -58,7 +55,7 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-    console.log("entry.problems", entry.problems)
+    console.log("entry.problems", entry.problems);
   }, [tags]);
 
   // Testing
@@ -68,8 +65,6 @@ const NewEntry = () => {
   const allPlants = useSelector((state) => state.plant.allPlants);
 
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
-
-
 
   const handleEntryChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -87,28 +82,25 @@ const NewEntry = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-  const newEntry = new FormData();
-  for (const key in entry) {
-    if (entry[key] !== null) {
-      if (key === 'problems' && Array.isArray(entry[key])) {
-        entry[key].forEach((problem) => {
-          newEntry.append('entry[problems][]', problem);
-        });
-      } else {
-        newEntry.append(`entry[${key}]`, entry[key]);
+    const newEntry = new FormData();
+    for (const key in entry) {
+      if (entry[key] !== null) {
+        if (key === "problems" && Array.isArray(entry[key])) {
+          entry[key].forEach((problem) => {
+            newEntry.append("entry[problems][]", problem);
+          });
+        } else {
+          newEntry.append(`entry[${key}]`, entry[key]);
+        }
       }
     }
-  }
-  
+
     dispatch(addEntryToApi(newEntry))
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));
-  
+
     navigate(`/plants/${entry.plant_id}`);
   };
-  
-
-
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -117,8 +109,8 @@ const NewEntry = () => {
 
   return (
     <>
-    <br/>
-    <br/>
+      <br />
+      <br />
       <br />
       <br />
       <Box sx={boxStyle}>
@@ -168,7 +160,7 @@ const NewEntry = () => {
           <br />
           <label htmlFor="picture">
             {" "}
-            <Typography variant="h6">Add Picture</Typography>
+            <Typography variant="h6">Add a Picture</Typography>
           </label>
           <input
             type="file"
@@ -189,8 +181,8 @@ const NewEntry = () => {
             <Typography variant="h6">Health Rating</Typography>
             <HealthRating rating={entry.health} changeRating={changeRating} />
           </div>
-          <br />
-          <br />
+
+
           <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
             tags={tags}
