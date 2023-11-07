@@ -45,9 +45,8 @@ const AllPlants = () => {
         <>
         <Grid container spacing={0} style={{ marginTop: "20px" }}>
     <Box sx={{ width: '100%', maxWidth: '100%' }}>
-      <br/>
-      <br/>
-      <Typography variant="h4" align="center">
+
+      <Typography variant="h4" align="center" style={{ marginTop: "1.75em" }}>
         All Plants
       </Typography>
       <br/>

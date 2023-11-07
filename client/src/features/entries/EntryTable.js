@@ -48,7 +48,7 @@ const EntryTable = ({ entries, comments }) => {
                 <TableCell align="center">{row.create_date}</TableCell>
                 <TableCell align="center"><Link to={`/users/${row.user_id}`}>{row.username}</Link></TableCell>
                 <TableCell align="center">
-                  {row.image ? row.image : "No Picture"}
+                  {row.picture ? <img src={row.picture} className='tiny_pic'/> : "No Picture"}
                 </TableCell>
                 <TableCell align="center">
                   {

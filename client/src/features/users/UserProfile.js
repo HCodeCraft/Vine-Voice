@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
 import { fetchUserById } from "./userSlice";
-import default_avatar from "../../defaultleaf.png"
+import default_avatar from "../../pictures/defaultleaf.png"
 
 const UserProfile = () => {
   const params = useParams();

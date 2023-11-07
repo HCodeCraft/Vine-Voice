@@ -12,6 +12,6 @@ class EntrySerializer < ActiveModel::Serializer
 
   def create_date
     created_at = object.created_at
-    formatted_time = created_at.strftime("%B %d, %Y, %I:%M %p")
+    formatted_time = created_at.strftime("%A, %B %d, %Y, %I:%M %p")
   end
 end

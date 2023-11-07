@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { fetchEntryById, deleteEntryFromApi } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
 import { deleteEntryInPlant } from "../plants/plantSlice";
+import default_plant from "../../pictures/nopic.png";
 
 const Entry = () => {
   const params = useParams();
@@ -36,12 +37,11 @@ const Entry = () => {
   useEffect(() => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
-      setEntry(result.payload); 
+      setEntry(result.payload);
     };
 
     fetchEntry();
   }, []);
-
 
   const entryUsername = useSelector(
     (state) => state.entry.individualEntry?.username
@@ -51,16 +51,9 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.comments
   );
 
-  const plant = useSelector((state) => state.plant.individualPlant)
-
-
+  const plant = useSelector((state) => state.plant.individualPlant);
 
   const user = useSelector((state) => state.user.loggedInUser);
-
-
- 
-
-
 
   useEffect(() => {
     if (entryUsername === user.username) {
@@ -76,9 +69,6 @@ const Entry = () => {
       behavior: "smooth",
     });
   };
-
-
-
 
   const handleCommentClick = async () => {
     await setCommentForm((prevCommentForm) => !prevCommentForm);
@@ -98,22 +88,18 @@ const Entry = () => {
   // If user's entry s/he can delete everyone's comment and also edit the entry
   // if a person made the comment, they can delete it
 
-
-
   const handleDeleteEntry = (entryId) => {
-    dispatch(deleteEntryFromApi(entryId))
-    .then(dispatch(deleteEntryInPlant(entryId)))
-// call the dispatch that deletes the entry from allEntries - ?? individualEntry to null
+    dispatch(deleteEntryFromApi(entryId)).then(
+      dispatch(deleteEntryInPlant(entryId))
+    );
+    // call the dispatch that deletes the entry from allEntries - ?? individualEntry to null
 
-// delete it from plant.entry also
-// probably eventually from user.entry too
+    // delete it from plant.entry also
+    // probably eventually from user.entry too
 
-// navigate to the plant page
-navigate(`/plants/${params.plant_id}`)
-
-
-
-  }
+    // navigate to the plant page
+    navigate(`/plants/${params.plant_id}`);
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -143,17 +129,15 @@ navigate(`/plants/${params.plant_id}`)
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
-  console.log("entry", entry)
+  console.log("entry", entry);
 
   return entry ? (
     <section className="section" align="center">
-      <br />
-      <br />
-      <Typography variant="h4" align="center">
+      <Typography variant="h4" align="center" style={{ marginTop: "3em" }}>
         {"An Entry for "}
-  
         {entry.nickname}
       </Typography>
+
       <Typography variant="h5">
         {currentUser ? "My" : `${entry.username}'s`} {plant.common_name}
       </Typography>
@@ -161,7 +145,7 @@ navigate(`/plants/${params.plant_id}`)
       <br />
       <img
         className="entry_pic"
-        src={entry.picture}
+        src={entry.picture ? entry.picture : default_plant}
         alt="Entry"
       />
       <br />
@@ -177,11 +161,9 @@ navigate(`/plants/${params.plant_id}`)
       <br />
       <Typography>
         Problems:{" "}
-        {entry.problems && entry.problems.length > 0 ? (
-          entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
-        ) : (
-          "No Problems :)"
-        )}
+        {entry.problems && entry.problems.length > 0
+          ? entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
+          : "No Problems :)"}
       </Typography>
       <br />
       <br />
@@ -191,8 +173,11 @@ navigate(`/plants/${params.plant_id}`)
           <Link to={`edit`}>
             <CommonButton>Edit Entry</CommonButton>
           </Link>
-  
-          <CommonButton style={{ marginLeft: "10px" }} onClick={() => handleDeleteEntry(entryId)}>
+
+          <CommonButton
+            style={{ marginLeft: "10px" }}
+            onClick={() => handleDeleteEntry(entryId)}
+          >
             Delete Entry
           </CommonButton>
           <br />
@@ -241,7 +226,7 @@ navigate(`/plants/${params.plant_id}`)
           <Typography>No comments yet.</Typography>
         </>
       )}
-  
+
       {commentForm === true ? (
         <div ref={commentBox} className="commentBox">
           <br />
@@ -260,13 +245,13 @@ navigate(`/plants/${params.plant_id}`)
           <br />
         </div>
       ) : null}
-  
+
       <br />
       <br />
       <br />
       <br />
     </section>
   ) : null;
-      }
+};
 
 export default Entry;

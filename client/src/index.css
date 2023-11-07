@@ -295,3 +295,8 @@ z-index: 1;
   padding: 10px;
   background-color:#81C784;
 }
+
+.tiny_pic {
+  height:100px;
+  width:100px;
+}

@@ -120,7 +120,7 @@ const Plant = () => {
             </Link>
             <CommonButton
               style={{ marginLeft: "10px" }}
-              onClick={handleDeletePlant}
+              onClick={()=> handleDeletePlant(plant.id)}
             >
               Delete Plant
             </CommonButton>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const TagsInput = ({tags, handleTagsChange, removeTag}) => {
+const TagsInput = ({tags, handleKeyDown, removeTag}) => {
 
 
 
@@ -8,14 +8,14 @@ const TagsInput = ({tags, handleTagsChange, removeTag}) => {
     <div className="tags-input-container">
 
 
-        { tags.map((tag, index)=> (
+        { tags?.map((tag, index)=> (
         <div className="tag-item" key={index}>
         <span className="text">{tag}</span>
         <span className="close" onClick={()=> removeTag(index)}>x</span>
     </div>
         ))}
         
-        <input type="text" onKeyDown={handleTagsChange} className="tags-input" placeholder="Type something"/>
+        <input type="text" onKeyDown={handleKeyDown} className="tags-input" placeholder="Type something"/>
     </div>
   )
 }

@@ -96,7 +96,7 @@ const EditPlant = () => {
     const updatedPlant = plant;
     dispatch(updatePlantInApi({ plantId, updatedPlant }));
 
-    // navigate(`/plants/${plant.id}`);
+    navigate(`/plants/${plant.id}`);
   };
 
   return (

@@ -206,10 +206,7 @@ const NewPlant = () => {
   return (
     <Container>
       <section>
-        <br />
-        <br />
-        <br />
-        <Typography variant="h4">Search for a Plant</Typography>
+        <Typography variant="h4" style={{ marginTop: "3em" }}>Search for a Plant</Typography>
         <br />
         <form>
           <label htmlFor="commonName">Enter your plant's common name:</label>

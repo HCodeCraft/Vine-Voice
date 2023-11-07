@@ -22,24 +22,29 @@ const EditEntry = () => {
     nickname: "",
     location: "",
     notes: "",
-    picture: "",
+    picture: null,
     plant_id: Number(params.plant_id),
     health: null,
     problems: [],
     open_to_advice: false,
   });
 
-  const [tags, setTags] = useState(entry.problems);
+  const [tags, setTags] = useState();
+
+  
 
   const handleKeyDown = (e) => {
-    if (e.key !== "Enter") return;
-    const value = e.target.value;
-    if (!value.trim()) return;
-    setTags([...tags, value]);
-    e.target.value = "";
-
-    setEntry({ ...entry, problems: [...entry.problems, ...tags] });
+    if (e.key === "Enter") {
+      e.preventDefault(); // Prevent the default behavior of adding a line break in the input field.
+      const value = e.target.value.trim();
+      if (value) {
+        setTags([...tags, value]);
+        e.target.value = "";
+        setEntry({ ...entry, problems: [...entry.problems, value] });
+      }
+    }
   };
+  
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -56,8 +61,9 @@ Set up the image upload
 
   /****/
 
+
   const apiEntry = useSelector((state) => state.entry.individualEntry);
-  console.log("apiEntry", apiEntry);
+
 
   const allPlants = useSelector((state) => state.plant.allPlants);
 
@@ -65,7 +71,7 @@ Set up the image upload
 
   useEffect(() => {
     setEntry(apiEntry);
-    console.log("entry from in UE", entry);
+    setTags(apiEntry.problems);
   }, []);
 
   const handleEntryChange = (e) => {
@@ -85,17 +91,18 @@ Set up the image upload
     e.preventDefault();
     const entryId = entry.id;
     const updatedEntry = new FormData();
-    if (entry.picture) {
-      updatedEntry.append("entry[picture]", entry.picture);
+  
+    for (const key in entry) {
+      if (entry[key] !== null) {
+        if (key === 'problems' && Array.isArray(entry[key])) {
+          entry[key].forEach((problem) => {
+            updatedEntry.append('entry[problems][]', problem);
+          });
+        } else {
+          updatedEntry.append(`entry[${key}]`, entry[key]);
+        }
+      }
     }
-
-    updatedEntry.append("entry[nickname]", entry.nickname);
-    updatedEntry.append("entry[location]", entry.location);
-    updatedEntry.append("entry[notes]", entry.notes);
-    updatedEntry.append("entry[health]", entry.health);
-    updatedEntry.append("entry[problems]", entry.problems);
-    updatedEntry.append("entry[open_to_advice]", entry.open_to_advice);
-    updatedEntry.append("entry[plant_id]", entry.plant_id);
 
     for (var pair of updatedEntry.entries()) {
       console.log(pair[0] + "," + pair[1]);

@@ -1,5 +1,5 @@
 import React from "react";
-import Rosepic from "../../rosepic.png"
+import Rosepic from "../../pictures/rosepic.png"
 
 
 const NoPlant = () => {

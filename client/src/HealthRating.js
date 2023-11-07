@@ -14,7 +14,7 @@ const HealthRating = ({ changeRating, rating }) => {
         return (
           <label key={i}>
             <input
-            className='display-none'
+            className='display_none'
               type="radio"
               name="health"
               value={ratingValue}

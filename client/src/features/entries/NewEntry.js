@@ -31,7 +31,7 @@ const NewEntry = () => {
     nickname: "",
     location: "",
     notes: "",
-    picture: "",
+    picture: null,
     problems: [],
     plant_id: Number(params.plant_id),
     health: null,

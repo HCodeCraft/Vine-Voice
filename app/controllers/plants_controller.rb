@@ -53,6 +53,7 @@ class PlantsController < ApplicationController
   end
 
   def plant_params
-    params.require(:plant).permit(:common_name, :scientific_name, :image_url, :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous_to_humans, :poisonous_to_pets, :edible, :medicinal, :med_image_url, :id, :sunlight, entries_attributes: [:nickname, :location, :notes, :picture, :user_id, :plant_id, :health, :problems, :open_to_advice])
+    params.require(:plant).permit(:common_name, :scientific_name, :image_url, :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous_to_humans, :poisonous_to_pets, :edible, :medicinal, :med_image_url, :id, entries_attributes: [:nickname, :location, :notes, :picture, :user_id, :plant_id, :health, :problems, :open_to_advice])
   end
+  
 end
