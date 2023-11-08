@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   def update
     user = User.find_by(id: params[:id])
     if user.update(user_params)
-      render json: user
+      render json: user,  serializer: UserSerializer, exclude_entries: true, exclude_plants: true
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
@@ -62,9 +62,9 @@ class UsersController < ApplicationController
 
   # added avatar
   def user_params
-    params.require(:user).permit(:username, :password, :name, :privacy, :email, :recieve_dev_emails, :status, :id, :admin, :avatar, :password_confirmation)
+    params.require(:user).permit(:username, :password, :name, :privacy, :email, :recieve_dev_emails, :status, :id, :admin, :avatar, :avatar_thumbnail, :password_confirmation)
   end
 
-  # It said unpermitted parameters: entries, plants, user so I added them, although not sure need them
-  # in the end
+  # I removed :avatar
+
 end

@@ -18,6 +18,8 @@ import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import Unauthorized from "../../Unauthorized";
 import TagsInput from "../../TagsInput";
+import { addPlantToUser } from "../users/userSlice";
+import { addEntryToPlant } from "./plantSlice";
 
 const NewPlant = () => {
   const navigate = useNavigate();
@@ -68,6 +70,7 @@ const NewPlant = () => {
   }
 
 
+
   const handleTagsChange = (e) => {
     if (e.key !== "Enter") return;
     const value = e.target.value;
@@ -85,6 +88,8 @@ const NewPlant = () => {
   // change Entry to formdata
 
   ////
+
+
 
   
   const resetEntryAndPlant = () => {
@@ -125,9 +130,17 @@ const NewPlant = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
+    console.log("SelectedPlant from HSP", selectedPlant)
     setActiveCard(index);
 
     if (apiForm === false) {
+      console.log("apiform was false")
+      setEntry({
+        ...entry,
+        plant_id: selectedPlant.id
+      });
+      
+
       setPlant((prevPlant) => ({
         ...prevPlant,
         id: selectedPlant.id,
@@ -173,6 +186,7 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
+
     // change to formdata
     const newEntry = new FormData();
     for (const key in entry) {
@@ -186,12 +200,11 @@ const NewPlant = () => {
         }
       }
     }
-    dispatch(addEntryToApi(newEntry));
+    dispatch(addEntryToApi(newEntry))
+      .then(() => dispatch(addEntryToPlant()))
+      .then(() => dispatch(addPlantToUser()));
 
-    // redirect to the plant page
-    // navigate to entry.plant_id
-    // set Entry form and plant to blank
-    resetEntryAndPlant()
+    // resetEntryAndPlant()
 navigate(`/plants/${entry.plant_id}`)
   };
 
@@ -212,9 +225,13 @@ navigate(`/plants/${entry.plant_id}`)
     setEntry({ ...entry, health: num });
   };
 
-  useEffect(() => {
-    myApiData ? console.log("myApiData.length", myApiData.length) : null;
-  }, [myApiData]);
+
+
+
+  useEffect(()=> {
+    console.log("plant.id", plant.id)
+    console.log("entry.plant_id", entry.plant_id)
+  }, [plant.id, entry.plant_id])
 
   const onSearchClick = async (e) => {
     e.preventDefault();
@@ -249,21 +266,24 @@ navigate(`/plants/${entry.plant_id}`)
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("plant.id in handleSubmit", selectedPlant.id)
     /// this will submit only the entry with the chosen plant id if the plant was in myApiData
     /// or this will submit the new api plant with my plant api attributes and the entry at the same time
     // if apiform == false, then we'll just add an enry (to the plant, using the id) otherwise, well add
     // both the plant and the entry at the same time
+    setEntry({
+      ...entry,
+      plant_id: selectedPlant.id,
+    });
+
 
     if (apiForm == false) {
+
       // add entry with the plant id
       addEntry(entry);
     } else {
       // being sure to add the entry also as a combined post
 
-      setEntry({
-        ...entry,
-        plant_id: plant.id,
-      });
 
       const newPlantWithEntry = {
         ...plant,

@@ -16,18 +16,21 @@ import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const currentUser = useSelector((state) => state.user.loggedInUser);
+  const error = useSelector((state) => state.user.error)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [user, setUser] = useState({
     username: "",
     name: "",
-    avatar: "",
+    avatar: null,
     email: "",
     recieve_dev_emails: false,
     status: "",
     privacy: false,
   });
+  const [validationErrors, setValidationErrors] = useState([]);
+
 
   useEffect(() => {
     if (currentUser) {
@@ -37,11 +40,10 @@ const EditProfile = () => {
   }, [currentUser]);
 
   // Testing
-  useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+
 
   /////
+  
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -59,49 +61,46 @@ const EditProfile = () => {
     });
   };
 
-  const updateUser = (editedUserId, editedUser) => {
-    dispatch(updateUserInApi(editedUserId, editedUser));
+  const updateUser = async (editedUserId, editedUser) => {
+    try {
+      const response = await dispatch(updateUserInApi(editedUserId, editedUser));
+      // Check if the request was successful
+      if (response.payload) {
+        // Request was successful, you can handle success as needed
+        console.log("response.error", response.error)
+   
+      } else if (response.error) {
+        // Request had errors, set the validation errors in the state
+        console.log("response.error", response.error)
+      }
+    } catch (error) {
+      // Handle any unexpected errors here
+      console.error("Error updating user:", error);
+    }
   };
+  
 
-  /// How do I need to change this to accomidate the image upload?
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const updatedUser = user;
-  //   updateUser({ userId: currentUser.id, updatedUser });
-
-  //   navigate(`/users/${user.id}`);
-  //   // Handle form submission here
-  //   // i'll use updateUserInApi and make sure there are extended reducers
-  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("handleSubmit is running")
     const updatedUser = new FormData();
 
-    if (user.avatar) {
-      updatedUser.append("user[avatar]", user.avatar);
+    for (const key in user) {
+      if (user[key] !== null && key !== 'plants' && key !== 'entries') {
+        updatedUser.append(`user[${key}]`, user[key]);
+      }
     }
+    
 
-    updatedUser.append("user[username]", user.username);
-    updatedUser.append("user[name]", user.name);
-    updatedUser.append("user[email]", user.email);
-    updatedUser.append("user[recieve_dev_emails]", user.recieve_dev_emails);
-    updatedUser.append("user[status]", user.status);
-    updatedUser.append("user[privacy]", user.privacy);
-    console.log("updatedUser in submit", updatedUser);
     for (var pair of updatedUser.entries() ){
       console.log(pair[0] + ',' + pair[1])
-
-      // The slice isn't getting the updatedUser data 
     }
     updateUser({ userId: currentUser.id, updatedUser });
 
     navigate(`/users/${user.id}`);
-    // Handle form submission here
-    // i'll use updateUserInApi and make sure there are extended reducers
+
   };
 
   return (
@@ -145,6 +144,7 @@ const EditProfile = () => {
             <TextField
               label="Name"
               name="name"
+              id='name'
               variant="outlined"
               color="secondary"
               fullWidth
@@ -199,6 +199,16 @@ const EditProfile = () => {
             <CommonButton onClick={handleSubmit}>Submit</CommonButton>
           </form>
         </Box>
+        {validationErrors.length > 0 && (
+  <div>
+    <p>Validation errors:</p>
+    <ul>
+      {error.map((error, index) => (
+        <li key={index}>{error}</li>
+      ))}
+    </ul>
+  </div>
+)}
       </Container>
     </>
   );

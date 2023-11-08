@@ -6,7 +6,7 @@ import { Link, useParams } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
 import { fetchUserById } from "./userSlice";
-import default_avatar from "../../pictures/defaultleaf.png"
+import default_avatar from "../../pictures/defaultleaf.png";
 
 const UserProfile = () => {
   const params = useParams();
@@ -16,26 +16,16 @@ const UserProfile = () => {
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
-  const individualUser = useSelector((state) => state.user.individualUser);
-
- 
-  // fetch user by id on login with useEffect
-  // change JSX so that this page has dynamic content
-  // can make it use user if user matches the params, otherwise, fetchUserById
 
   const userId = Number(params.id);
-
-  console.log("user", user)
-
 
   useEffect(() => {
     if (userId === loggedInUser.id) {
       setCurrentUser(true);
       setUser(loggedInUser);
     } else {
-      console.log("params id when user isn't logged in", userId);
       dispatch(fetchUserById(userId)).then((response) => {
-        setUser(response.payload); // Update user with the fetched data
+        setUser(response.payload);
         setCurrentUser(false);
       });
     }
@@ -47,15 +37,24 @@ const UserProfile = () => {
     }
   }, [user?.status]);
 
-  // Make Username profile Title Stylized like the plan
-  // add status bubble div
-  // add email if it's present
+
+  //// Testing
+useEffect(()=> {
+  console.log("newStatus", newStatus)
+},[newStatus])
+
+  ///////
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
   };
 
+  useEffect(()=> {
+    console.log("user.status", user.status)
+  },[user.status])
+
   const handleStatusFormClick = (e) => {
+    console.log("handleStatusFormClick was clicked")
     setStatusForm(true);
     setNewStatus(user.status);
   };
@@ -63,7 +62,14 @@ const UserProfile = () => {
   const handleStatusEditSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedUser = new FormData()
+    const updatedUser = new FormData();
+    // need to add the formdata !!!!
+        updatedUser.append(`user[status]`, newStatus);
+
+
+    for (var pair of updatedUser.entries() ){
+      console.log(pair[0] + ',' + pair[1])
+    }
 
     try {
       await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
@@ -77,8 +83,6 @@ const UserProfile = () => {
     }
   }, [user?.status]);
 
-  // used to be [user, params.id]
-
   if (user.errors) {
     return (
       <>
@@ -89,94 +93,104 @@ const UserProfile = () => {
 
   return user.username ? (
     <Container>
-      <Box>
-        <br />
-        <br />
-        <Typography variant="h4">
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <Typography variant="h4" style={{ marginTop: "2.5em" }}>
           {currentUser ? "My" : `${user.username}'s`} Profile
         </Typography>
-      </Box>
-      <br />
-      <div>
         <br />
-        <Typography variant="h5">
-          {currentUser ? `I have` : "They have"}{" "}
-          {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
-          {user.plants?.length === 1 ? `plant` : `plants`} logged!
-        </Typography>
-        <br />{" "}
-        {currentUser === true ? (
-          statusForm === false ? (
-            <>
-              <Typography variant="subtitle1">My status:</Typography>
-              <br />
-              <div className="statusBubble">
-                <div className="status-txt">
-                  <Typography variant="h7">{user.status}</Typography>
+        <div>
+          <br />
+          <Typography variant="h5">
+            {currentUser ? `I have` : "They have"}{" "}
+            {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
+            {user.plants?.length === 1 ? `plant` : `plants`} logged!
+          </Typography>
+          <br />
+          {currentUser === true ? (
+            statusForm === false ? (
+              <>
+                <Typography variant="subtitle1">My status:</Typography>
+                <br />
+                <div className="statusBubble" style={{ textAlign: "center" }}>
+                  <div className="status-txt">
+                    <Typography variant="h7">{user.status}</Typography>
+                  </div>
                 </div>
-              </div>
-              <br />
-              <br />
-              <CommonButton onClick={() => handleStatusFormClick()}>
-                Edit
-              </CommonButton>
-            </>
+                <br />
+                <br />
+                <CommonButton onClick={() => handleStatusFormClick()}>
+                  Edit
+                </CommonButton>
+              </>
+            ) : (
+              <>
+                <Typography variant="h5">Status: </Typography>
+                <textarea
+                  rows={5}
+                  cols={20}
+                  name="status"
+                  value={newStatus}
+                  onChange={handleStatusChange}
+                  type="text"
+                  style={{ width: "100%" }}
+                />
+                <br />
+                <CommonButton onClick={handleStatusEditSubmit}>
+                  Set Status
+                </CommonButton>
+              </>
+            )
           ) : (
             <>
-              <Typography variant="h5">Status: </Typography>
-              <textarea
-                rows={5}
-                cols={20}
-                name="status"
-                value={newStatus}
-                onChange={handleStatusChange}
-                type="text"
-              />
-              <br />
-              <CommonButton onClick={handleStatusEditSubmit}>
-                Set Status
-              </CommonButton>
+              <Typography variant="subtitle1">Their status:</Typography>
+              <div className="statusBubble" style={{ textAlign: "center" }}>
+                <Typography variant="h6" sx={{ align: "center" }}>
+                  {user.status}
+                </Typography>
+              </div>{" "}
             </>
-          )
-        ) : (
-          <>
-            <Typography variant="subtitle1">Their status:</Typography>
-            <div className="statusBubble">
-              <Typography variant="h6" align={"center"}>
-                {user.status}
+          )}
+          <br />
+          <br />
+          <br />
+          <img
+            src={user.avatar ? user.avatar : default_avatar}
+            className="avatarBig"
+            style={{ display: "block", margin: "0 auto" }}
+          />
+          <Typography
+            variant="h5"
+            style={{ textAlign: "center", marginTop: "1.75em" }}
+          >
+            {"Username:"} {user.username}{" "}
+          </Typography>
+          <br />
+          <Typography variant="h5" style={{ textAlign: "center" }}>
+            {"Name:"} {user.name}
+          </Typography>
+          <br />
+          {user.privacy !== true ? (
+            <a href={`mailto:${user.email}`}>
+              <Typography variant="h5" style={{ textAlign: "center" }}>
+                Send Email
               </Typography>
-            </div>{" "}
-          </>
-        )}
-        <br />
-        <br />
-        <br />
-        <img src={user.avatar ? user.avatar : default_avatar} className="avatarBig"/>
-        <Typography variant="h5">
-          {"Username:"} {user.username}{" "}
-        </Typography>
-        <br />
-        <Typography variant="h5">
-          {" "}
-          {"Name:"} {user.name}
-        </Typography>
-        <br />
-        {user.privacy !== true ? (
-          <Typography variant="h5">{user.email}</Typography>
-        ) : null}
-        <br />
-      </div>
-      {currentUser == true ? (
-        <Link to={`/users/${user.id}/edit`}>
-          <CommonButton>Edit Info</CommonButton>
-        </Link>
-      ) : null}
+            </a>
+          ) : null}
 
-      {loggedInUser.admin || currentUser ? (
-        <>
-          <CommonButton style={{ marginLeft: "3px" }}>Delete User</CommonButton>
-        </>
-      ) : null}
+          <br />
+        </div>
+        {currentUser == true ? (
+          <Link to={`/users/${user.id}/edit`} style={{ textAlign: "center" }}>
+            <CommonButton>Edit Info</CommonButton>
+          </Link>
+        ) : null}
+
+        {loggedInUser.admin || currentUser ? (
+          <CommonButton style={{ marginTop: "1.75em" }}>
+            Delete User
+          </CommonButton>
+        ) : null}
+      </Box>
     </Container>
   ) : (
     <Unauthorized />
