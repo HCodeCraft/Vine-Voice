@@ -119,26 +119,22 @@ export const registerUserInApi = createAsyncThunk(
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
-    try {
-    
-      const response = await fetch(`/users/${userId}`, {
-        method: "PATCH",
-        body: updatedUser
-      });
+    const response = await fetch(`/users/${userId}`, {
+      method: "PATCH",
+      body: updatedUser,
+    });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Update user failed");
-      }
-
-      const updatedUserData = await response.json();
-      console.log("updatedUserData in api data", updatedUserData);
-      return updatedUserData;
-    } catch (error) {
-      throw error;
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Update user failed");
     }
+
+    const updatedUserData = await response.json();
+    console.log("updatedUserData in api data", updatedUserData);
+    return updatedUserData;
   }
 );
+
 
 export const deleteUserFromApi = createAsyncThunk(
   "users/deleteUserFromApi",
@@ -223,12 +219,15 @@ const userSlice = createSlice({
       );
     },
     deleteUserPlant: (state, action) => {
-      const deletedPlantId = action.payload;
-
+      console.log("Deleting plant with ID:", action.payload.id);
+   
+      const deletedPlantId = action.payload.id;
+   
       state.loggedInUser.plants = state.loggedInUser.plants.filter(
-        (plant) => plant.id !== deletedPlantId
+         (plant) => plant.id !== deletedPlantId
       );
-    },
+   },
+   
     // I probably need to change it for all users, but I don't have all users loaded yet,
     // but it would be changed for individual plant and all plants
     // it loads the individual plant every time someone opens the plant page, but they could still
@@ -306,6 +305,7 @@ const userSlice = createSlice({
       .addCase(updateUserInApi.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+    
       })
       .addCase(fetchUserData.pending, (state) => {
         state.loading = true;
@@ -347,6 +347,7 @@ const userSlice = createSlice({
 
       })
       .addCase(deleteUserFromApi.rejected, (state, action) => {
+        console.log("There was a problem with deleteUserFromApi")
 
       })
   },

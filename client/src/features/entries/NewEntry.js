@@ -55,7 +55,6 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-    console.log("entry.problems", entry.problems);
   }, [tags]);
 
   // Testing
@@ -65,6 +64,9 @@ const NewEntry = () => {
   const allPlants = useSelector((state) => state.plant.allPlants);
 
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
+ 
+  const loggedInUser = useSelector((state) => state.user.loggedInUser);
+
 
   const handleEntryChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -94,10 +96,20 @@ const NewEntry = () => {
         }
       }
     }
-
     dispatch(addEntryToApi(newEntry))
-      .then(() => dispatch(addEntryToPlant()))
-      .then(() => dispatch(addPlantToUser()));
+    .then(() => dispatch(addEntryToPlant()))
+    .then(() => {
+      const specificPlant = plant
+      const isPlantInArray = loggedInUser.plants.some(
+        (plant) => plant.id === specificPlant.id
+      );
+  
+      if (!isPlantInArray) {
+
+        dispatch(addPlantToUser(specificPlant));
+      }
+    });
+  
 
     navigate(`/plants/${entry.plant_id}`);
   };

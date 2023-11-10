@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   def update
     user = User.find_by(id: params[:id])
     if user.update(user_params)
-      render json: user,  serializer: UserSerializer, exclude_entries: true, exclude_plants: true
+      render json: user
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end

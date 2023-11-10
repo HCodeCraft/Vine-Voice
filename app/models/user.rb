@@ -8,7 +8,7 @@ class User < ApplicationRecord
   validates :username, presence: true, length: { in: 3..15 }, uniqueness: true, unless: :username_not_changed?
   validates :email, presence: true, uniqueness: { on: :create }
   validates :password, presence: true, length: { minimum: 5 }, on: :create
-  
+  validates :status, presence: true, length: { in: 10..75 }, on: :update
 
 
   def username_not_changed?

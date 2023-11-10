@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { fetchEntryById, deleteEntryFromApi } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
 import { deleteEntryInPlant } from "../plants/plantSlice";
+import { deleteUserPlant } from "../users/userSlice";
 import default_plant from "../../pictures/nopic.png";
 
 const Entry = () => {
@@ -80,26 +81,36 @@ const Entry = () => {
   };
 
   // // TO-DO
-  // // If this is user's plant, prepend nickname with "My"
-  // // Add user's avatars to their comments
   // // make a delete button and delete handler for all comments if it's user's plant
-  // // only show username if it's not current user's
-
   // If user's entry s/he can delete everyone's comment and also edit the entry
-  // if a person made the comment, they can delete it
 
-  const handleDeleteEntry = (entryId) => {
-    dispatch(deleteEntryFromApi(entryId)).then(
-      dispatch(deleteEntryInPlant(entryId))
-    );
-    // call the dispatch that deletes the entry from allEntries - ?? individualEntry to null
+  const handleDeleteEntry = async (entryId) => {
+    try {
+        await dispatch(deleteEntryFromApi(entryId));
+        await dispatch(deleteEntryInPlant(entryId));
 
-    // delete it from plant.entry also
-    // probably eventually from user.entry too
+        console.log("user", user);
+        console.log("user.plants", user.plants);
+        console.log("plant", plant);
+        console.log("plant.entries", plant.entries)
 
-    // navigate to the plant page
-    navigate(`/plants/${params.plant_id}`);
-  };
+        const userPlant = user.plants.find((p) => p.id === plant.id);
+        console.log("userPlant", userPlant);
+        console.log("userPlant.entries", userPlant.entries);
+
+        if (userPlant && ( userPlant.entries.length === 1)) {
+            console.log("Deleting userPlant", userPlant);
+            dispatch(deleteUserPlant({ id: userPlant.id }));
+
+            navigate(`/users/plants`);
+        } else {
+            console.log("Not deleting userPlant. Entries:", userPlant?.entries);
+        }
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }
+};
+
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -128,8 +139,6 @@ const Entry = () => {
   };
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
-
-  console.log("entry", entry);
 
   return entry ? (
     <section className="section" align="center">

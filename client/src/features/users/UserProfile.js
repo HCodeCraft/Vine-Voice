@@ -2,22 +2,26 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography, Box, Container } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
-import { fetchUserById } from "./userSlice";
+import { fetchUserById, deleteUserFromApi } from "./userSlice";
 import default_avatar from "../../pictures/defaultleaf.png";
 
 const UserProfile = () => {
   const params = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [statusForm, setStatusForm] = useState(false);
   const [newStatus, setNewStatus] = useState("");
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  const [error, setError] = useState(null)
+  const userError = useSelector((state)=> state.user.error)
 
   const userId = Number(params.id);
+  
 
   useEffect(() => {
     if (userId === loggedInUser.id) {
@@ -41,8 +45,9 @@ const UserProfile = () => {
   //// Testing
 useEffect(()=> {
   console.log("newStatus", newStatus)
-},[newStatus])
-
+  console.log("loggedInuser.error", userError)
+},[newStatus, loggedInUser])
+// Access error from the useSelector state? 
   ///////
 
   const handleStatusChange = (e) => {
@@ -54,28 +59,47 @@ useEffect(()=> {
   },[user.status])
 
   const handleStatusFormClick = (e) => {
-    console.log("handleStatusFormClick was clicked")
+    console.log("handleStatusFormClick was clicked");
     setStatusForm(true);
     setNewStatus(user.status);
   };
-
+  
   const handleStatusEditSubmit = async (e) => {
     e.preventDefault();
-
+  
     const updatedUser = new FormData();
-    // need to add the formdata !!!!
-        updatedUser.append(`user[status]`, newStatus);
-
-
-    for (var pair of updatedUser.entries() ){
-      console.log(pair[0] + ',' + pair[1])
-    }
-
+    updatedUser.append(`user[status]`, newStatus);
+  
     try {
-      await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
+      const response = await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
+      console.log("response.error", response.error);
+  
+      response.error
+        ? (() => {
+            const errorData = JSON.parse(response.error.message);
+            setError(errorData.errors);
+          })()
+        : setError([]);
+  
       setStatusForm(false);
-    } catch (error) {}
+    } catch (error) {
+      console.log("Caught an error:", error.message);
+      setError(error.message);
+    }
   };
+
+  const handleDeleteUser = () => {
+    dispatch(delteUserFromApi)
+    // redirect to main page
+
+  }
+  
+  
+  
+  useEffect(()=> {
+console.log("error", error)
+  },[error])
+
 
   useEffect(() => {
     if (user) {
@@ -125,6 +149,8 @@ useEffect(()=> {
             ) : (
               <>
                 <Typography variant="h5">Status: </Typography>
+                <p>Limit 10-75 characters</p>
+                <p>currently: {newStatus.length}</p>
                 <textarea
                   rows={5}
                   cols={20}
@@ -134,6 +160,8 @@ useEffect(()=> {
                   type="text"
                   style={{ width: "100%" }}
                 />
+                <ul>
+                </ul>
                 <br />
                 <CommonButton onClick={handleStatusEditSubmit}>
                   Set Status
@@ -150,13 +178,19 @@ useEffect(()=> {
               </div>{" "}
             </>
           )}
-          <br />
-          <br />
-          <br />
+ {error ? (
+  <div style={{ color: 'red', marginTop: '10px' }}>
+    {error.map((errorMessage, index) => (
+      <p key={index}>{errorMessage}</p>
+    ))}
+  </div>
+) : null}
+
+
           <img
             src={user.avatar ? user.avatar : default_avatar}
             className="avatarBig"
-            style={{ display: "block", margin: "0 auto" }}
+            style={{ display: "block", marginTop: "1.75em" }}
           />
           <Typography
             variant="h5"
@@ -186,8 +220,8 @@ useEffect(()=> {
         ) : null}
 
         {loggedInUser.admin || currentUser ? (
-          <CommonButton style={{ marginTop: "1.75em" }}>
-            Delete User
+          <CommonButton style={{ marginTop: "1.75em" }} onClick={()=> handleDeleteUser({userId:user.id})}>
+            Delete Account
           </CommonButton>
         ) : null}
       </Box>

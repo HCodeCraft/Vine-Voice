@@ -16,9 +16,9 @@ import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const currentUser = useSelector((state) => state.user.loggedInUser);
-  const error = useSelector((state) => state.user.error)
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userId = currentUser.id;
 
   const [user, setUser] = useState({
     username: "",
@@ -29,8 +29,7 @@ const EditProfile = () => {
     status: "",
     privacy: false,
   });
-  const [validationErrors, setValidationErrors] = useState([]);
-
+  const [error, setError] = useState([]);
 
   useEffect(() => {
     if (currentUser) {
@@ -41,15 +40,14 @@ const EditProfile = () => {
 
   // Testing
 
-
   /////
-  
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
     padding: "30px",
     borderRadius: "10px",
     boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+    marginTop: "2.7em",
   };
 
   const handleUserChange = (e) => {
@@ -63,45 +61,54 @@ const EditProfile = () => {
 
   const updateUser = async (editedUserId, editedUser) => {
     try {
-      const response = await dispatch(updateUserInApi(editedUserId, editedUser));
-      // Check if the request was successful
+      const response = await dispatch(
+        updateUserInApi(editedUserId, editedUser)
+      );
       if (response.payload) {
-        // Request was successful, you can handle success as needed
-        console.log("response.error", response.error)
-   
-      } else if (response.error) {
-        // Request had errors, set the validation errors in the state
-        console.log("response.error", response.error)
+        console.log("Success:", response.payload);
+        setError([])
+            navigate(`/users/${currentUser.id}`);
+      } else {
+        response.error
+        ? (() => {
+            const errorData = JSON.parse(response.error.message);
+            setError(errorData.errors);
+          })()
+        : setError([]);
+      
+        console.log("Error from updateUser: after parse", error);
       }
     } catch (error) {
-      // Handle any unexpected errors here
       console.error("Error updating user:", error);
     }
   };
-  
-
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const updatedUser = new FormData();
+    const initialUser = { ...currentUser };
 
     for (const key in user) {
-      if (user[key] !== null && key !== 'plants' && key !== 'entries') {
-        updatedUser.append(`user[${key}]`, user[key]);
+      if (user[key] !== null && key !== "plants" && key !== "entries") {
+        // Check if the value has changed from the initial user
+        if (user[key] !== initialUser[key]) {
+          console.log("something was changed");
+          updatedUser.append(`user[${key}]`, user[key]);
+        }
       }
     }
-    
+    updatedUser.append(`user[id]`, user.id);
 
-    for (var pair of updatedUser.entries() ){
-      console.log(pair[0] + ',' + pair[1])
-    }
-    updateUser({ userId: currentUser.id, updatedUser });
+  updateUser({ userId: userId, updatedUser });
 
-    navigate(`/users/${user.id}`);
+
 
   };
+
+  useEffect(()=> {
+    console.log("error from UE", error)
+  }, [error])
 
   return (
     <>
@@ -112,7 +119,12 @@ const EditProfile = () => {
           <Typography variant="h5">Edit My User Details</Typography>
           <br />
 
-          <form noValidate autoComplete="off" onSubmit={() => handleSubmit} encType="multipart/form-data">
+          <form
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit}
+            encType="multipart/form-data"
+          >
             <Box mb={2}>
               <label htmlFor="avatar">Add Image for avatar</label>
               <input
@@ -144,7 +156,7 @@ const EditProfile = () => {
             <TextField
               label="Name"
               name="name"
-              id='name'
+              id="name"
               variant="outlined"
               color="secondary"
               fullWidth
@@ -196,19 +208,21 @@ const EditProfile = () => {
               <label htmlFor="receive_dev_emails">Receive Dev Emails</label>
               <br />
             </Box>
-            <CommonButton onClick={handleSubmit}>Submit</CommonButton>
-          </form>
-        </Box>
-        {validationErrors.length > 0 && (
-  <div>
+            {error.length > 0 && (
+  <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>
     <p>Validation errors:</p>
-    <ul>
-      {error.map((error, index) => (
-        <li key={index}>{error}</li>
+    <ul style={{ listStyle: 'none', padding: '0' }}>
+      {error.map((errorMessage, index) => (
+        <li key={index}>{errorMessage}</li>
       ))}
     </ul>
   </div>
 )}
+            <CommonButton onClick={handleSubmit}>Submit</CommonButton>
+          </form>
+        </Box>
+
+
       </Container>
     </>
   );
