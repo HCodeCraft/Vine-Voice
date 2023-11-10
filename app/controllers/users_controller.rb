@@ -30,7 +30,6 @@ class UsersController < ApplicationController
 
 
   def show
-    # not sure I need .with_attached_image
     user = User.find_by(id: params[:id])
 
     if user
@@ -44,19 +43,24 @@ class UsersController < ApplicationController
     end
   end
 
-  # def show
-  #   if @current_user
-  #   render json: @current_user
-  #   else
-  #       render json: {error: "You must be logged in to access"}
-  #   end
-  # end
+
 
   def destroy
-    user = find_user
-    user.destroy
-    head :no_content
+    user = User.find(params[:id])
+  
+    if user
+      if @current_user == user || (@current_user&.admin? && !user.admin?)
+        user.destroy
+        head :no_content
+      else
+        head :unauthorized
+      end
+    else
+      head :not_found
+    end
   end
+  
+  
 
   private
 

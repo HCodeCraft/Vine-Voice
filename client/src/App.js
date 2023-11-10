@@ -18,6 +18,7 @@ import Home from "./features/users/Home";
 import { Grid, Container } from "@mui/material";
 import NoPlant from "./features/plants/NoPlant";
 import AddPlant from "./features/plants/AddPlant"
+import AllUsers from "./features/users/AllUsers";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
             <Route path="/plants/new" element={<NewPlant />} />
             <Route path="/plants/none" element={<NoPlant />} />
             <Route path="/plants/add" element={<AddPlant />} />
+            <Route path="/users/all" element={<AllUsers/>} />
             <Route path="/users/:id/edit" element={<EditProfile />} />
           </Routes>
         {/* </Grid> */}

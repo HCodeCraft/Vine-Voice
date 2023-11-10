@@ -313,3 +313,7 @@ z-index: 1;
   display: flex;
 justify-content: space-around;
 }
+
+.all_btn{
+  margin-top: 5%;
+}

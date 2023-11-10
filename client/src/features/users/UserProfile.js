@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Box, Container } from "@mui/material";
+import { Typography, Box, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
@@ -19,8 +19,14 @@ const UserProfile = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
   const [error, setError] = useState(null)
   const userError = useSelector((state)=> state.user.error)
+  const [open, setOpen] = useState(false)
 
   const userId = Number(params.id);
+
+
+  console.log("currentUser", currentUser)
+  console.log("user.admin", user.admin)
+  console.log("loggedInUser.admin", loggedInUser.admin)
   
 
   useEffect(() => {
@@ -88,9 +94,11 @@ useEffect(()=> {
     }
   };
 
-  const handleDeleteUser = () => {
-    dispatch(delteUserFromApi)
-    // redirect to main page
+  const handleDeleteUser = (user) => {
+    console.log("user from HDU", user)
+    dispatch(deleteUserFromApi(user))
+  
+    // navigate(`/`)
 
   }
   
@@ -203,7 +211,7 @@ console.log("error", error)
             {"Name:"} {user.name}
           </Typography>
           <br />
-          {user.privacy !== true ? (
+          {user.privacy  !== true && user !== loggedInUser ? (
             <a href={`mailto:${user.email}`}>
               <Typography variant="h5" style={{ textAlign: "center" }}>
                 Send Email
@@ -217,18 +225,40 @@ console.log("error", error)
           <Link to={`/users/${user.id}/edit`} style={{ textAlign: "center" }}>
             <CommonButton>Edit Info</CommonButton>
           </Link>
-        ) : null}
+        ) : null} {loggedInUser.admin ? <div className='all_btn'><Link to={`/users/all`}><CommonButton>All User's Page</CommonButton></Link></div> : null}
+{(loggedInUser.admin || (currentUser && !user.admin)) && loggedInUser.id !== user.id ? (
 
-        {loggedInUser.admin || currentUser ? (
-          <CommonButton style={{ marginTop: "1.75em" }} onClick={()=> handleDeleteUser({userId:user.id})}>
-            Delete Account
-          </CommonButton>
-        ) : null}
+  <>
+    <CommonButton style={{ marginTop: "1.75em" }} onClick={() => setOpen(true)}>
+      Delete Account
+    </CommonButton>
+    <Dialog
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+      open={open}
+      onClose={() => setOpen(false)}
+    >
+      <DialogTitle id='dialog-title'>Delete your Account?</DialogTitle>
+      <DialogContent>
+        <DialogContentText id='dialog-discription'>
+          This will be final. It will delete all your entries and photos as well. Are you sure you want to delete the account?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={() => handleDeleteUser(user)}>Delete</Button>
+        <Button onClick={() => setOpen(false)}>Cancel</Button>
+      </DialogActions>
+    </Dialog>
+  </>
+) : null}
+
       </Box>
     </Container>
   ) : (
     <Unauthorized />
   );
 };
+
+
 
 export default UserProfile;

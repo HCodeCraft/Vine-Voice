@@ -21,7 +21,7 @@ const UserPlants = () => {
       <div className='center'>
         <br/>
         <br/>
-        <Typography variant="h4" align="center">
+        <Typography variant="h4" align="center" style={{ marginTop: "1.75em" }}>
           You don't have any plants logged!
         </Typography>
         <br/>

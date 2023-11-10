@@ -138,9 +138,9 @@ export const updateUserInApi = createAsyncThunk(
 
 export const deleteUserFromApi = createAsyncThunk(
   "users/deleteUserFromApi",
-  async (userId) => {
+  async (user) => {
     try {
-      const response = await fetch(`/users/${userId}`, {
+      const response = await fetch(`/users/${user.id}`, {
         method: "DELETE",
       });
       if (response.ok) {
@@ -336,15 +336,20 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(deleteUserFromApi.fulfilled, (state, action) => {
-        // delete from allPlants,
-        const deletedUserId = action.payload
+        // delete from allPlants
+        console.log("action.payload from addcase", action.payload)
+        const deletedUserId = action.payload;
+      
+        // if the user who deleted it was logged in, set loggedInUser to null
+    
+      
+        // filter out the deleted user from allUsers
+        state.allUsers = state.allUsers.filter((user) => user.id !== deletedUserId);
 
-        // not sure if I need this
-        state.allUsers = state.allUsers.filter(
-          (user) => user.id !== deletedUserId
-        );
-
-
+        if (loggedInUser.id === deletedUserId) {
+          loggedInUser = null;
+          state.loggedIn = null
+        }
       })
       .addCase(deleteUserFromApi.rejected, (state, action) => {
         console.log("There was a problem with deleteUserFromApi")
