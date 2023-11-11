@@ -146,7 +146,7 @@ export const deleteUserFromApi = createAsyncThunk(
       if (response.ok) {
       
         console.log("User deleted successfully.");
-        return userId
+        return user.id
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
       }
@@ -215,7 +215,7 @@ const userSlice = createSlice({
       const updatedPlant = action.payload;
 
       state.loggedInUser.plants = state.loggedInUser.plants.map((plant) =>
-        plant.id === updatedPlant.id ? updatedPlant : Plant
+        plant.id === updatedPlant.id ? updatedPlant : plant
       );
     },
     deleteUserPlant: (state, action) => {
@@ -346,8 +346,8 @@ const userSlice = createSlice({
         // filter out the deleted user from allUsers
         state.allUsers = state.allUsers.filter((user) => user.id !== deletedUserId);
 
-        if (loggedInUser.id === deletedUserId) {
-          loggedInUser = null;
+        if (state.loggedInUser.id === deletedUserId) {
+          state.loggedInUser = null;
           state.loggedIn = null
         }
       })

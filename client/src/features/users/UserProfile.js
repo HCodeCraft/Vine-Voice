@@ -5,8 +5,9 @@ import CommonButton from "../../common/CommonButton";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
 import Unauthorized from "../../Unauthorized";
-import { fetchUserById, deleteUserFromApi } from "./userSlice";
+import { fetchUserById, deleteUserFromApi, logoutUser } from "./userSlice";
 import default_avatar from "../../pictures/defaultleaf.png";
+import { filterOutUserEntries } from "../plants/plantSlice";
 
 const UserProfile = () => {
   const params = useParams();
@@ -97,8 +98,9 @@ useEffect(()=> {
   const handleDeleteUser = (user) => {
     console.log("user from HDU", user)
     dispatch(deleteUserFromApi(user))
-  
-    // navigate(`/`)
+    dispatch(filterOutUserEntries(user.id))
+  dispatch(logoutUser())
+    navigate(`/`)
 
   }
   
@@ -226,7 +228,7 @@ console.log("error", error)
             <CommonButton>Edit Info</CommonButton>
           </Link>
         ) : null} {loggedInUser.admin ? <div className='all_btn'><Link to={`/users/all`}><CommonButton>All User's Page</CommonButton></Link></div> : null}
-{(loggedInUser.admin || (currentUser && !user.admin)) && loggedInUser.id !== user.id ? (
+{( (currentUser && !user.admin) || loggedInUser.admin && !user.admin ) ? (
 
   <>
     <CommonButton style={{ marginTop: "1.75em" }} onClick={() => setOpen(true)}>

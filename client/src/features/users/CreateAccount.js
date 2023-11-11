@@ -57,9 +57,12 @@ const CreateAccount = () => {
       for (var pair of newUser.entries()) {
         console.log(pair[0] + "," + pair[1]);
       }
-      dispatch(registerUserInApi(newUser));
-      reset();
+     const result = dispatch(registerUserInApi(newUser));
+ 
+      if (!result.errors){
       navigate(`/users/plants`);
+      reset();
+      }
     }
   };
 

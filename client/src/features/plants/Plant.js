@@ -21,6 +21,8 @@ const Plant = () => {
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
+  
+
 
 
   const allPlants = useSelector((state) => state.plant.allPlants)

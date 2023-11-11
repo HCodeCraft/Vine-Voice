@@ -23,6 +23,7 @@ import { fetchAllUsers, deleteUserFromApi } from "./userSlice";
 import { fetchAllComments } from "../comments/commentSlice";
 import { Link } from "react-router-dom";
 import CommonButton from "../../common/CommonButton";
+import { filterOutUserEntries } from "../plants/plantSlice";
 
 
 const AllUsers = () => {
@@ -68,6 +69,7 @@ const AllUsers = () => {
   const handleDeleteUser = () => {
     if (userToDelete) {
       dispatch(deleteUserFromApi(userToDelete));
+      dispatch(filterOutUserEntries(userToDelete.id))
 
       setOpen(false);
       setUserToDelete(null);
@@ -139,7 +141,7 @@ const AllUsers = () => {
                 <TableCell align="center">{row.entries.length}</TableCell>
                 <TableCell align="center">
                   {
-                    comments.filter((comment) => comment.user_id == row.id)
+                    comments?.filter((comment) => comment.user_id == row.id)
                       .length
                   }
                 </TableCell>

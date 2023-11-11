@@ -126,13 +126,6 @@ const plantSlice = createSlice({
     addPlant: (state, action) => {
       state.allPlants.push(action.payload);
     },
-    // updatePlant: (state, action) => {
-    //   const { id, updatedPlant } = action.payload;
-    //   const plantToUpdate = state.allPlants.find((plant) => plant.id === id);
-    //   if (plantToUpdate) {
-    //     plantToUpdate = updatedPlant;
-    //   }
-    // },
     deletePlant: (state, action) => {
       state.allPlants = state.allPlants.filter(
         (plant) => plant.id !== action.payload.id
@@ -140,24 +133,22 @@ const plantSlice = createSlice({
     },
     updateEntryInPlant: (state, action) => {
       const updatedEntry = action.payload;
-
-      // update the plant's entries with updatedEntry
-
-      state.plant.individualPlant.entries =
-        state.plant.individualPlant.entries.map((entry) =>
-          entry.id === updatedEntry.id ? updatedEntry : entry
-        );
+  
+      // Update the plant's entries with updatedEntry
+      state.plant.individualPlant.entries = state.plant.individualPlant.entries.map(
+        (entry) => (entry.id === updatedEntry.id ? updatedEntry : entry)
+      );
     },
     deleteEntryInPlant: (state, action) => {
       const deletedEntryId = action.payload;
-    
+  
       // Remove the entry from individualPlant.entries
       const updatedEntries = state.individualPlant.entries.filter(
         (entry) => entry.id !== deletedEntryId
       );
-    
+  
       // Return a new state object with updated allPlants and individualPlant
-      return {
+      state = {
         ...state,
         individualPlant: {
           ...state.individualPlant,
@@ -169,9 +160,19 @@ const plantSlice = createSlice({
             : plant
         ),
       };
-    }
-    
+    },
+  
+    filterOutUserEntries: (state, action) => {
+      const deletedUserId = action.payload;
+  
+      // Update each plant's entries by filtering out entries with deletedUserId
+      state.allPlants = state.allPlants.map((plant) => ({
+        ...plant,
+        entries: plant.entries.filter((entry) => entry.user_id !== deletedUserId),
+      }));
+    },
   },
+  
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPlants.pending, (state, action) => {
@@ -261,6 +262,7 @@ export const {
   deletePlant,
   updateEntryInPlant,
   deleteEntryInPlant,
+  filterOutUserEntries
 } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;
