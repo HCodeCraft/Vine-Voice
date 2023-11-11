@@ -225,14 +225,6 @@ navigate(`/plants/${entry.plant_id}`)
     setEntry({ ...entry, health: num });
   };
 
-
-
-
-  useEffect(()=> {
-    console.log("plant.id", plant.id)
-    console.log("entry.plant_id", entry.plant_id)
-  }, [plant.id, entry.plant_id])
-
   const onSearchClick = async (e) => {
     e.preventDefault();
     setResultForm(true);
