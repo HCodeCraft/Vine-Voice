@@ -20,19 +20,10 @@ const Plant = () => {
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
-  console.log("plant", plant)
 
-  console.log(plant.common_name, "plant.entries", plant.entries)
-  
-// plant is getting plants from individualPlant
+  // plant is getting plants from individualPlant
 
-
-  const allPlants = useSelector((state) => state.plant.allPlants)
-
-  console.log("allPlants from Plant", allPlants)
-
-  
-
+  const allPlants = useSelector((state) => state.plant.allPlants);
 
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));
@@ -129,7 +120,7 @@ const Plant = () => {
             </Link>
             <CommonButton
               style={{ marginLeft: "10px" }}
-              onClick={()=> handleDeletePlant(plant.id)}
+              onClick={() => handleDeletePlant(plant.id)}
             >
               Delete Plant
             </CommonButton>

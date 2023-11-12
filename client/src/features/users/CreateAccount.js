@@ -8,6 +8,7 @@ import {
   Typography,
   Dialog,
   DialogContent,
+  DialogActions,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
@@ -26,16 +27,15 @@ const CreateAccount = () => {
     handleSubmit,
     formState: { errors },
     control,
-    reset,
-    ref,
+    setValue,
   } = useForm();
 
-  // To-Do
-  // Get avatar/ image url working
-  // redirect to user plants
   const onSubmit = async (data) => {
     try {
-      console.log("data from onSubmit", data);
+      if (!data.agreeToTerms) {
+        alert("Please agree to the terms before submitting.");
+        return;
+      }
 
       if (data.password !== data.password_confirmation) {
         alert("Passwords don't match");
@@ -57,9 +57,6 @@ const CreateAccount = () => {
       newUser.append("user[recieve_dev_emails]", data.recieve_dev_emails);
       newUser.append("user[password_confirmation]", data.password_confirmation);
 
-      for (const pair of newUser.entries()) {
-        console.log(pair[0] + "," + pair[1]);
-      }
 
       const action = await dispatch(registerUserInApi(newUser));
 
@@ -82,6 +79,7 @@ const CreateAccount = () => {
   };
 
   const handleClose = () => {
+    setValue("agreeToTerms", true);
     setOpen(false);
   };
 
@@ -172,7 +170,7 @@ const CreateAccount = () => {
                 <Typography variant="h6">Validation errors:</Typography>
                 <ul style={{ listStyle: "none", padding: "0" }}>
                   {formErrors.map((error) => (
-                    <Typography>
+                    <Typography key={error}>
                       <li style={{ marginBottom: "10px" }}>{error}</li>
                     </Typography>
                   ))}
@@ -252,6 +250,35 @@ const CreateAccount = () => {
                     medicinal use information
                   </Typography>
                 </DialogContent>
+                <DialogActions>
+                  <Button
+                    autoFocus
+                    onClick={handleClose}
+                    sx={{
+                      fontSize: "1.5rem",
+                      padding: "15px",
+                      margin: "10px",
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    Agree
+                  </Button>
+                  <Button
+                    onClick={() => setOpen(false)}
+                    sx={{
+                      fontSize: "1.5rem",
+                      padding: "15px",
+                      margin: "10px",
+                      display: "block",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </DialogActions>
               </Dialog>
             </div>
             <br />
@@ -266,10 +293,13 @@ const CreateAccount = () => {
                 },
               }}
               render={({ field }) => (
-                <label>
-                  <input type="checkbox" {...field} />I agree to the terms and
-                  conditions
-                </label>
+                <>
+                  <input
+                    type="checkbox"
+                    {...field}
+                    style={{ display: "none" }}
+                  />
+                </>
               )}
             />
             <p className="error_msg">{errors.agreeToTerms?.message}</p>
@@ -280,7 +310,7 @@ const CreateAccount = () => {
               fullWidth
               variant="contained"
               style={btnstyle}
-              onSubmit={handleSubmit}
+              onSubmit={handleSubmit(onSubmit)}
             >
               Sign Up
             </Button>
@@ -293,3 +323,23 @@ const CreateAccount = () => {
 };
 
 export default CreateAccount;
+
+{
+  /* <Controller
+              name="agreeToTerms"
+              control={control}
+              defaultValue={false}
+              rules={{
+                required: {
+                  value: true,
+                  message: "You must agree to the terms and conditions",
+                },
+              }}
+              render={({ field }) => (
+                <label>
+                  <input type="checkbox" {...field} />I agree to the terms and
+                  conditions
+                </label>
+              )} 
+              /> */
+}

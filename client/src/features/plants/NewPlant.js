@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
@@ -39,6 +39,7 @@ const NewPlant = () => {
     plant_id: null,
     health: null,
     open_to_advice: false,
+    user_id: null,
     problems:[]
   });
   // took out problems: ""
@@ -62,12 +63,30 @@ const NewPlant = () => {
 
   const [tags, setTags] = useState([]);
 
+
+
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+
+  useEffect(() => {
+    setEntry({ ...entry, user_id: loggedInUser.id });
+    console.log("loggedInUser.id", loggedInUser.id)
+  console.log("entry in UE", entry)
+  console.log("entry.user_id in UE", entry.user_id)
+  }, []);
+
+  useEffect(() => {
+    console.log("entry.plant_id", entry.plant_id)
+    console.log("selectedPlant.id", selectedPlant.id)
+      }, [entry.plant_id, selectedPlant.id])
+    
 
   if (!loggedInUser) {
     return <Unauthorized />;
   }
 
+
+
+  
 
 
   const handleTagsChange = (e) => {
@@ -129,36 +148,40 @@ const NewPlant = () => {
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
-    console.log("SelectedPlant from HSP", selectedPlant)
+    console.log("SelectedPlant from HSP", selectedPlant);
     setActiveCard(index);
-
+  
     if (apiForm === false) {
-      console.log("apiform was false")
+      // If apiform is false
+      console.log("apiform was false");
+  
       setEntry({
         ...entry,
-        plant_id: selectedPlant.id
+        plant_id: selectedPlant.id,
       });
-      
-
+  
       setPlant((prevPlant) => ({
         ...prevPlant,
         id: selectedPlant.id,
       }));
       setEntryForm(true);
     } else {
+      // If apiform is true
+
+
       setEntryForm(true);
       try {
         setPlant((prevPlant) => ({
           ...prevPlant,
-          image_url: selectedPlant.default_image["thumbnail"],
-          med_image_url: selectedPlant.default_image["medium_url"],
+          image_url: selectedPlant.default_image.thumbnail,
+          med_image_url: selectedPlant.default_image.medium_url,
         }));
-
+  
         const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
         const externalResponse = await axios.get(url);
         const apiPlant = externalResponse.data;
-
-        await setPlant((prevPlant) => ({
+  
+        setPlant((prevPlant) => ({
           ...prevPlant,
           common_name: apiPlant.common_name,
           scientific_name: apiPlant.scientific_name[0],
@@ -172,16 +195,19 @@ const NewPlant = () => {
           edible: apiPlant.edible_leaf,
           medicinal: apiPlant.medicinal,
         }));
-
+  
         console.log("Plant from in axios thing", plant);
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
+  
 
   const addPlant = (plant) => {
     dispatch(addPlantToApi(plant));
+
+    /// NEEDS TO HAVE ENTRY DATA ??
   };
 
   const addEntry = (entry) => {
@@ -254,40 +280,75 @@ navigate(`/plants/${entry.plant_id}`)
       console.error("API Error:", error);
     }
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("plant.id in handleSubmit", selectedPlant.id)
-    /// this will submit only the entry with the chosen plant id if the plant was in myApiData
-    /// or this will submit the new api plant with my plant api attributes and the entry at the same time
-    // if apiform == false, then we'll just add an enry (to the plant, using the id) otherwise, well add
-    // both the plant and the entry at the same time
-    setEntry({
-      ...entry,
-      plant_id: selectedPlant.id,
-    });
+  
+    try {
+      if (apiForm === false) {
+        await addEntry(entry);
+      } else {
+        const entryFormData = createFormData(entry);
+        const newPlantWithEntry = createNewPlantWithEntry(plant, entryFormData);
 
+        /// console logging
 
-    if (apiForm == false) {
+        //////
+        
+        const createdPlantWithEntry = await addPlant(newPlantWithEntry);
 
-      // add entry with the plant id
-      addEntry(entry);
-    } else {
-      // being sure to add the entry also as a combined post
+     
+  
+        let newPlantId;
+  
+        if (createdPlantWithEntry && createdPlantWithEntry.id) {
+          newPlantId = createdPlantWithEntry.id;
+        } else {
+          // Handle the case where createdPlantWithEntry is undefined or has no id property
+          console.error("Error: Unable to retrieve plant ID");
+          return; // or throw an error, depending on your error-handling strategy
+        }
+  
+        const updatedEntry = {
+          ...createdPlantWithEntry.entries[0], // Assuming the entry is the first in the array
+          plant_id: newPlantId,
+        };
+  
+        await updateEntry(updatedEntry);
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+    }
+  };
+  
 
-
-      const newPlantWithEntry = {
-        ...plant,
-        entries_attributes: [entry], // Wrap entry in an array
-      };
-
-      addPlant(newPlantWithEntry);
+  const createFormData = (entry) => {
+    console.log("entry from CFD", entry)
+    const formData = new FormData();
+    for (const key in entry) {
+      if (entry[key] !== null) {
+        if (key === "problems" && Array.isArray(entry[key])) {
+          entry[key].forEach((problem) => {
+            formData.append("entry[problems][]", problem);
+          });
+        } else {
+          formData.append(`entry[${key}]`, entry[key]);
+        }
+      }
     }
 
-    // will I need to reload plant and user state or will redux to dit for me?
+    for (const pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1]);
+    }
+    return formData;
   };
-
-
+  
+  
+  
+  const createNewPlantWithEntry = (plant, entryFormData) => ({
+    ...plant,
+    entries_attributes: [ entryFormData],
+  });
+  
 
   return (
     <Container>

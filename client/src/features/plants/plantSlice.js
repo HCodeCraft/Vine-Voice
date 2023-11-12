@@ -46,6 +46,7 @@ export const addPlantToApi = createAsyncThunk(
         throw new Error("Failed to add plant to API");
       }
       const data = await response.json();
+      console.log("data from addPlantToAPI", data)
       return data;
     } catch (error) {
       throw error;
