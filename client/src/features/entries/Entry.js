@@ -85,32 +85,26 @@ const Entry = () => {
   // If user's entry s/he can delete everyone's comment and also edit the entry
 
   const handleDeleteEntry = async (entryId) => {
+    console.log("entryId from handleDeleteEntry", entryId)
     try {
-        await dispatch(deleteEntryFromApi(entryId));
-        await dispatch(deleteEntryInPlant(entryId));
+    
+      await dispatch(deleteEntryInPlant(entryId));
+      await dispatch(deleteEntryFromApi(entryId));
 
-        console.log("user", user);
-        console.log("user.plants", user.plants);
-        console.log("plant", plant);
-        console.log("plant.entries", plant.entries)
+      const userPlant = user.plants.find((p) => p.id === plant.id);
+      navigate(`/users/plants`);
 
-        const userPlant = user.plants.find((p) => p.id === plant.id);
-        console.log("userPlant", userPlant);
-        console.log("userPlant.entries", userPlant.entries);
+      // DELETE ENTRY FROM ALLPLANTS
+      if (userPlant && userPlant.entries?.length === 1) {
+        dispatch(deleteUserPlant({ id: userPlant.id }));
 
-        if (userPlant && ( userPlant.entries.length === 1)) {
-            console.log("Deleting userPlant", userPlant);
-            dispatch(deleteUserPlant({ id: userPlant.id }));
-
-            navigate(`/users/plants`);
-        } else {
-            console.log("Not deleting userPlant. Entries:", userPlant?.entries);
-        }
+        navigate(`/users/plants`);
+      } else {
+      }
     } catch (error) {
-        console.error("An error occurred:", error);
+      console.error("An error occurred:", error);
     }
-};
-
+  };
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();

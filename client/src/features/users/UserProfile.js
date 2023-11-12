@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Typography, Box, Container, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { updateUserInApi } from "./userSlice";
@@ -18,17 +28,10 @@ const UserProfile = () => {
   const [currentUser, setCurrentUser] = useState(false);
   const [user, setUser] = useState({});
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
-  const [error, setError] = useState(null)
-  const userError = useSelector((state)=> state.user.error)
-  const [open, setOpen] = useState(false)
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const userId = Number(params.id);
-
-
-  console.log("currentUser", currentUser)
-  console.log("user.admin", user.admin)
-  console.log("loggedInUser.admin", loggedInUser.admin)
-  
 
   useEffect(() => {
     if (userId === loggedInUser.id) {
@@ -48,46 +51,43 @@ const UserProfile = () => {
     }
   }, [user?.status]);
 
-
   //// Testing
-useEffect(()=> {
-  console.log("newStatus", newStatus)
-  console.log("loggedInuser.error", userError)
-},[newStatus, loggedInUser])
-// Access error from the useSelector state? 
+
+  // Access error from the useSelector state?
   ///////
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
   };
 
-  useEffect(()=> {
-    console.log("user.status", user.status)
-  },[user.status])
+  useEffect(() => {
+    console.log("user.status", user.status);
+  }, [user.status]);
 
   const handleStatusFormClick = (e) => {
     console.log("handleStatusFormClick was clicked");
     setStatusForm(true);
     setNewStatus(user.status);
   };
-  
+
   const handleStatusEditSubmit = async (e) => {
     e.preventDefault();
-  
+
     const updatedUser = new FormData();
     updatedUser.append(`user[status]`, newStatus);
-  
+
     try {
-      const response = await dispatch(updateUserInApi({ userId: user.id, updatedUser }));
-      console.log("response.error", response.error);
-  
+      const response = await dispatch(
+        updateUserInApi({ userId: user.id, updatedUser })
+      );
+
       response.error
         ? (() => {
             const errorData = JSON.parse(response.error.message);
             setError(errorData.errors);
           })()
         : setError([]);
-  
+
       setStatusForm(false);
     } catch (error) {
       console.log("Caught an error:", error.message);
@@ -96,20 +96,15 @@ useEffect(()=> {
   };
 
   const handleDeleteUser = (user) => {
-    console.log("user from HDU", user)
-    dispatch(deleteUserFromApi(user))
-    dispatch(filterOutUserEntries(user.id))
-  dispatch(logoutUser())
-    navigate(`/`)
+    dispatch(deleteUserFromApi(user));
+    dispatch(filterOutUserEntries(user.id));
+    dispatch(logoutUser());
+    navigate(`/`);
+  };
 
-  }
-  
-  
-  
-  useEffect(()=> {
-console.log("error", error)
-  },[error])
-
+  useEffect(() => {
+    console.log("error", error);
+  }, [error]);
 
   useEffect(() => {
     if (user) {
@@ -170,8 +165,7 @@ console.log("error", error)
                   type="text"
                   style={{ width: "100%" }}
                 />
-                <ul>
-                </ul>
+                <ul></ul>
                 <br />
                 <CommonButton onClick={handleStatusEditSubmit}>
                   Set Status
@@ -188,14 +182,13 @@ console.log("error", error)
               </div>{" "}
             </>
           )}
- {error ? (
-  <div style={{ color: 'red', marginTop: '10px' }}>
-    {error.map((errorMessage, index) => (
-      <p key={index}>{errorMessage}</p>
-    ))}
-  </div>
-) : null}
-
+          {error ? (
+            <div style={{ color: "red", marginTop: "10px" }}>
+              {error.map((errorMessage, index) => (
+                <p key={index}>{errorMessage}</p>
+              ))}
+            </div>
+          ) : null}
 
           <img
             src={user.avatar ? user.avatar : default_avatar}
@@ -213,7 +206,7 @@ console.log("error", error)
             {"Name:"} {user.name}
           </Typography>
           <br />
-          {user.privacy  !== true && user !== loggedInUser ? (
+          {user.privacy !== true && user !== loggedInUser ? (
             <a href={`mailto:${user.email}`}>
               <Typography variant="h5" style={{ textAlign: "center" }}>
                 Send Email
@@ -227,40 +220,49 @@ console.log("error", error)
           <Link to={`/users/${user.id}/edit`} style={{ textAlign: "center" }}>
             <CommonButton>Edit Info</CommonButton>
           </Link>
-        ) : null} {loggedInUser.admin ? <div className='all_btn'><Link to={`/users/all`}><CommonButton>All User's Page</CommonButton></Link></div> : null}
-{( (currentUser && !user.admin) || loggedInUser.admin && !user.admin ) ? (
-
-  <>
-    <CommonButton style={{ marginTop: "1.75em" }} onClick={() => setOpen(true)}>
-      Delete Account
-    </CommonButton>
-    <Dialog
-      aria-labelledby="dialog-title"
-      aria-describedby="dialog-description"
-      open={open}
-      onClose={() => setOpen(false)}
-    >
-      <DialogTitle id='dialog-title'>Delete your Account?</DialogTitle>
-      <DialogContent>
-        <DialogContentText id='dialog-discription'>
-          This will be final. It will delete all your entries and photos as well. Are you sure you want to delete the account?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button autoFocus onClick={() => handleDeleteUser(user)}>Delete</Button>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
-      </DialogActions>
-    </Dialog>
-  </>
-) : null}
-
+        ) : null}{" "}
+        {loggedInUser.admin ? (
+          <div className="all_btn">
+            <Link to={`/users/all`}>
+              <CommonButton>All User's Page</CommonButton>
+            </Link>
+          </div>
+        ) : null}
+        {(currentUser && !user.admin) || (loggedInUser.admin && !user.admin) ? (
+          <>
+            <CommonButton
+              style={{ marginTop: "1.75em" }}
+              onClick={() => setOpen(true)}
+            >
+              Delete Account
+            </CommonButton>
+            <Dialog
+              aria-labelledby="dialog-title"
+              aria-describedby="dialog-description"
+              open={open}
+              onClose={() => setOpen(false)}
+            >
+              <DialogTitle id="dialog-title">Delete your Account?</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="dialog-discription">
+                  This will be final. It will delete all your entries and photos
+                  as well. Are you sure you want to delete the account?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button autoFocus onClick={() => handleDeleteUser(user)}>
+                  Delete
+                </Button>
+                <Button onClick={() => setOpen(false)}>Cancel</Button>
+              </DialogActions>
+            </Dialog>
+          </>
+        ) : null}
       </Box>
     </Container>
   ) : (
     <Unauthorized />
   );
 };
-
-
 
 export default UserProfile;

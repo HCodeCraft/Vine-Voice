@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
@@ -9,7 +9,6 @@ import CommonButton from "../../common/CommonButton";
 import {
   Container,
   Typography,
-  Button,
   FormGroup,
   FormControlLabel,
   Checkbox,

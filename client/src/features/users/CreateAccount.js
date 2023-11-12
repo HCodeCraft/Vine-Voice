@@ -20,6 +20,7 @@ const CreateAccount = () => {
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
+  const [formErrors, setFormErrors] = useState([]);
   const {
     register,
     handleSubmit,
@@ -32,13 +33,15 @@ const CreateAccount = () => {
   // To-Do
   // Get avatar/ image url working
   // redirect to user plants
+  const onSubmit = async (data) => {
+    try {
+      console.log("data from onSubmit", data);
 
-  const onSubmit = (data) => {
-    console.log("data from onSubmit", data);
-    if (data.password !== data.password_confirmation) {
-      alert("Passwords don't match");
-      return;
-    } else {
+      if (data.password !== data.password_confirmation) {
+        alert("Passwords don't match");
+        return;
+      }
+
       data.email = data.email.toLowerCase();
       const newUser = new FormData();
 
@@ -54,15 +57,23 @@ const CreateAccount = () => {
       newUser.append("user[recieve_dev_emails]", data.recieve_dev_emails);
       newUser.append("user[password_confirmation]", data.password_confirmation);
 
-      for (var pair of newUser.entries()) {
+      for (const pair of newUser.entries()) {
         console.log(pair[0] + "," + pair[1]);
       }
-     const result = dispatch(registerUserInApi(newUser));
- 
-      if (!result.errors){
-      navigate(`/users/plants`);
-      reset();
+
+      const action = await dispatch(registerUserInApi(newUser));
+
+      if (registerUserInApi.fulfilled.match(action)) {
+        setFormErrors([]);
+        navigate(`/users/plants`);
+      } else if (registerUserInApi.rejected.match(action)) {
+        const error = action.error.message;
+        const errorList = error.split(",");
+
+        setFormErrors(errorList);
       }
+    } catch (error) {
+      console.error("Login failed:", error);
     }
   };
 
@@ -85,8 +96,8 @@ const CreateAccount = () => {
   return (
     <>
       <Grid>
-        <br/>
-        <br/>
+        <br />
+        <br />
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
             <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
@@ -154,6 +165,20 @@ const CreateAccount = () => {
                 },
               })}
             />
+            {formErrors.length > 0 ? (
+              <div
+                style={{ color: "red", fontWeight: "bold", marginTop: "10px" }}
+              >
+                <Typography variant="h6">Validation errors:</Typography>
+                <ul style={{ listStyle: "none", padding: "0" }}>
+                  {formErrors.map((error) => (
+                    <Typography>
+                      <li style={{ marginBottom: "10px" }}>{error}</li>
+                    </Typography>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
             <p className="error_msg">{errors.password_confirmation?.message}</p>
             <label htmlFor="avatar">Add Avatar from image</label>
             <Controller

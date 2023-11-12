@@ -22,6 +22,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -29,15 +30,18 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+  const [formErrors, setFormErrors] = useState([]);
 
-  const indUser = useSelector((state) => state.user.loggedInUser);
+  const loggedIn = useSelector((state) => state.user.loggedIn);
 
   const submitForm = async (data) => {
     try {
-      console.log("data from login user submit", data)
+      console.log("data from login user submit", data);
       const action = await dispatch(loginUser(data));
+      action.error?.message ? setFormErrors(action.error.message) : null;
+
       if (loginUser.fulfilled.match(action)) {
+        setFormErrors([]);
         dispatch(fetchAllPlants());
         dispatch(fetchAllEntries());
         dispatch(fetchAllComments());
@@ -116,7 +120,17 @@ const Login = () => {
               Sign in
             </Button>
           </form>
-          <br />
+          {formErrors.length > 0 ? (
+            <div
+              style={{ color: "red", fontWeight: "bold", marginTop: "10px" }}
+            >
+              <p>Validation errors:</p>
+              <ul style={{ listStyle: "none", padding: "0" }}>
+                <li>{formErrors}</li>
+              </ul>
+            </div>
+          ) : null}
+
           <Typography>
             Do you have an account? <Link to={`/users/new`}>Sign Up</Link>
           </Typography>

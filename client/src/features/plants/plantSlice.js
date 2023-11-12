@@ -141,29 +141,26 @@ const plantSlice = createSlice({
     },
     deleteEntryInPlant: (state, action) => {
       const deletedEntryId = action.payload;
-  
+      console.log("deletedEntryId from deleteEntryInPlant", deletedEntryId);
+
       // Remove the entry from individualPlant.entries
       const updatedEntries = state.individualPlant.entries.filter(
         (entry) => entry.id !== deletedEntryId
       );
-  
-      // Return a new state object with updated allPlants and individualPlant
-      state = {
-        ...state,
-        individualPlant: {
-          ...state.individualPlant,
-          entries: updatedEntries,
-        },
-        allPlants: state.allPlants.map((plant) =>
-          plant.id === state.individualPlant.id
-            ? { ...plant, entries: updatedEntries }
-            : plant
-        ),
-      };
+
+      // Update the state in an immutable way using immer
+      state.individualPlant.entries = updatedEntries;
+      state.allPlants = state.allPlants.map((plant) =>
+        plant.id === state.individualPlant.id
+          ? { ...plant, entries: updatedEntries }
+          : plant
+      );
     },
+  
   
     filterOutUserEntries: (state, action) => {
       const deletedUserId = action.payload;
+      console.log("deletedUserId from filterOutUserEntries", deletedUserId)
   
       // Update each plant's entries by filtering out entries with deletedUserId
       state.allPlants = state.allPlants.map((plant) => ({

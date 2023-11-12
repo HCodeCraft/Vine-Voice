@@ -90,24 +90,21 @@ export const fetchUserById = createAsyncThunk(
     }
   }
 );
-// I know typing in the backendurl is messing with the session, but otherwise how could I put in that
-// url for fetching? if I put `users/${userId}` it will send the request to localhost:4000
-// all the other requests have been working (with localhost:4000) - I think that's because of my CORS
-// With the request using localhost:4000, it says not authorized
 
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
   async (newUser) => {
-    console.log("newUser from registerUser", newUser)
     try {
       const response = await fetch(`/users`, {
         method: "POST",
-        body: newUser
+        body: newUser,
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add user to API");
+        const errorData = await response.json();
+        throw new Error(errorData.errors); // assuming errors are in JSON format
       }
+
       const data = await response.json();
       return data;
     } catch (error) {
@@ -115,6 +112,30 @@ export const registerUserInApi = createAsyncThunk(
     }
   }
 );
+
+
+
+// export const registerUserInApi = createAsyncThunk(
+//   "user/registerUserInApi",
+//   async (newUser) => {
+//     console.log("newUser from registerUser", newUser)
+//     try {
+//       const response = await fetch(`/users`, {
+//         method: "POST",
+//         body: newUser
+//       });
+
+//       if (!response.ok) {
+//         const errorData = await response.json(); // Retrieve the error data
+//         throw new Error(errorData.message);
+//       }
+
+//       return data;
+//     } catch (error) {
+//       throw error;
+//     }
+//   }
+// );
 
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
@@ -343,13 +364,17 @@ const userSlice = createSlice({
         // if the user who deleted it was logged in, set loggedInUser to null
     
       
+        // CANNOT READ PROPERTIES OF NULL (id) bc there is no user by then?
         // filter out the deleted user from allUsers
+
         state.allUsers = state.allUsers.filter((user) => user.id !== deletedUserId);
 
         if (state.loggedInUser.id === deletedUserId) {
           state.loggedInUser = null;
           state.loggedIn = null
         }
+
+        // not working
       })
       .addCase(deleteUserFromApi.rejected, (state, action) => {
         console.log("There was a problem with deleteUserFromApi")

@@ -20,12 +20,16 @@ const Plant = () => {
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
+  console.log("plant", plant)
 
+  console.log(plant.common_name, "plant.entries", plant.entries)
   
-
+// plant is getting plants from individualPlant
 
 
   const allPlants = useSelector((state) => state.plant.allPlants)
+
+  console.log("allPlants from Plant", allPlants)
 
   
 
@@ -85,7 +89,7 @@ const Plant = () => {
     <>
       <br />
       <br />
-      <Box sx={{ width: "100%", maxWidth: "100%" }}>
+      <Box sx={{ width: "100%", maxWidth: "100%", marginTop: "2.5em" }}>
         <Typography variant="h4" align="center">
           {plant.common_name}
         </Typography>
