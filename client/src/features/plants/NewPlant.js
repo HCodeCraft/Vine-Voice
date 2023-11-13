@@ -426,10 +426,6 @@ const NewPlant = () => {
                 onChange={handleEntryChange}
               />
               <br />
-              <label htmlFor="picture">
-                {" "}
-                <Typography variant="h6">Add a Picture</Typography>
-              </label>
               <br />
               <div className="health_box">
                 <Typography variant="h6">Health Rating</Typography>
