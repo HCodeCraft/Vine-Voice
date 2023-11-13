@@ -35,12 +35,11 @@ const NewPlant = () => {
     nickname: "",
     location: "",
     notes: "",
-    picture: null,
     plant_id: null,
     health: null,
     open_to_advice: false,
     user_id: null,
-    problems:[]
+    problems: [],
   });
   // took out problems: ""
   const [plant, setPlant] = useState({
@@ -60,34 +59,20 @@ const NewPlant = () => {
     medicinal: false,
   });
 
-
   const [tags, setTags] = useState([]);
-
-
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
-  useEffect(() => {
-    setEntry({ ...entry, user_id: loggedInUser.id });
-    console.log("loggedInUser.id", loggedInUser.id)
-  console.log("entry in UE", entry)
-  console.log("entry.user_id in UE", entry.user_id)
-  }, []);
+
 
   useEffect(() => {
-    console.log("entry.plant_id", entry.plant_id)
-    console.log("selectedPlant.id", selectedPlant.id)
-      }, [entry.plant_id, selectedPlant.id])
-    
+    console.log("entry.plant_id", entry.plant_id);
+    console.log("selectedPlant.id", selectedPlant.id);
+  }, [entry.plant_id, selectedPlant.id]);
 
   if (!loggedInUser) {
     return <Unauthorized />;
   }
-
-
-
-  
-
 
   const handleTagsChange = (e) => {
     if (e.key !== "Enter") return;
@@ -107,16 +92,12 @@ const NewPlant = () => {
 
   ////
 
-
-
-  
   const resetEntryAndPlant = () => {
     const defaultValues = {
       entry: {
         nickname: "",
         location: "",
         notes: "",
-        picture: null,
         plant_id: null,
         health: null,
         open_to_advice: false,
@@ -139,27 +120,26 @@ const NewPlant = () => {
         medicinal: false,
       },
     };
-  
+
     setEntry({ ...defaultValues.entry });
     setPlant({ ...defaultValues.plant });
   };
-
 
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
     console.log("SelectedPlant from HSP", selectedPlant);
     setActiveCard(index);
-  
+
     if (apiForm === false) {
       // If apiform is false
       console.log("apiform was false");
-  
+
       setEntry({
         ...entry,
         plant_id: selectedPlant.id,
       });
-  
+
       setPlant((prevPlant) => ({
         ...prevPlant,
         id: selectedPlant.id,
@@ -168,7 +148,6 @@ const NewPlant = () => {
     } else {
       // If apiform is true
 
-
       setEntryForm(true);
       try {
         setPlant((prevPlant) => ({
@@ -176,11 +155,11 @@ const NewPlant = () => {
           image_url: selectedPlant.default_image.thumbnail,
           med_image_url: selectedPlant.default_image.medium_url,
         }));
-  
+
         const url = `https://perenual.com/api/species/details/${selectedPlant.id}?key=${API_KEY}`;
         const externalResponse = await axios.get(url);
         const apiPlant = externalResponse.data;
-  
+
         setPlant((prevPlant) => ({
           ...prevPlant,
           common_name: apiPlant.common_name,
@@ -195,23 +174,22 @@ const NewPlant = () => {
           edible: apiPlant.edible_leaf,
           medicinal: apiPlant.medicinal,
         }));
-  
+
         console.log("Plant from in axios thing", plant);
       } catch (error) {
         console.error("API Error:", error);
       }
     }
   };
-  
 
   const addPlant = (plant) => {
+    console.log("plant from addPlant", plant);
     dispatch(addPlantToApi(plant));
 
     /// NEEDS TO HAVE ENTRY DATA ??
   };
 
   const addEntry = (entry) => {
-
     // change to formdata
     const newEntry = new FormData();
     for (const key in entry) {
@@ -230,7 +208,7 @@ const NewPlant = () => {
       .then(() => dispatch(addPlantToUser()));
 
     // resetEntryAndPlant()
-navigate(`/plants/${entry.plant_id}`)
+    navigate(`/plants/${entry.plant_id}`);
   };
 
   const onSearchNameChanged = (e) => {
@@ -280,6 +258,7 @@ navigate(`/plants/${entry.plant_id}`)
       console.error("API Error:", error);
     }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -287,67 +266,40 @@ navigate(`/plants/${entry.plant_id}`)
       if (apiForm === false) {
         await addEntry(entry);
       } else {
-        const entryFormData = createFormData(entry);
-        const newPlantWithEntry = createNewPlantWithEntry(plant, entryFormData);
-
-        /// console logging
-
-        //////
-        
+        const newPlantWithEntry = {
+          ...plant,
+          entries_attributes: [entry], // Ensure entries_attributes is an array
+        };
+  
+        console.log("newPlantWithEntry", newPlantWithEntry);
+  
         const createdPlantWithEntry = await addPlant(newPlantWithEntry);
-
-     
+  
+        console.log("createdPlantWithEntry", createdPlantWithEntry);
   
         let newPlantId;
   
         if (createdPlantWithEntry && createdPlantWithEntry.id) {
           newPlantId = createdPlantWithEntry.id;
         } else {
-          // Handle the case where createdPlantWithEntry is undefined or has no id property
           console.error("Error: Unable to retrieve plant ID");
           return; // or throw an error, depending on your error-handling strategy
         }
   
-        const updatedEntry = {
-          ...createdPlantWithEntry.entries[0], // Assuming the entry is the first in the array
-          plant_id: newPlantId,
-        };
+        const updatedEntry = createdPlantWithEntry.entries.length > 0
+          ? { ...createdPlantWithEntry.entries[0], plant_id: newPlantId }
+          : null;
   
-        await updateEntry(updatedEntry);
+        console.log("updatedEntry", updatedEntry);
+  
+        if (updatedEntry) {
+          await updateEntry(updatedEntry);
+        }
       }
     } catch (error) {
       console.error("Submission Error:", error);
     }
   };
-  
-
-  const createFormData = (entry) => {
-    console.log("entry from CFD", entry)
-    const formData = new FormData();
-    for (const key in entry) {
-      if (entry[key] !== null) {
-        if (key === "problems" && Array.isArray(entry[key])) {
-          entry[key].forEach((problem) => {
-            formData.append("entry[problems][]", problem);
-          });
-        } else {
-          formData.append(`entry[${key}]`, entry[key]);
-        }
-      }
-    }
-
-    for (const pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
-    return formData;
-  };
-  
-  
-  
-  const createNewPlantWithEntry = (plant, entryFormData) => ({
-    ...plant,
-    entries_attributes: [ entryFormData],
-  });
   
 
   return (
@@ -475,22 +427,9 @@ navigate(`/plants/${entry.plant_id}`)
               />
               <br />
               <label htmlFor="picture">
-            {" "}
-            <Typography variant="h6">Add a Picture</Typography>
-          </label>
-          <input
-            type="file"
-            name="picture"
-            id="picture"
-            accept=".jpg, .jpeg, .png, .webp, .wdp"
-            onChange={(e) => {
-              const selectedFile = e.target.files[0];
-              setEntry({
-                ...entry,
-                picture: selectedFile,
-              });
-            }}
-          />
+                {" "}
+                <Typography variant="h6">Add a Picture</Typography>
+              </label>
               <br />
               <div className="health_box">
                 <Typography variant="h6">Health Rating</Typography>

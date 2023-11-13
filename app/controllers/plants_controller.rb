@@ -20,9 +20,12 @@ class PlantsController < ApplicationController
   end
 
   def create
-    plant = Plant.create!(plant_params)
+    plant = Plant.create(plant_params)
+    byebug
     render json: plant, status: :created
   end
+
+  # not giving the entry a user
 
   def update
     if @current_user.admin === true
@@ -68,15 +71,14 @@ class PlantsController < ApplicationController
       :med_image_url,
       :id,
       entries_attributes: [
-        "entry[nickname]",
-        "entry[location]",
-        "entry[notes]",
-        "entry[picture]",
-        "entry[user_id]",
-        "entry[plant_id]",
-        "entry[health]",
-        "entry[open_to_advice]",
-        "entry[problems]: []",
+        :nickname,
+        :location,
+        :notes,
+        :user_id,
+        :plant_id,
+        :health,
+        :open_to_advice,
+        problems: [],
       ],
     )
   end

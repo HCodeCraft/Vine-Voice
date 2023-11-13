@@ -30,6 +30,8 @@ export const fetchPlantById = createAsyncThunk(
   }
 );
 
+
+
 export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
   async (newPlant) => {

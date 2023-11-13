@@ -6,10 +6,17 @@ has_many :entries
  has_many :comments
 
 
-  def create_date
-    created_at = object.created_at
+ def create_date
+  created_at = object.created_at
+
+  if created_at.present?
     formatted_time = created_at.strftime("%B %d, %Y, %I:%M %p")
+  else
+    # Handle the case where created_at is nil
+    formatted_time = "N/A"  # or any default value or message you prefer
   end
+end
+
 
   def short_description
     object.description.nil? ? "" : object.description.length < 200 ? object.description : "#{object.description[0..200]}..."

@@ -11,11 +11,12 @@ class Entry < ApplicationRecord
 
     def username
         self.user.username
-    end
-
-    def user_id
+      end
+      
+      def user_id
         self.user.id
-    end
+      end
+      
   
     private
   
