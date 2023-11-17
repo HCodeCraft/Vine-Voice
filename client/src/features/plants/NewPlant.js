@@ -73,16 +73,16 @@ const NewPlant = () => {
   // how do I set the entry in NewEntry? addEntryToApi(newEntry)
 
   useEffect(() => {
-    pageEndRef.current?.scrollIntoView();
+    console.log('useEffect triggered'); // Check if this is logged
 
+    console.log("selectedPlant", selectedPlant)
   }, [selectedPlant]);
+  
+  
 
 
 
-  useEffect(() => {
-    console.log("entry.plant_id", entry.plant_id);
-    console.log("selectedPlant.id", selectedPlant.id);
-  }, [entry.plant_id, selectedPlant.id]);
+
 
   useEffect(() => {
     setEntry({ ...entry, user_id: loggedInUser.id });
@@ -150,6 +150,7 @@ const NewPlant = () => {
     console.log("SelectedPlant from HSP", selectedPlant);
     setActiveCard(index);
 
+
     if (apiForm === false) {
       // If apiform is false
       console.log("apiform was false");
@@ -195,6 +196,10 @@ const NewPlant = () => {
         }));
 
         console.log("Plant from in axios thing", plant);
+
+    pageEndRef.current && pageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+
+
       } catch (error) {
         console.error("API Error:", error);
       }
@@ -315,6 +320,7 @@ const NewPlant = () => {
   };
 
   return (
+  
     <Container>
       <section>
         <Typography variant="h4" style={{ marginTop: "3em" }}>
@@ -370,6 +376,7 @@ const NewPlant = () => {
             speciesList.length > 0 &&
             speciesList.map((p_plant, index) => (
               <SmallPlantCard
+              key={p_plant.id}
                 className="small-plant-card"
                 plant={p_plant}
                 commonName={p_plant.common_name}
@@ -465,13 +472,15 @@ const NewPlant = () => {
               </FormGroup>
               <CommonButton onClick={handleSubmit}>Submit</CommonButton>
             </form>
+            <div ref={pageEndRef}></div>
           </div>
         ) : null}
         <br />
         <br />
       </div>
-      <div ref={pageEndRef}></div>
     </Container>
+ 
+
   );
 };
 
