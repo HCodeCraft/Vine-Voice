@@ -33,20 +33,25 @@ const Entry = () => {
     problems: [],
     open_to_advice: false,
     comments: [],
+    create_date: null,
   });
 
   useEffect(() => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);
+      console.log('result.payload from fetchEntry', result.payload)
     };
 
     fetchEntry();
   }, []);
 
   const entryUsername = useSelector(
-    (state) => state.entry.individualEntry?.username
+    (state) => state.entry.individualEntry?.user.username
   );
+
+
+
 
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
@@ -134,6 +139,7 @@ const Entry = () => {
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
+  console.log("entry", entry)
   return entry ? (
     <section className="section" align="center">
       <Typography variant="h4" align="center" style={{ marginTop: "3em" }}>
@@ -142,7 +148,7 @@ const Entry = () => {
       </Typography>
 
       <Typography variant="h5">
-        {currentUser ? "My" : `${entry.username}'s`} {plant.common_name}
+        {currentUser ? "My" : `${entry.user?.username}'s`} {plant.common_name}
       </Typography>
       <Typography align="center">from {entry.create_date}</Typography>
       <br />

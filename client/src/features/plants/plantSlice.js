@@ -30,11 +30,11 @@ export const fetchPlantById = createAsyncThunk(
   }
 );
 
-
+// need to do a conditional in here for if there's entries_attributes
 
 export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
-  async (newPlant) => {
+  async ({newPlant}) => {
     try {
       const response = await fetch(`/plants`, {
         method: "POST",
@@ -47,6 +47,7 @@ export const addPlantToApi = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Failed to add plant to API");
       }
+      console.log("newPlant from addPlantToApi", {newPlant})
       const data = await response.json();
       console.log("data from addPlantToAPI", data)
       return data;
@@ -201,8 +202,15 @@ const plantSlice = createSlice({
         state.loadingIndividualPlant = true;
       })
       .addCase(addPlantToApi.fulfilled, (state, action) => {
-        // Assuming action.payload is an array of plants
-        state.allPlants.push(action.payload);
+
+        if (action.payload.plant) {
+          state.allPlants = [...state.allPlants, action.payload.plant]
+        }
+        else {
+          state.allPlants = [...state.allPlants, action.payload]
+        }
+      
+        console.log("allPlants after Push", state.allPlants)
         state.loadingIndividualPlant = false;
       })
 

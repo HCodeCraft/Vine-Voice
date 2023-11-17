@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import { addPlantToApi } from "./plantSlice";
-import { addEntryToApi } from "../entries/entriesSlice";
+import {
+  addEntryToApi,
+  addEntryToAllAndIndState,
+} from "../entries/entriesSlice";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
@@ -23,6 +26,8 @@ import { addEntryToPlant } from "./plantSlice";
 const NewPlant = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const pageEndRef = useRef(null)
   const [searchName, setSearchName] = useState("");
   const [resultForm, setResultForm] = useState(false);
   const [apiForm, setApiForm] = useState(false);
@@ -57,11 +62,20 @@ const NewPlant = () => {
     poisonous_to_animals: false,
     edible: false,
     medicinal: false,
+    entries: [],
   });
 
   const [tags, setTags] = useState([]);
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  const allPlants = useSelector((state) => state.plant.allPlants);
+  const indEntry = useSelector((state) => state.entry.individualEntry);
+  // how do I set the entry in NewEntry? addEntryToApi(newEntry)
+
+  useEffect(() => {
+    pageEndRef.current?.scrollIntoView();
+
+  }, [selectedPlant]);
 
 
 
@@ -69,6 +83,11 @@ const NewPlant = () => {
     console.log("entry.plant_id", entry.plant_id);
     console.log("selectedPlant.id", selectedPlant.id);
   }, [entry.plant_id, selectedPlant.id]);
+
+  useEffect(() => {
+    setEntry({ ...entry, user_id: loggedInUser.id });
+    console.log("entry.user_id", entry.user_id);
+  }, []);
 
   if (!loggedInUser) {
     return <Unauthorized />;
@@ -183,11 +202,23 @@ const NewPlant = () => {
   };
 
   const addPlant = (plant) => {
-    console.log("plant from addPlant", plant);
-    dispatch(addPlantToApi(plant));
+    dispatch(addPlantToApi(plant))
+      .then((action) => {
+        // Log the data from the action
+        console.log("Data after addPlantToApi dispatch:", action.payload);
 
-    /// NEEDS TO HAVE ENTRY DATA ??
+        const entry = action.payload.plant.entries[0];
+        dispatch(addEntryToAllAndIndState(entry));
+        dispatch(addPlantToUser());
+      })
+      .catch((error) => {
+        // Handle error if needed
+        console.error("Error adding plant:", error);
+      });
   };
+  
+
+
 
   const addEntry = (entry) => {
     // change to formdata
@@ -261,46 +292,27 @@ const NewPlant = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       if (apiForm === false) {
         await addEntry(entry);
       } else {
-        const newPlantWithEntry = {
+        const newPlant = {
           ...plant,
           entries_attributes: [entry], // Ensure entries_attributes is an array
         };
-  
-        console.log("newPlantWithEntry", newPlantWithEntry);
-  
-        const createdPlantWithEntry = await addPlant(newPlantWithEntry);
-  
-        console.log("createdPlantWithEntry", createdPlantWithEntry);
-  
-        let newPlantId;
-  
-        if (createdPlantWithEntry && createdPlantWithEntry.id) {
-          newPlantId = createdPlantWithEntry.id;
-        } else {
-          console.error("Error: Unable to retrieve plant ID");
-          return; // or throw an error, depending on your error-handling strategy
-        }
-  
-        const updatedEntry = createdPlantWithEntry.entries.length > 0
-          ? { ...createdPlantWithEntry.entries[0], plant_id: newPlantId }
-          : null;
-  
-        console.log("updatedEntry", updatedEntry);
-  
-        if (updatedEntry) {
-          await updateEntry(updatedEntry);
-        }
+
+        const createdPlantWithEntry = await addPlant({ newPlant });
+
+        // add Entry to plant?
+        /// how would I get the id of the created plant???
+
+        navigate(`/users/plants`);
       }
     } catch (error) {
       console.error("Submission Error:", error);
     }
   };
-  
 
   return (
     <Container>
@@ -458,6 +470,7 @@ const NewPlant = () => {
         <br />
         <br />
       </div>
+      <div ref={pageEndRef}></div>
     </Container>
   );
 };

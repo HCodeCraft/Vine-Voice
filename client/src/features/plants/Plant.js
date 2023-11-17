@@ -21,6 +21,8 @@ const Plant = () => {
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
+  console.log("plant (individualPlant)", plant)
+
   // plant is getting plants from individualPlant
 
   const allPlants = useSelector((state) => state.plant.allPlants);

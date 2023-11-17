@@ -19,11 +19,28 @@ class PlantsController < ApplicationController
     render json: @plants
   end
 
+  # def create
+  #   plant = Plant.create(plant_params)
+
+
+  #   render json: plant, status: :created
+  # end
+
   def create
-    plant = Plant.create(plant_params)
-    byebug
-    render json: plant, status: :created
+    @current_user = User.find_by(id: session[:user_id])
+  
+    # Build a new plant
+    plant = Plant.new(plant_params)
+  
+    if plant.save
+      render json: { plant: plant.as_json(include: :entries) }, status: :created
+    else
+      render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
+    end
   end
+  
+  
+  
 
   # not giving the entry a user
 

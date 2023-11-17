@@ -10,12 +10,14 @@ class Entry < ApplicationRecord
     validate :validate_problems_limit
 
     def username
-        self.user.username
+    self.user.username
       end
       
       def user_id
-        self.user.id
+  self.user.id
       end
+
+      
       
   
     private

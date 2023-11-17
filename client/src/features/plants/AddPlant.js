@@ -8,6 +8,7 @@ import tomato from "../../pictures/tomato.png";
 
 const AddPlant = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user.loggedInUser);
 
   /// Missing water rec! frequent, average, minimum, none
@@ -80,12 +81,13 @@ const AddPlant = () => {
   
 
     dispatch(addPlantToApi({plant}));
+    /// put in the backend to add the plant to user's plants if it has an entry
+     // add entry to user
 
-    // why is this not getting anything for plant, why is it not permitting it??
 
 
-    // maybe actually stay on this page and clear the stuff?
   setPlantFieldsToBlank()
+
   };
 
   const setPlantFieldsToBlank = () => {

@@ -181,6 +181,7 @@ export const addPlantToUser = createAsyncThunk(
   "user/addPlantToUser",
   (_, { getState }) => {
     const entry = getState().entry.individualEntry;
+    console.log("entry from addPlantToUser", entry)
     const allPlants = getState().plant.allPlants;
 
     const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
@@ -351,6 +352,7 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addPlantToUser.fulfilled, (state, action) => {
+        console.log("addPlantToUser was successful!", action.payload)
         state.loggedInUser.plants.push(action.payload);
       })
       .addCase(addPlantToUser.rejected, (state, action) => {

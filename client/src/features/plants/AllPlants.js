@@ -16,7 +16,7 @@ const AllPlants = () => {
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
-  console.log("plants", plants)
+
 
 
 
@@ -43,7 +43,7 @@ const AllPlants = () => {
       ));
       return (
         <>
-        <Grid container spacing={0} style={{ marginTop: "20px" }}>
+        <Grid container spacing={0} style={{ marginTop: "20px", marginBottom:"20px"}}>
     <Box sx={{ width: '100%', maxWidth: '100%' }}>
 
       <Typography variant="h4" align="center" style={{ marginTop: "1.75em" }}>
@@ -56,6 +56,7 @@ const AllPlants = () => {
     </Grid>
 
     </Grid>
+
   </>
       );
     }

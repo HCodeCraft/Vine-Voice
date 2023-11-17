@@ -6,7 +6,6 @@ import {
   Box,
   CardContent,
   CardMedia,
-  Button,
 } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link } from "react-router-dom";
@@ -25,7 +24,10 @@ const PlantCard = ({
 
   const plant = plants.find((plant) => plant.id === id);
 
-console.log("plant", plant.common_name, "plant.entries", plant.entries)
+
+  // getting the entries from allPlants
+
+
 
   return (
     <Grid item xs={12} sm={6} md={2} lg={2}>

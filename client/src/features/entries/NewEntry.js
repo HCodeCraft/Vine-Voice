@@ -35,8 +35,15 @@ const NewEntry = () => {
     problems: [],
     plant_id: Number(params.plant_id),
     health: null,
+    user_id: null,
     open_to_advice: false,
   });
+
+  // maybe remove user_id, not sure yet, testing
+
+
+
+  /////
 
   const [tags, setTags] = useState([]);
 
@@ -66,6 +73,12 @@ const NewEntry = () => {
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
  
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+
+  useEffect(() => {
+    console.log("loggedInUser.id", loggedInUser.id)
+    setEntry({ ...entry, user_id: loggedInUser.id });
+    console.log("entry.user_id", entry.user_id);
+  }, [loggedInUser]);
 
 
   const handleEntryChange = (e) => {

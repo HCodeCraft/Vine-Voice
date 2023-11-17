@@ -2,6 +2,7 @@ class EntrySerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :nickname, :location, :notes, :plant_id, :health, :open_to_advice, :create_date, :picture, :username, :user_id, :problems
   has_many :comments
+  belongs_to :user
 
 
 
@@ -11,15 +12,9 @@ class EntrySerializer < ActiveModel::Serializer
 
 
   def create_date
-    created_at = object.created_at
-  
-    if created_at.present?  
-      formatted_time = created_at.strftime("%A, %B %d, %Y, %I:%M %p")
-    else
-      formatted_time = "N/A" 
-    end
-  
+    formatted_time = object.created_at&.strftime("%A, %B %d, %Y, %I:%M %p") || "N/A"
     formatted_time
   end
+  
   
 end

@@ -2,23 +2,38 @@ class EntriesController < ApplicationController
   before_action :authorize
 
 # added .with_attached_picture
+
   def index
-    entries = Entry.all.with_attached_picture
-    render json: entries
+    entries = Entry.all.with_attached_picture.includes(:user)
+    render json: entries.to_json(include: { user: { only: [:id, :username] } })
   end
+
 
   def show
     entry = Entry.find_by(id: params[:id])
-    render json: entry
+    render json: EntrySerializer.new(entry).to_json(include: [:plant, :user])
   end
+  
+
+  # def show
+  #   entry = Entry.find_by(id: params[:id])
+  #   render json: entry.to_json(include: [:plant, :user])
+  # end
+  
+
+  # added the .to_json(include: :plant)
 
   def create
     @current_user = User.find_by(id: session[:user_id])
 
-    new_entry = @current_user.entries.create(entry_params)
-
-    render json: new_entry
+    if @current_user
+      new_entry = @current_user.entries.create(entry_params)
+      render json: new_entry
+    else
+      render json: { error: 'User not found' }, status: :unprocessable_entity
+    end
   end
+  
 
   def update
     entry = find_entry

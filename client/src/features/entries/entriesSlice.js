@@ -44,37 +44,53 @@ export const updateEntryInApi = createAsyncThunk(
       }
 
       const updatedEntryData = await response.json();
-      thunkAPI.dispatch(updateEntryInPlant(updatedEntryData))
+      thunkAPI.dispatch(updateEntryInPlant(updatedEntryData));
       return updatedEntryData;
     } catch (error) {
       throw error;
     }
   }
 );
-
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
   async (newEntry) => {
-    console.log("newEntry from in addEntryToApi", newEntry)
+    console.log("newEntry from in addEntryToApi", newEntry);
+
     try {
-      const response = await fetch(`/entries`, {
-        method: "POST",
-        body: newEntry,
-      });
+      let requestBody;
+
+      if (newEntry instanceof FormData) {
+        // Set the correct headers for FormData
+        requestBody = {
+          method: "POST",
+          body: newEntry,
+        };
+      } else {
+        // Set headers for JSON data
+        requestBody = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newEntry),
+        };
+      }
+
+      const response = await fetch("/entries", requestBody);
 
       if (!response.ok) {
         throw new Error("Failed to add entry to API");
       }
-  
+
       const data = await response.json();
-          
-      console.log("data from addEntry", data);
       return data;
     } catch (error) {
       throw error;
     }
   }
 );
+
+
 
 export const deleteEntryFromApi = createAsyncThunk(
   "entries/deleteEntryFromApi",
@@ -115,20 +131,30 @@ const entrySlice = createSlice({
       );
     },
     addCommentToEntry: (state, action) => {
-      state.individualEntry.comments.push(action.payload)
+      state.individualEntry.comments.push(action.payload);
     },
-    deleteCommentFromEntry:(state, action) => {
+    deleteCommentFromEntry: (state, action) => {
       state.individualEntry.comments = state.individualEntry.comments.filter(
         (comment) => comment.id !== action.payload
       );
     },
-    updateCommentInEntry:(state, action) => {
+    updateCommentInEntry: (state, action) => {
       const updatedComment = action.payload;
 
-      state.individualEntry.comments = state.individualEntry.comments.map((comment) =>
-        comment.id === updatedComment.id ? updatedComment : comment
+      state.individualEntry.comments = state.individualEntry.comments.map(
+        (comment) =>
+          comment.id === updatedComment.id ? updatedComment : comment
       );
-    }
+    },
+    addEntryToAllAndIndState: (state, action) => {
+      const newEntry = action.payload;
+      console.log("newEntry from AETAAIS", newEntry);
+
+      state.allEntries.push(newEntry);
+      state.individualEntry = newEntry;
+      state.loadingIndividualEntry = false;
+    },
+    // Maybe make a reducer here that would make the state changes? that are the same as addEntryToApi Extra REducer
   },
   extraReducers: (builder) => {
     builder
@@ -165,8 +191,6 @@ const entrySlice = createSlice({
         state.individualEntry = newEntry;
 
         state.loadingIndividualEntry = false;
-
-       
       })
       .addCase(addEntryToApi.rejected, (state, action) => {
         state.loadingIndividualEntry = false;
@@ -176,10 +200,8 @@ const entrySlice = createSlice({
         state.loadingIndividualEntry = true;
       })
       .addCase(deleteEntryFromApi.fulfilled, (state, action) => {
-       
         const deletedEntryId = action.payload;
 
-     
         state.allEntries = state.allEntries.filter(
           (entry) => entry.entryId !== deletedEntryId
         );
@@ -193,25 +215,30 @@ const entrySlice = createSlice({
         state.errorIndividualEntry = action.error.message;
       })
       .addCase(updateEntryInApi.fulfilled, (state, action) => {
-
         const updatedEntry = action.payload;
-      
+
         state.individualEntry = updatedEntry;
-      
+
         state.allEntries = state.allEntries.map((entry) =>
           entry.id === updatedEntry.id ? updatedEntry : entry
         );
-      
+
         state.loadingIndividualEntry = false;
       })
       .addCase(updateEntryInApi.rejected, (state, action) => {
         state.loadingIndividualEntry = false;
         state.errorIndividualEntry = action.error.message;
-      })
-      
+      });
   },
 });
 
-export const { addEntry, deleteEntry, addCommentToEntry, deleteCommentFromEntry, updateCommentInEntry } = entrySlice.actions;
+export const {
+  addEntry,
+  deleteEntry,
+  addCommentToEntry,
+  deleteCommentFromEntry,
+  updateCommentInEntry,
+  addEntryToAllAndIndState,
+} = entrySlice.actions;
 
 export const entryReducer = entrySlice.reducer;
