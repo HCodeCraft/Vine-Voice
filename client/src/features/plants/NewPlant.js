@@ -20,6 +20,7 @@ import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import Unauthorized from "../../Unauthorized";
 import TagsInput from "../../TagsInput";
+import Spinner from "../../Spinner";
 import { addPlantToUser } from "../users/userSlice";
 import { addEntryToPlant } from "./plantSlice";
 
@@ -27,12 +28,16 @@ const NewPlant = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const pageEndRef = useRef(null)
+  const pageEndRef = useRef(null);
   const [searchName, setSearchName] = useState("");
+  const [searchBar, setSearchBar] = useState(true);
+  const [showSpinner, setShowSpinner] = useState(false);
   const [resultForm, setResultForm] = useState(false);
   const [apiForm, setApiForm] = useState(false);
   const [entryForm, setEntryForm] = useState(false);
   const [myApiData, setMyApiData] = useState([]);
+  const [noResultButton, setNoResultButton] = useState(false);
+  const [triggerTimeout, setTriggerTimeout] = useState(false);
   const [speciesList, setSpeciesList] = useState([]);
   const [selectedPlant, setSelectedPlant] = useState("");
   const [activeCard, setActiveCard] = useState(null);
@@ -73,21 +78,27 @@ const NewPlant = () => {
   // how do I set the entry in NewEntry? addEntryToApi(newEntry)
 
   useEffect(() => {
-    console.log('useEffect triggered'); // Check if this is logged
+    console.log("myApiData.length", myApiData?.length);
+    const timer = setTimeout(() => {
+      if (myApiData.length === 0) {
+        setShowSpinner(true);
+      }
+    }, 2000);
 
-    console.log("selectedPlant", selectedPlant)
-  }, [selectedPlant]);
-  
-  
-
-
-
-
+    return () => clearTimeout(timer);
+  }, [myApiData]);
 
   useEffect(() => {
-    setEntry({ ...entry, user_id: loggedInUser.id });
-    console.log("entry.user_id", entry.user_id);
-  }, []);
+    const timeoutId = setTimeout(() => {
+      if (myApiData.length === 0 && speciesList.length === 0 && apiForm) {
+        setNoResultButton(true);
+        setShowSpinner(false);
+      }
+    }, 3000);
+
+    // Clear the timeout if the component unmounts or the dependency changes
+    return () => clearTimeout(timeoutId);
+  }, [myApiData, speciesList]);
 
   if (!loggedInUser) {
     return <Unauthorized />;
@@ -102,16 +113,29 @@ const NewPlant = () => {
     e.target.value = "";
   };
 
+  useEffect(() => {
+    console.log("showSpinner", showSpinner);
+  }, [showSpinner]);
+
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
   };
-  /// To Do
-  //Add TabsInput to NewEntry area
-  // change Entry to formdata
 
-  ////
 
-  const resetEntryAndPlant = () => {
+  const resetPage = () => {
+    setSearchName("");
+    setSearchBar(true);
+    setShowSpinner(false);
+    setResultForm(false);
+    setApiForm(false);
+    setEntryForm(false);
+    setMyApiData([]);
+    setNoResultButton(false);
+    setTriggerTimeout(false);
+    setSpeciesList([]);
+    setSelectedPlant("");
+    setActiveCard(null);
+
     const defaultValues = {
       entry: {
         nickname: "",
@@ -149,7 +173,6 @@ const NewPlant = () => {
   const handleSelectedPlant = async (selectedPlant, index) => {
     console.log("SelectedPlant from HSP", selectedPlant);
     setActiveCard(index);
-
 
     if (apiForm === false) {
       // If apiform is false
@@ -197,9 +220,8 @@ const NewPlant = () => {
 
         console.log("Plant from in axios thing", plant);
 
-    pageEndRef.current && pageEndRef.current.scrollIntoView({ behavior: 'smooth' });
-
-
+        pageEndRef.current &&
+          pageEndRef.current.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
         console.error("API Error:", error);
       }
@@ -221,9 +243,6 @@ const NewPlant = () => {
         console.error("Error adding plant:", error);
       });
   };
-  
-
-
 
   const addEntry = (entry) => {
     // change to formdata
@@ -267,27 +286,56 @@ const NewPlant = () => {
   const onSearchClick = async (e) => {
     e.preventDefault();
     setResultForm(true);
+    setSearchBar(false)
 
     try {
       // First Axios request
       const localResponse = await axios.get(`/search.json?q=${searchName}`);
       console.log("Local API Data:", localResponse.data);
       setMyApiData(localResponse.data);
+      setTriggerTimeout(true);
     } catch (error) {
-      console.error("API Error:", error);
+      console.log("There was an error with onSearchClick", error);
     }
   };
 
+  useEffect(() => {
+    let timeoutId;
+
+    if (triggerTimeout && myApiData.length === 0) {
+      timeoutId = setTimeout(() => {
+        speciesListRequest();
+        setTriggerTimeout(false);
+      }, 3000);
+    }
+
+    // Clear the timeout if the component unmounts or myApiData changes
+    return () => clearTimeout(timeoutId);
+  }, [myApiData, triggerTimeout]);
+
+  // maybe do something similar for the duration of the spinner
+  // for between when SpeciesListRequest is clicked and speciesList.length ==0
+  //
+
   const speciesListRequest = async () => {
-    console.log("SpeciesLisRequest was clicked");
+    console.log("SpeciesListRequest was clicked");
     setResultForm(false);
     setApiForm(true);
+    /// just added
+    setShowSpinner(true);
+    ///////
 
     try {
       const url = `https://perenual.com/api/species-list?key=${API_KEY}&q=${searchName}`;
       const externalResponse = await axios.get(url);
       console.log("External API Data:", externalResponse.data.data);
       await setSpeciesList(externalResponse.data.data);
+
+      // just added
+      speciesList.length > 0
+        ? setShowSpinner(false)
+        : setTimeout(() => setShowSpinner(true), 3000);
+      //// just added
 
       // Eventually I want only the elements of speciesList that are not in myApiData
     } catch (error) {
@@ -320,95 +368,166 @@ const NewPlant = () => {
   };
 
   return (
-  
     <Container>
       <section>
-        <Typography variant="h4" style={{ marginTop: "3em" }}>
-          Search for a Plant
-        </Typography>
-        <br />
-        <form>
-          <label htmlFor="commonName">Enter your plant's common name:</label>
-          <input
-            type="text"
-            id="commonName"
-            name="commonName"
-            value={searchName}
-            onChange={onSearchNameChanged}
-          />
-          <button type="button" onClick={onSearchClick}>
-            Search!
-          </button>
-        </form>
-        <br />
-        <div className="result">
-          <>
-            {myApiData.map((db_plant, index) => (
-              <SmallPlantCard
-                id={db_plant.id}
-                key={db_plant.id}
-                plant={db_plant}
-                commonName={db_plant.common_name}
-                sciName={db_plant.scientific_name}
-                image_url={db_plant.image_url}
-                handleSelectedPlant={handleSelectedPlant}
-                activeCard={activeCard}
-                selectedPlant={selectedPlant}
-                index={index}
-              />
-            ))}
-            {apiForm === false && resultForm === true && (
-              <div className="none_btn_box">
-                <CommonButton
-                  size="small"
-                  variant="contained"
-                  onClick={() => speciesListRequest()}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {" "}
+          {searchBar ? (
+            <>
+              <Typography variant="h4" style={{ marginTop: "3em" }}>
+                Search for a Plant
+              </Typography>
+              <br />
+              <form>
+                <label htmlFor="commonName" className="editLabel">
+                  Enter your plant's common name:
+                </label>
+                <input
+                  type="text"
+                  id="commonName"
+                  className="inputText"
+                  name="commonName"
+                  value={searchName}
+                  onChange={onSearchNameChanged}
+                />
+                <button
+                  type="button"
+                  className="search-btn"
+                  onClick={onSearchClick}
                 >
-                  None of these are my plant my db
-                </CommonButton>
+                  Search!
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Typography variant="h4" style={{ marginTop: "3em" }}>
+                You Searched for:
+              </Typography>
+              <br />
+              <div className='search-txt'>
+              <form>
+                <Typography variant="h4" style={{marginRight:'.5em'}}>{searchName}</Typography>
+                <button
+                  type="button"
+                  className="search-btn"
+                  onClick={resetPage}
+                >
+                  Try again ?
+                </button>
+              </form>
               </div>
-            )}
+            </>
+          )}
+          <br />
+          {showSpinner === true && resultForm && myApiData.length === 0 ? (
+            <Spinner />
+          ) : null}
+          {showSpinner === true &&
+          !resultForm &&
+          apiForm &&
+          speciesList.length === 0 ? (
+            <Spinner />
+          ) : null}
+          {/* Maybe have a timeout on the spinner, maybe has a useEffect if show
+        spinner is true after 3 seconds set it to false*/}
+          {noResultButton ? (
+            <div className="editBox">
+              <Typography variant="h4" style={{ marginBottom: ".75em" }}>
+                {" "}
+                No Results, please try again or
+              </Typography>
+              <Link to={`/plants/none`}>
+                <CommonButton size="large">Request a new Plant</CommonButton>
+              </Link>
+              <Typography variant="h4" style={{ marginTop: ".75em" }}>
+                {" "}
+                In the database
+              </Typography>
+            </div>
+          ) : null}
+        </div>
+        <div className="result">
+          {/* Testing if apiForm === false will make the myApiData dissapear when it's true
+           */}
+          <>
+            {apiForm === false
+              ? myApiData.map((db_plant, index) => (
+                  <SmallPlantCard
+                    id={db_plant.id}
+                    key={db_plant.id}
+                    plant={db_plant}
+                    commonName={db_plant.common_name}
+                    sciName={db_plant.scientific_name}
+                    image_url={db_plant.image_url}
+                    handleSelectedPlant={handleSelectedPlant}
+                    activeCard={activeCard}
+                    selectedPlant={selectedPlant}
+                    index={index}
+                  />
+                ))
+              : null}
+            {apiForm === false &&
+              resultForm === true &&
+              myApiData.length > 0 && (
+                <div className="none_btn_box">
+                  {/* After my Db data */}
+                  <CommonButton
+                    size="small"
+                    variant="contained"
+                    onClick={() => speciesListRequest()}
+                  >
+                    None of these are my plant
+                  </CommonButton>
+                </div>
+              )}
           </>
-
           <br />
           <div className="small-plant-card-container" />
-          {apiForm &&
-            speciesList.length > 0 &&
-            speciesList.map((p_plant, index) => (
-              <SmallPlantCard
-              key={p_plant.id}
-                className="small-plant-card"
-                plant={p_plant}
-                commonName={p_plant.common_name}
-                sciName={p_plant.scientific_name[0]}
-                handleSelectedPlant={handleSelectedPlant}
-                selectedPlant={selectedPlant}
-                activeCard={activeCard}
-                index={index}
-                image_url={
-                  p_plant.default_image
-                    ? p_plant.default_image["thumbnail"] ===
-                        "https://perenual.com/storage/image/upgrade_access.jpg" ||
-                      p_plant.default_image["small_url"] ===
-                        "https://perenual.com/storage/image/upgrade_access.jpg"
-                      ? "https://louisville.edu/history/images/noimage.jpg/image"
-                      : p_plant.default_image["thumbnail"]
-                      ? p_plant.default_image["thumbnail"]
-                      : p_plant.default_image["small_url"]
-                      ? p_plant.default_image["small_url"]
-                      : "https://louisville.edu/history/images/noimage.jpg/image"
-                    : null
-                }
-              />
-            ))}
-          {apiForm && !resultForm && (
-            <div className="noneBtnBox">
-              <Link to={`/plants/none`}>
-                <CommonButton size="large">
-                  None of these are my plant after apidata
-                </CommonButton>
-              </Link>
-            </div>
+          {apiForm && speciesList && speciesList.length > 0 && (
+            <>
+              {speciesList.map((p_plant, index) => (
+                <SmallPlantCard
+                  key={p_plant.id}
+                  className="small-plant-card"
+                  plant={p_plant}
+                  commonName={p_plant.common_name}
+                  sciName={p_plant.scientific_name[0]}
+                  handleSelectedPlant={handleSelectedPlant}
+                  selectedPlant={selectedPlant}
+                  activeCard={activeCard}
+                  index={index}
+                  image_url={
+                    p_plant.default_image
+                      ? p_plant.default_image["thumbnail"] ===
+                          "https://perenual.com/storage/image/upgrade_access.jpg" ||
+                        p_plant.default_image["small_url"] ===
+                          "https://perenual.com/storage/image/upgrade_access.jpg"
+                        ? "https://louisville.edu/history/images/noimage.jpg/image"
+                        : p_plant.default_image["thumbnail"]
+                        ? p_plant.default_image["thumbnail"]
+                        : p_plant.default_image["small_url"]
+                        ? p_plant.default_image["small_url"]
+                        : "https://louisville.edu/history/images/noimage.jpg/image"
+                      : null
+                  }
+                />
+              ))}
+              <div className="noneBtnBox">
+                <Link to={`/plants/none`}>
+                  {/* After api Data */}
+                  <CommonButton size="large">
+                    None of these are my plant
+                  </CommonButton>
+                </Link>
+              </div>
+            </>
           )}
         </div>
       </section>
@@ -479,8 +598,6 @@ const NewPlant = () => {
         <br />
       </div>
     </Container>
- 
-
   );
 };
 

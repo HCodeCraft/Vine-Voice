@@ -179,6 +179,7 @@ font-size: 1em;
 
 .inputText{
   font-size:1.25em;
+  padding:3px;
 }
 
 .editInputs {
@@ -294,6 +295,7 @@ z-index: 1;
   font-size: 24px;
   padding: 10px;
   background-color:#81C784;
+  border-radius: 15%;
 }
 
 .tiny_pic {
@@ -317,3 +319,25 @@ justify-content: space-around;
 .all_btn{
   margin-top: 5%;
 }
+
+.loader{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+
+.search-btn{
+  font-size: 20px;
+  padding: 5px;
+  background-color:#81C784;
+  border-radius: 15%;
+}
+
+.search-txt form{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 import React from "react";
 
@@ -8,15 +8,15 @@ const Spinner = () => {
 
 
   return (
-    <>
-      <ClipLoader
+    <div className="loader">
+      <PropagateLoader
         color={"#4CAF50"}
         loading={loading}
-        size={150}
+        size={50}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-    </>
+    </div>
   );
 };
 
