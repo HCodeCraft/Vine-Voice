@@ -13,6 +13,7 @@ import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
 import { updateEntryInApi } from "./entriesSlice";
 import TagsInput from "../../TagsInput";
+import default_plant from "../../pictures/nopic.png";
 
 const EditEntry = () => {
   const params = useParams();
@@ -31,8 +32,6 @@ const EditEntry = () => {
 
   const [tags, setTags] = useState();
 
-  
-
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); // Prevent the default behavior of adding a line break in the input field.
@@ -44,7 +43,8 @@ const EditEntry = () => {
       }
     }
   };
-  
+
+  console.log("entry", entry);
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -61,9 +61,7 @@ Set up the image upload
 
   /****/
 
-
   const apiEntry = useSelector((state) => state.entry.individualEntry);
-
 
   const allPlants = useSelector((state) => state.plant.allPlants);
 
@@ -91,12 +89,12 @@ Set up the image upload
     e.preventDefault();
     const entryId = entry.id;
     const updatedEntry = new FormData();
-  
+
     for (const key in entry) {
       if (entry[key] !== null) {
-        if (key === 'problems' && Array.isArray(entry[key])) {
+        if (key === "problems" && Array.isArray(entry[key])) {
           entry[key].forEach((problem) => {
-            updatedEntry.append('entry[problems][]', problem);
+            updatedEntry.append("entry[problems][]", problem);
           });
         } else {
           updatedEntry.append(`entry[${key}]`, entry[key]);
@@ -122,13 +120,13 @@ Set up the image upload
 
   return (
     <>
-      <br />
-      <br />
-      <Box sx={boxStyle}>
-        <Typography variant="h5" style={{ textAlign: "center" }}>
+      <Box sx={boxStyle} style={{ marginBottom: "10px", marginTop: "4em" }}>
+        <Typography
+          variant="h5"
+          style={{ textAlign: "center", marginBottom: "20px" }}
+        >
           Edit Your Entry for:
         </Typography>
-        <br />
 
         <form
           noValidate
@@ -145,23 +143,28 @@ Set up the image upload
             value={entry.nickname}
             onChange={handleEntryChange}
           />
-          <br />
-          <br />
-          <Typography variant="h5">the {plant.common_name}</Typography>
-          <Typography variant="h6">from {entry.create_date}</Typography>
-          <br />
+
+          <Typography variant="h5" style={{ marginTop: "1em" }}>
+            the {plant.common_name}
+          </Typography>
+          <Typography variant="h6" style={{ marginBottom: "1em" }}>
+            from {entry.create_date}
+          </Typography>
+
           <img
             className="entry_pic"
             src={
               entry.picture instanceof File
                 ? URL.createObjectURL(entry.picture)
-                : entry.picture
+                : entry.picture || default_plant
             }
             alt="Entry"
           />
-          <br />
-          <Typography variant="h6">Change Picture:</Typography>
+          <Typography variant="h6" style={{ marginTop: ".75em" }}>
+            Change Picture:
+          </Typography>
           <input
+            className="file-input"
             type="file"
             name="picture"
             id="picture"
@@ -174,8 +177,6 @@ Set up the image upload
               });
             }}
           />
-          <br />
-          <br />
           <TextField
             label="Location"
             name="location"
@@ -185,39 +186,30 @@ Set up the image upload
             value={entry.location}
             onChange={handleEntryChange}
           />
-          <br />
-          <br />
           <TextField
             label="Notes"
             name="notes"
             variant="outlined"
             color="secondary"
-            className="classes-field"
+            style={{ marginTop: "2em", marginBottom: "2em" }}
             multiline
             rows={10}
             columns={12}
             value={entry.notes}
             onChange={handleEntryChange}
           />
-          <br />
-          <br />
 
-          <br />
-          <br />
           <div className="health_box">
             <Typography variant="h6">Health Rating</Typography>
             <HealthRating rating={entry.health} changeRating={changeRating} />
           </div>
-          <br />
           <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
             tags={tags}
             handleKeyDown={handleKeyDown}
             removeTag={removeTag}
           />
-          <br />
-          <br />
-          <FormGroup>
+          <FormGroup style={{ marginTop: "1em", marginBottom: "1em" }}>
             <FormControlLabel
               required
               control={
@@ -230,7 +222,7 @@ Set up the image upload
               label="Open to advice"
             />
           </FormGroup>
-          <br />
+
           <CommonButton onClick={handleSubmit}>Submit</CommonButton>
         </form>
       </Box>

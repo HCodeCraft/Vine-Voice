@@ -121,7 +121,6 @@ const NewPlant = () => {
     setTags(tags.filter((el, i) => i !== index));
   };
 
-
   const resetPage = () => {
     setSearchName("");
     setSearchBar(true);
@@ -286,7 +285,7 @@ const NewPlant = () => {
   const onSearchClick = async (e) => {
     e.preventDefault();
     setResultForm(true);
-    setSearchBar(false)
+    setSearchBar(false);
 
     try {
       // First Axios request
@@ -411,17 +410,19 @@ const NewPlant = () => {
                 You Searched for:
               </Typography>
               <br />
-              <div className='search-txt'>
-              <form>
-                <Typography variant="h4" style={{marginRight:'.5em'}}>{searchName}</Typography>
-                <button
-                  type="button"
-                  className="search-btn"
-                  onClick={resetPage}
-                >
-                  Try again ?
-                </button>
-              </form>
+              <div className="search-txt">
+                <form>
+                  <Typography variant="h4" style={{ marginRight: ".5em" }}>
+                    {searchName}
+                  </Typography>
+                  <button
+                    type="button"
+                    className="search-btn"
+                    onClick={resetPage}
+                  >
+                    Try again ?
+                  </button>
+                </form>
               </div>
             </>
           )}
@@ -439,23 +440,26 @@ const NewPlant = () => {
         spinner is true after 3 seconds set it to false*/}
           {noResultButton ? (
             <div className="editBox">
-              <Typography variant="h4" style={{ marginBottom: ".75em" }}>
+              <Typography
+                variant="h4"
+                style={{ marginBottom: ".75em", marginTop: ".75em" }}
+              >
                 {" "}
                 No Results, please try again or
               </Typography>
               <Link to={`/plants/none`}>
-                <CommonButton size="large">Request a new Plant</CommonButton>
+                <CommonButton size="large" style={{ fontSize: "1.5em" }}>
+                  Request a new Plant
+                </CommonButton>
               </Link>
               <Typography variant="h4" style={{ marginTop: ".75em" }}>
                 {" "}
-                In the database
+                in the database
               </Typography>
             </div>
           ) : null}
         </div>
         <div className="result">
-          {/* Testing if apiForm === false will make the myApiData dissapear when it's true
-           */}
           <>
             {apiForm === false
               ? myApiData.map((db_plant, index) => (

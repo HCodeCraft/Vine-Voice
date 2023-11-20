@@ -55,8 +55,7 @@ const CommentCard = ({ comment, setComment }) => {
 
   return oneComment ? (
     <>
-      <br />
-      <div className="comment_box">
+      <div className="comment_box" style={{ marginBottom: '10px' }}>
         <div className='flex-comment-box'>
             <div className="comment-avatar-box">
                 <img className="avatar" src={comment.avatar_thumbnail ? comment.avatar_thumbnail : default_avatar }/>
@@ -100,18 +99,17 @@ const CommentCard = ({ comment, setComment }) => {
           )}
         </Typography>
         {user.username === comment.username & editForm == false ? (
-          <>
-            <br />
+          <div className='marginTop'>
+            
             <CommonButton onClick={() => handleFormClick(comment)}>
               Edit
             </CommonButton>{" "}
             <CommonButton onClick={() => handleDeleteComment(comment.id)}>
               Delete
             </CommonButton>
-          </>
+          </div>
         ) : null}
         </div>
-        <br />
         </div>
         </div>
       </div>

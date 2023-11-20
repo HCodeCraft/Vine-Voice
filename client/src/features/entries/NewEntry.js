@@ -41,8 +41,6 @@ const NewEntry = () => {
 
   // maybe remove user_id, not sure yet, testing
 
-
-
   /////
 
   const [tags, setTags] = useState([]);
@@ -71,15 +69,14 @@ const NewEntry = () => {
   const allPlants = useSelector((state) => state.plant.allPlants);
 
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
- 
+
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   useEffect(() => {
-    console.log("loggedInUser.id", loggedInUser.id)
+    console.log("loggedInUser.id", loggedInUser.id);
     setEntry({ ...entry, user_id: loggedInUser.id });
     console.log("entry.user_id", entry.user_id);
   }, [loggedInUser]);
-
 
   const handleEntryChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,19 +107,17 @@ const NewEntry = () => {
       }
     }
     dispatch(addEntryToApi(newEntry))
-    .then(() => dispatch(addEntryToPlant()))
-    .then(() => {
-      const specificPlant = plant
-      const isPlantInArray = loggedInUser.plants.some(
-        (plant) => plant.id === specificPlant.id
-      );
-  
-      if (!isPlantInArray) {
+      .then(() => dispatch(addEntryToPlant()))
+      .then(() => {
+        const specificPlant = plant;
+        const isPlantInArray = loggedInUser.plants.some(
+          (plant) => plant.id === specificPlant.id
+        );
 
-        dispatch(addPlantToUser(specificPlant));
-      }
-    });
-  
+        if (!isPlantInArray) {
+          dispatch(addPlantToUser(specificPlant));
+        }
+      });
 
     navigate(`/plants/${entry.plant_id}`);
   };
@@ -130,23 +125,21 @@ const NewEntry = () => {
   const boxStyle = {
     backgroundColor: "#f5f5f5",
     padding: "20px",
+    marginTop: "4em",
   };
 
   return (
     <>
-      <br />
-      <br />
-      <br />
-      <br />
       <Box sx={boxStyle}>
         <Typography variant="h5" style={{ textAlign: "center" }}>
           Adding an Entry for your
         </Typography>
-        <Typography variant="h5" style={{ textAlign: "center" }}>
+        <Typography
+          variant="h5"
+          style={{ textAlign: "center", marginBottom: "1em" }}
+        >
           {plant.common_name}
         </Typography>
-        <br />
-
         <form
           noValidate
           autoComplete="off"
@@ -158,31 +151,30 @@ const NewEntry = () => {
             name="nickname"
             variant="outlined"
             color="secondary"
-            className="classes-field"
+            style={{ marginBottom: "1em" }}
             onChange={handleEntryChange}
           />
-          <br />
+
           <TextField
             label="Location"
             name="location"
             variant="outlined"
             color="secondary"
-            className="classes-field"
+            style={{ marginBottom: "1em" }}
             onChange={handleEntryChange}
           />
-          <br />
+
           <TextField
             label="Notes"
             name="notes"
             variant="outlined"
             color="secondary"
-            className="classes-field"
+            style={{ marginBottom: "1em" }}
             multiline
             rows={10}
             columns={12}
             onChange={handleEntryChange}
           />
-          <br />
           <label htmlFor="picture">
             {" "}
             <Typography variant="h6">Add a Picture</Typography>
@@ -191,6 +183,7 @@ const NewEntry = () => {
             type="file"
             name="picture"
             id="picture"
+            className="margB2"
             accept=".jpg, .jpeg, .png, .webp, .wdp"
             onChange={(e) => {
               const selectedFile = e.target.files[0];
@@ -200,13 +193,10 @@ const NewEntry = () => {
               });
             }}
           />
-          <br />
-          <br />
           <div className="health_box">
             <Typography variant="h6">Health Rating</Typography>
             <HealthRating rating={entry.health} changeRating={changeRating} />
           </div>
-
 
           <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
@@ -215,9 +205,8 @@ const NewEntry = () => {
             // handleKeyDown={handleKeyDown}
             removeTag={removeTag}
           />
-          <br />
-          <br />
-          <FormGroup>
+
+          <FormGroup style={{ marginTop: "1em", marginBottom: "1em" }}>
             <FormControlLabel
               required
               control={<Checkbox />}
@@ -226,7 +215,6 @@ const NewEntry = () => {
               onChange={handleEntryChange}
             />
           </FormGroup>
-          <br />
           <CommonButton onClick={handleSubmit}>Submit</CommonButton>
         </form>
       </Box>

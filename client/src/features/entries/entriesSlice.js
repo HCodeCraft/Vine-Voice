@@ -90,8 +90,6 @@ export const addEntryToApi = createAsyncThunk(
   }
 );
 
-
-
 export const deleteEntryFromApi = createAsyncThunk(
   "entries/deleteEntryFromApi",
   async (entryId) => {

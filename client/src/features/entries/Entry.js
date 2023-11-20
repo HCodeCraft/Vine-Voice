@@ -40,7 +40,7 @@ const Entry = () => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);
-      console.log('result.payload from fetchEntry', result.payload)
+      console.log("result.payload from fetchEntry", result.payload);
     };
 
     fetchEntry();
@@ -50,12 +50,11 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.user.username
   );
 
-
-
-
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
   );
+
+  console.log("indEntryComments", indEntryComments);
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
@@ -90,9 +89,8 @@ const Entry = () => {
   // If user's entry s/he can delete everyone's comment and also edit the entry
 
   const handleDeleteEntry = async (entryId) => {
-    console.log("entryId from handleDeleteEntry", entryId)
+    console.log("entryId from handleDeleteEntry", entryId);
     try {
-    
       await dispatch(deleteEntryInPlant(entryId));
       await dispatch(deleteEntryFromApi(entryId));
 
@@ -139,7 +137,7 @@ const Entry = () => {
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
-  console.log("entry", entry)
+  console.log("entry", entry);
   return entry ? (
     <section className="section" align="center">
       <Typography variant="h4" align="center" style={{ marginTop: "3em" }}>
@@ -150,35 +148,33 @@ const Entry = () => {
       <Typography variant="h5">
         {currentUser ? "My" : `${entry.user?.username}'s`} {plant.common_name}
       </Typography>
-      <Typography align="center">from {entry.create_date}</Typography>
-      <br />
+      <Typography align="center" style={{ marginBottom: "1em" }}>
+        from {entry.create_date}
+      </Typography>
       <img
         className="entry_pic"
         src={entry.picture ? entry.picture : default_plant}
         alt="Entry"
       />
-      <br />
-      <Typography>Location: {entry.location}</Typography>
-      <br />
+
+      <Typography style={{ marginBottom: "1em" }}>
+        Location: {entry.location}
+      </Typography>
       <div>
         <Typography>Health:</Typography>
         <Typography variant="h4">
           <FaSquare color={colorArray[entry.health - 1]} />
         </Typography>
       </div>
-      <p>{entry.notes}</p>
-      <br />
-      <Typography>
+      <p className="margB1">{entry.notes}</p>
+      <Typography style={{ marginBottom: "3em" }}>
         Problems:{" "}
         {entry.problems && entry.problems.length > 0
           ? entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
           : "No Problems :)"}
       </Typography>
-      <br />
-      <br />
-      <br />
       {currentUser ? (
-        <>
+        <div className="margB1">
           <Link to={`edit`}>
             <CommonButton>Edit Entry</CommonButton>
           </Link>
@@ -189,56 +185,52 @@ const Entry = () => {
           >
             Delete Entry
           </CommonButton>
-          <br />
-        </>
+        </div>
       ) : null}
-      <br />
-      <br />
       <Typography
         sx={{
           border: `1px solid ${entry.open_to_advice ? "green" : "red"}`,
           padding: "4px", // Add padding for better visualization
-          display: "inline-block", // To make the border apply to the text only
+          display: "inline-block",
+          marginTop: "2em", // To make the border apply to the text only
         }}
       >
         {entry.open_to_advice ? "I'm open to advice!" : "No advice, please"}
       </Typography>
-      <br />
-      <br />
-      <Typography variant="h5">Comments:</Typography>
-      <br />
+
+      <Typography
+        variant="h5"
+        style={{ marginTop: "2em", marginBottom: "1em" }}
+      >
+        Comments:
+      </Typography>
       {commentForm === false ? (
-        <>
+        <div className="btn-margin-bottom">
           {" "}
           <CommonButton onClick={handleCommentClick}>
             Add a Comment
           </CommonButton>{" "}
-          <br />
-        </>
+        </div>
       ) : null}
       {indEntryComments && indEntryComments.length > 0 ? (
         indEntryComments.map((comment, index) => (
-          <div key={index}>
+          <div key={index} className="margB1">
             <CommentCard
               key={index}
               setComment={setComment}
               comment={comment}
               handleCommentChange={handleCommentChange}
             />
-            <br />
           </div>
         ))
       ) : (
         <>
-          <br />
-          <br />
-          <Typography>No comments yet.</Typography>
+          <Typography style={{ marginTop: "2em" }}>No comments yet.</Typography>
         </>
       )}
 
       {commentForm === true ? (
         <div ref={commentBox} className="commentBox">
-          <br />
           <textarea
             rows={10}
             cols={50}
@@ -246,19 +238,16 @@ const Entry = () => {
             value={comment.text}
             onChange={handleCommentChange}
             type="text"
-            className="cBox"
+            className="cBox margB1"
           />
-          <br />
-          <br />{" "}
-          <CommonButton onClick={handleCommentSubmit}>Submit</CommonButton>
-          <br />
+          <CommonButton
+            style={{ marginTop: "1em", marginBottom: "1em" }}
+            onClick={handleCommentSubmit}
+          >
+            Submit
+          </CommonButton>
         </div>
       ) : null}
-
-      <br />
-      <br />
-      <br />
-      <br />
     </section>
   ) : null;
 };
