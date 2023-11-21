@@ -14,49 +14,41 @@ import NewPlant from "./features/plants/NewPlant";
 import EditProfile from "./features/users/EditProfile";
 import Entry from "./features/entries/Entry";
 import NavBar from "./NavBar";
-import Home from "./features/users/Home";
 import { Grid, Container } from "@mui/material";
 import NoPlant from "./features/plants/NoPlant";
-import AddPlant from "./features/plants/AddPlant"
+import AddPlant from "./features/plants/AddPlant";
 import AllUsers from "./features/users/AllUsers";
-
 
 function App() {
   return (
     <>
       <NavBar />
-      {/* <Container maxWidth="100%" style={{ marginTop: "50px" }}> */}
-        {/* <Grid container spacing={0} style={{ marginTop: "20px" }}> */}
-          <Routes>
-            {/* public routes */}
-            <Route path="/" element={<Welcome />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/users/new" element={<CreateAccount />} />
 
-            {/* protected routes */}
+      <Routes>
+        {/* public routes */}
+        <Route path="/" element={<Welcome />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/users/new" element={<CreateAccount />} />
 
-            <Route path="/home" element={<Home />} />
-            <Route path="/plants" element={<AllPlants />} />
-            <Route path="/users/:id" element={<UserProfile />} />
-            <Route path="/plants/:id/edit" element={<EditPlant />} />
-            <Route
-              path="/plants/:plant_id/entries/:id/edit"
-              element={<EditEntry />}
-            />
-            <Route path="/plants/:id" element={<Plant />} />
-            <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
-            <Route
-              path="/plants/:plant_id/entries/new"
-              element={<NewEntry />}
-            />
-            <Route path="/users/plants" element={<UserPlants />} />
-            <Route path="/plants/new" element={<NewPlant />} />
-            <Route path="/plants/none" element={<NoPlant />} />
-            <Route path="/plants/add" element={<AddPlant />} />
-            <Route path="/users/all" element={<AllUsers/>} />
-            <Route path="/users/:id/edit" element={<EditProfile />} />
-          </Routes>
-        {/* </Grid> */}
+        {/* protected routes */}
+        <Route path="/plants" element={<AllPlants />} />
+        <Route path="/users/:id" element={<UserProfile />} />
+        <Route path="/plants/:id/edit" element={<EditPlant />} />
+        <Route
+          path="/plants/:plant_id/entries/:id/edit"
+          element={<EditEntry />}
+        />
+        <Route path="/plants/:id" element={<Plant />} />
+        <Route path="/plants/:plant_id/entries/:id" element={<Entry />} />
+        <Route path="/plants/:plant_id/entries/new" element={<NewEntry />} />
+        <Route path="/users/plants" element={<UserPlants />} />
+        <Route path="/plants/new" element={<NewPlant />} />
+        <Route path="/plants/none" element={<NoPlant />} />
+        <Route path="/plants/add" element={<AddPlant />} />
+        <Route path="/users/all" element={<AllUsers />} />
+        <Route path="/users/:id/edit" element={<EditProfile />} />
+      </Routes>
+      {/* </Grid> */}
       {/* </Container> */}
     </>
   );

@@ -66,16 +66,16 @@ const EditProfile = () => {
       );
       if (response.payload) {
         console.log("Success:", response.payload);
-        setError([])
-            navigate(`/users/${currentUser.id}`);
+        setError([]);
+        navigate(`/users/${currentUser.id}`);
       } else {
         response.error
-        ? (() => {
-            const errorData = JSON.parse(response.error.message);
-            setError(errorData.errors);
-          })()
-        : setError([]);
-      
+          ? (() => {
+              const errorData = JSON.parse(response.error.message);
+              setError(errorData.errors);
+            })()
+          : setError([]);
+
         console.log("Error from updateUser: after parse", error);
       }
     } catch (error) {
@@ -100,24 +100,20 @@ const EditProfile = () => {
     }
     updatedUser.append(`user[id]`, user.id);
 
-  updateUser({ userId: userId, updatedUser });
-
-
-
+    updateUser({ userId: userId, updatedUser });
   };
 
-  useEffect(()=> {
-    console.log("error from UE", error)
-  }, [error])
+  useEffect(() => {
+    console.log("error from UE", error);
+  }, [error]);
 
   return (
     <>
-      <br />
-      <br />
-      <Container maxWidth="md">
+      <Container maxWidth="md" style={{ marginTop: "2em" }}>
         <Box sx={boxStyle}>
-          <Typography variant="h5">Edit My User Details</Typography>
-          <br />
+          <Typography variant="h5" style={{ marginBottom: "1em" }}>
+            Edit My User Details
+          </Typography>
 
           <form
             noValidate
@@ -141,7 +137,6 @@ const EditProfile = () => {
                 }}
               />
             </Box>
-            <br />
             <TextField
               label="Username"
               name="username"
@@ -150,9 +145,8 @@ const EditProfile = () => {
               fullWidth
               value={user.username}
               onChange={handleUserChange}
+              style={{ marginBottom: "2em" }}
             />
-            <br />
-            <br />
             <TextField
               label="Name"
               name="name"
@@ -162,9 +156,8 @@ const EditProfile = () => {
               fullWidth
               value={user.name}
               onChange={handleUserChange}
+              style={{ marginBottom: "2em" }}
             />
-            <br />
-            <br />
             <Box mb={2}>
               <TextField
                 label="Status"
@@ -205,24 +198,25 @@ const EditProfile = () => {
                 checked={user.recieve_dev_emails}
                 onChange={handleUserChange}
               />
-              <label htmlFor="receive_dev_emails">Receive Dev Emails</label>
-              <br />
+              <label htmlFor="receive_dev_emails margB1">
+                Receive Dev Emails
+              </label>
             </Box>
             {error.length > 0 && (
-  <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>
-    <p>Validation errors:</p>
-    <ul style={{ listStyle: 'none', padding: '0' }}>
-      {error.map((errorMessage, index) => (
-        <li key={index}>{errorMessage}</li>
-      ))}
-    </ul>
-  </div>
-)}
+              <div
+                style={{ color: "red", fontWeight: "bold", marginTop: "10px" }}
+              >
+                <p>Validation errors:</p>
+                <ul style={{ listStyle: "none", padding: "0" }}>
+                  {error.map((errorMessage, index) => (
+                    <li key={index}>{errorMessage}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <CommonButton onClick={handleSubmit}>Submit</CommonButton>
           </form>
         </Box>
-
-
       </Container>
     </>
   );

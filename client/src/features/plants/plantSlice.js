@@ -94,7 +94,6 @@ export const addEntryToPlant = createAsyncThunk(
   }
 );
 
-// want to make this availible only to admin
 export const deletePlantFromApi = createAsyncThunk(
   "plants/deletePlantFromApi",
   async (plantId, thunkAPI) => {

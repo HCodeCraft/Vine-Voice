@@ -45,18 +45,13 @@ const CreateAccount = () => {
       data.email = data.email.toLowerCase();
       const newUser = new FormData();
 
-      if (data.avatar && data.avatar[0]) {
-        newUser.append("user[avatar]", data.avatar[0]);
-      }
+      Object.keys(data).forEach((key) => {
+        const value = data[key];
 
-      newUser.append("user[username]", data.username);
-      newUser.append("user[name]", data.name);
-      newUser.append("user[password]", data.password);
-      newUser.append("user[privacy]", data.privacy);
-      newUser.append("user[email]", data.email);
-      newUser.append("user[recieve_dev_emails]", data.recieve_dev_emails);
-      newUser.append("user[password_confirmation]", data.password_confirmation);
-
+        if (value !== null && value !== undefined) {
+          newUser.append(`user[${key}]`, value);
+        }
+      });
 
       const action = await dispatch(registerUserInApi(newUser));
 
@@ -88,21 +83,19 @@ const CreateAccount = () => {
     height: "100vh",
     width: 400,
     margin: "20px auto",
+    marginTop: "2em",
   };
   const btnstyle = { margin: "8px 0" };
 
   return (
     <>
       <Grid>
-        <br />
-        <br />
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
             <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
             <h2>Sign Up</h2>
           </Grid>
-          <p aria-live="assertive"></p>
-          <br />
+          <p aria-live="assertive marginB1"></p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label="Username"
@@ -132,13 +125,12 @@ const CreateAccount = () => {
             <TextField
               label="First Name (optional)"
               placeholder="Enter First Name"
+              className="margB2"
               fullWidth
               type="text"
               id="name"
               {...register("name")}
             />
-            <br />
-            <br />
             <TextField
               label="Password"
               placeholder="Enter Password"
@@ -197,9 +189,8 @@ const CreateAccount = () => {
                 </>
               )}
             />
-            <br />
-            <br />
             <Controller
+              className="margT2 margB2"
               name="devEmails"
               control={control}
               defaultValue={false} // Initial value of the checkbox
@@ -210,10 +201,9 @@ const CreateAccount = () => {
                 </label>
               )}
             />{" "}
-            <br />
-            <br />
             <Controller
               name="privacy"
+              className="margB2"
               control={control}
               defaultValue={false} // Initial value of the checkbox
               render={({ field }) => (
@@ -223,9 +213,7 @@ const CreateAccount = () => {
                 </label>
               )}
             />
-            <br />
-            <br />
-            <div>
+            <div className="margB1">
               <Button variant="contained" onClick={handleOpen}>
                 Terms of Service
               </Button>
@@ -281,7 +269,6 @@ const CreateAccount = () => {
                 </DialogActions>
               </Dialog>
             </div>
-            <br />
             <Controller
               name="agreeToTerms"
               control={control}
@@ -302,8 +289,7 @@ const CreateAccount = () => {
                 </>
               )}
             />
-            <p className="error_msg">{errors.agreeToTerms?.message}</p>
-            <br />
+            <p className="error_msg margB1">{errors.agreeToTerms?.message}</p>
             <Button
               type="submit"
               color="primary"
@@ -323,23 +309,3 @@ const CreateAccount = () => {
 };
 
 export default CreateAccount;
-
-{
-  /* <Controller
-              name="agreeToTerms"
-              control={control}
-              defaultValue={false}
-              rules={{
-                required: {
-                  value: true,
-                  message: "You must agree to the terms and conditions",
-                },
-              }}
-              render={({ field }) => (
-                <label>
-                  <input type="checkbox" {...field} />I agree to the terms and
-                  conditions
-                </label>
-              )} 
-              /> */
-}

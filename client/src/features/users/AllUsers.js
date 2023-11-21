@@ -25,11 +25,9 @@ import { Link } from "react-router-dom";
 import CommonButton from "../../common/CommonButton";
 import { filterOutUserEntries } from "../plants/plantSlice";
 
-
 const AllUsers = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.loggedInUser);
-  const allUsers = useSelector((state) => state.user.allUsers);
 
   const [users, setUsers] = useState([]);
   const [comments, setComments] = useState([]);
@@ -69,12 +67,12 @@ const AllUsers = () => {
   const handleDeleteUser = () => {
     if (userToDelete) {
       dispatch(deleteUserFromApi(userToDelete));
-      dispatch(filterOutUserEntries(userToDelete.id))
+      dispatch(filterOutUserEntries(userToDelete.id));
 
       setOpen(false);
       setUserToDelete(null);
-      const existingUsers = users.filter((user) => user !== userToDelete)
-      setUsers(existingUsers)
+      const existingUsers = users.filter((user) => user !== userToDelete);
+      setUsers(existingUsers);
     }
   };
 
@@ -121,7 +119,7 @@ const AllUsers = () => {
                 <TableCell align="center">
                   <div
                     style={{
-                        padding:'3px',
+                      padding: "3px",
                       border: `2px solid ${
                         row.recieve_dev_emails ? "green" : "red"
                       }`,

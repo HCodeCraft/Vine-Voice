@@ -244,7 +244,6 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
-    // change to formdata
     const newEntry = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {

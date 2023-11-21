@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import config from "../../config";
 
-
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ username, password }) => {
@@ -113,30 +112,6 @@ export const registerUserInApi = createAsyncThunk(
   }
 );
 
-
-
-// export const registerUserInApi = createAsyncThunk(
-//   "user/registerUserInApi",
-//   async (newUser) => {
-//     console.log("newUser from registerUser", newUser)
-//     try {
-//       const response = await fetch(`/users`, {
-//         method: "POST",
-//         body: newUser
-//       });
-
-//       if (!response.ok) {
-//         const errorData = await response.json(); // Retrieve the error data
-//         throw new Error(errorData.message);
-//       }
-
-//       return data;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
-
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
   async ({ userId, updatedUser }) => {
@@ -156,7 +131,6 @@ export const updateUserInApi = createAsyncThunk(
   }
 );
 
-
 export const deleteUserFromApi = createAsyncThunk(
   "users/deleteUserFromApi",
   async (user) => {
@@ -165,9 +139,8 @@ export const deleteUserFromApi = createAsyncThunk(
         method: "DELETE",
       });
       if (response.ok) {
-      
         console.log("User deleted successfully.");
-        return user.id
+        return user.id;
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
       }
@@ -181,7 +154,7 @@ export const addPlantToUser = createAsyncThunk(
   "user/addPlantToUser",
   (_, { getState }) => {
     const entry = getState().entry.individualEntry;
-    console.log("entry from addPlantToUser", entry)
+    console.log("entry from addPlantToUser", entry);
     const allPlants = getState().plant.allPlants;
 
     const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
@@ -193,8 +166,6 @@ export const addPlantToUser = createAsyncThunk(
     return newPlant;
   }
 );
-
-
 
 const userSlice = createSlice({
   name: "user",
@@ -242,14 +213,14 @@ const userSlice = createSlice({
     },
     deleteUserPlant: (state, action) => {
       console.log("Deleting plant with ID:", action.payload.id);
-   
+
       const deletedPlantId = action.payload.id;
-   
+
       state.loggedInUser.plants = state.loggedInUser.plants.filter(
-         (plant) => plant.id !== deletedPlantId
+        (plant) => plant.id !== deletedPlantId
       );
-   },
-   
+    },
+
     // I probably need to change it for all users, but I don't have all users loaded yet,
     // but it would be changed for individual plant and all plants
     // it loads the individual plant every time someone opens the plant page, but they could still
@@ -327,7 +298,6 @@ const userSlice = createSlice({
       .addCase(updateUserInApi.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-    
       })
       .addCase(fetchUserData.pending, (state) => {
         state.loading = true;
@@ -352,7 +322,7 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addPlantToUser.fulfilled, (state, action) => {
-        console.log("addPlantToUser was successful!", action.payload)
+        console.log("addPlantToUser was successful!", action.payload);
         state.loggedInUser.plants.push(action.payload);
       })
       .addCase(addPlantToUser.rejected, (state, action) => {
@@ -360,28 +330,28 @@ const userSlice = createSlice({
       })
       .addCase(deleteUserFromApi.fulfilled, (state, action) => {
         // delete from allPlants
-        console.log("action.payload from addcase", action.payload)
+        console.log("action.payload from addcase", action.payload);
         const deletedUserId = action.payload;
-      
+
         // if the user who deleted it was logged in, set loggedInUser to null
-    
-      
+
         // CANNOT READ PROPERTIES OF NULL (id) bc there is no user by then?
         // filter out the deleted user from allUsers
 
-        state.allUsers = state.allUsers.filter((user) => user.id !== deletedUserId);
+        state.allUsers = state.allUsers.filter(
+          (user) => user.id !== deletedUserId
+        );
 
         if (state.loggedInUser.id === deletedUserId) {
           state.loggedInUser = null;
-          state.loggedIn = null
+          state.loggedIn = null;
         }
 
         // not working
       })
       .addCase(deleteUserFromApi.rejected, (state, action) => {
-        console.log("There was a problem with deleteUserFromApi")
-
-      })
+        console.log("There was a problem with deleteUserFromApi");
+      });
   },
 });
 

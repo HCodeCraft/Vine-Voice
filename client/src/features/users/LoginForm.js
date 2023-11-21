@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Grid,
   Paper,
@@ -18,7 +18,6 @@ const LoginForm = () => {
   };
   const btnstyle = { margin: "8px 0" };
 
-
   return (
     <Grid>
       <Paper elevation={10} style={paperStyle}>
@@ -34,8 +33,8 @@ const LoginForm = () => {
           value={username}
           onChange={(e) => handleChange(e)}
           name="username"
+          style={{ marginBottom: "1em" }}
         />
-        <br />
         <TextField
           label="Password"
           placeholder="Enter Password"
@@ -51,7 +50,8 @@ const LoginForm = () => {
           color="primary"
           fullWidth
           variant="contained"
-          style={btnstyle} onSubmit={handleSubmit}
+          style={btnstyle}
+          onSubmit={handleSubmit}
         >
           Sign in
         </Button>

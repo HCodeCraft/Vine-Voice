@@ -60,13 +60,11 @@ export const addEntryToApi = createAsyncThunk(
       let requestBody;
 
       if (newEntry instanceof FormData) {
-        // Set the correct headers for FormData
         requestBody = {
           method: "POST",
           body: newEntry,
         };
       } else {
-        // Set headers for JSON data
         requestBody = {
           method: "POST",
           headers: {

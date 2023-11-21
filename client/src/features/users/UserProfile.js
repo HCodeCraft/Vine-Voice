@@ -123,30 +123,35 @@ const UserProfile = () => {
   return user.username ? (
     <Container>
       <Box display="flex" flexDirection="column" alignItems="center">
-        <Typography variant="h4" style={{ marginTop: "2.5em" }}>
+        <Typography
+          variant="h4"
+          style={{ marginTop: "2.5em", marginBottom: "1em" }}
+        >
           {currentUser ? "My" : `${user.username}'s`} Profile
         </Typography>
-        <br />
         <div>
-          <br />
-          <Typography variant="h5">
+          <Typography
+            variant="h5"
+            style={{ marginTop: "1em", marginBottom: "1em" }}
+          >
             {currentUser ? `I have` : "They have"}{" "}
             {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
             {user.plants?.length === 1 ? `plant` : `plants`} logged!
           </Typography>
-          <br />
           {currentUser === true ? (
             statusForm === false ? (
               <>
-                <Typography variant="subtitle1">My status:</Typography>
-                <br />
-                <div className="statusBubble" style={{ textAlign: "center" }}>
+                <Typography variant="subtitle1" style={{ marginBottom: "1em" }}>
+                  My status:
+                </Typography>
+                <div
+                  className="statusBubble"
+                  style={{ textAlign: "center", marginBottom: "2em" }}
+                >
                   <div className="status-txt">
                     <Typography variant="h7">{user.status}</Typography>
                   </div>
                 </div>
-                <br />
-                <br />
                 <CommonButton onClick={() => handleStatusFormClick()}>
                   Edit
                 </CommonButton>
@@ -164,9 +169,8 @@ const UserProfile = () => {
                   onChange={handleStatusChange}
                   type="text"
                   style={{ width: "100%" }}
+                  className="margB1"
                 />
-                <ul></ul>
-                <br />
                 <CommonButton onClick={handleStatusEditSubmit}>
                   Set Status
                 </CommonButton>
@@ -197,15 +201,20 @@ const UserProfile = () => {
           />
           <Typography
             variant="h5"
-            style={{ textAlign: "center", marginTop: "1.75em" }}
+            style={{
+              textAlign: "center",
+              marginTop: "1.75em",
+              marginBottom: "1em",
+            }}
           >
             {"Username:"} {user.username}{" "}
           </Typography>
-          <br />
-          <Typography variant="h5" style={{ textAlign: "center" }}>
+          <Typography
+            variant="h5"
+            style={{ textAlign: "center", marginBottom: "1em" }}
+          >
             {"Name:"} {user.name}
           </Typography>
-          <br />
           {user.privacy !== true && user !== loggedInUser ? (
             <a href={`mailto:${user.email}`}>
               <Typography variant="h5" style={{ textAlign: "center" }}>
@@ -214,7 +223,7 @@ const UserProfile = () => {
             </a>
           ) : null}
 
-          <br />
+          <div className="margB1"></div>
         </div>
         {currentUser == true ? (
           <Link to={`/users/${user.id}/edit`} style={{ textAlign: "center" }}>

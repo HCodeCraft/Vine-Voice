@@ -75,15 +75,12 @@ const Login = () => {
 
   return (
     <>
-      <br />
-      <br />
-      <Grid>
+      <Grid style={{ marginTop: "2em", marginBottom: "1em" }}>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
             <Avatar sx={{ backgroundColor: "#FFD600" }}>🌺</Avatar>
             <h2>Sign In</h2>
           </Grid>
-          <br />
           <p aria-live="assertive"></p>
           <form onSubmit={handleSubmit(submitForm)} noValidate>
             <TextField
@@ -130,12 +127,9 @@ const Login = () => {
               </ul>
             </div>
           ) : null}
-
-          <Typography>
+          <Typography style={{ marginBottom: "2em" }}>
             Do you have an account? <Link to={`/users/new`}>Sign Up</Link>
           </Typography>
-          <br />
-          <br />
         </Paper>
       </Grid>
       <DevTool control={control} />

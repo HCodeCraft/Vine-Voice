@@ -338,7 +338,6 @@ const AddPlant = () => {
         <button
           className="save-btn"
           type="submit"
-          // disabled={!canSave}
         >
           {" "}
           Save

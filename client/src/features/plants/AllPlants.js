@@ -41,11 +41,10 @@ const AllPlants = () => {
             <Typography
               variant="h4"
               align="center"
-              style={{ marginTop: "1.75em" }}
+              style={{ marginTop: "1.75em", marginBottom: "1em" }}
             >
               All Plants
             </Typography>
-            <br />
           </Box>
           <Grid container spacing={2}>
             {content}
