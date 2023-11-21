@@ -76,18 +76,12 @@ const AddPlant = () => {
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
-  
 
-  
-
-    dispatch(addPlantToApi({plant}));
+    dispatch(addPlantToApi({ plant }));
     /// put in the backend to add the plant to user's plants if it has an entry
-     // add entry to user
+    // add entry to user
 
-
-
-  setPlantFieldsToBlank()
-
+    setPlantFieldsToBlank();
   };
 
   const setPlantFieldsToBlank = () => {
@@ -110,12 +104,9 @@ const AddPlant = () => {
 
   return (
     <section className="editBox">
-      <br />
       <h2>Add a Plant</h2>
-      <img className="img_deg" src={tomato}></img>
-      <form className="editForm" onSubmit={onSavePlantClicked}>
-        <br />
-        <br />
+      <img className="img_deg margB2" src={tomato}></img>
+      <form className="margB2" onSubmit={onSavePlantClicked}>
         <label htmlFor="common_name" className="editLabel">
           Common Name:
         </label>
@@ -129,8 +120,7 @@ const AddPlant = () => {
           rows={1}
           cols={60}
         />
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel" htmlFor="scientific_name">
           Scientific Name:
         </label>
@@ -144,8 +134,7 @@ const AddPlant = () => {
           rows={1}
           cols={60}
         />
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel" htmlFor="image_url">
           Image Url:
         </label>
@@ -158,8 +147,7 @@ const AddPlant = () => {
           rows={2}
           cols={67}
         />
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel" htmlFor="medImageUrl">
           Medium Image Url:
         </label>
@@ -172,8 +160,7 @@ const AddPlant = () => {
           rows={2}
           cols={58}
         />
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel" htmlFor="description">
           Description:
         </label>
@@ -186,8 +173,7 @@ const AddPlant = () => {
           rows={5}
           cols={66}
         />
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Water Recommendation:</label>
         <div>
           <input
@@ -241,12 +227,12 @@ const AddPlant = () => {
             None
           </label>
         </div>
-        <br/>
+        <div className="margB1"></div>
         <div>
           <label htmlFor="sunlight" className="editLabel">
             Sunlight
           </label>
-          <br />
+          <div className="margB1"></div>
           <input
             type="checkbox"
             id="full_shade"
@@ -257,7 +243,7 @@ const AddPlant = () => {
           <label htmlFor="full_shade" className="inputText">
             Full Shade
           </label>
-          <br />
+          <div className="margB1"></div>
           <input
             type="checkbox"
             id="part_shade"
@@ -269,7 +255,7 @@ const AddPlant = () => {
           <label htmlFor="part_shade" className="inputText">
             Part Shade
           </label>{" "}
-          <br />
+          <div className="margB1"></div>
           <input
             type="checkbox"
             id="sun-part_shade"
@@ -281,7 +267,7 @@ const AddPlant = () => {
           <label htmlFor="sun-part_shade" className="inputText">
             Sun-Part Shade
           </label>
-          <br />
+          <div className="margB1"></div>
           <input
             type="checkbox"
             id="full_sun"
@@ -294,8 +280,7 @@ const AddPlant = () => {
             Full Sun
           </label>
         </div>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel"> Edible</label>
         <input
           name="edible"
@@ -303,8 +288,7 @@ const AddPlant = () => {
           checked={plant.edible}
           onChange={handlePlantChange}
         ></input>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Indoor</label>
         <input
           name="indoor"
@@ -312,8 +296,7 @@ const AddPlant = () => {
           checked={plant.indoor}
           onChange={handlePlantChange}
         ></input>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Medicinal</label>
         <input
           name="medicinal"
@@ -321,8 +304,7 @@ const AddPlant = () => {
           checked={plant.medicinal}
           onChange={handlePlantChange}
         ></input>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Poisionous To Humans</label>
         <input
           name="poisonous_to_humans"
@@ -330,8 +312,7 @@ const AddPlant = () => {
           checked={plant.poisonous_to_humans}
           onChange={handlePlantChange}
         ></input>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Poisonous To Pets</label>
         <input
           name="poisonous_to_pets"
@@ -339,8 +320,7 @@ const AddPlant = () => {
           checked={plant.poisonous_to_pets}
           onChange={handlePlantChange}
         ></input>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <label className="editLabel">Yearly Cycle</label>
         <select
           className="editLabel"
@@ -354,8 +334,7 @@ const AddPlant = () => {
           <option>Biennial</option>
           <option>Biannual</option>
         </select>
-        <br />
-        <br />
+        <div className="margB2"></div>
         <button
           className="save-btn"
           type="submit"
@@ -365,8 +344,7 @@ const AddPlant = () => {
           Save
         </button>
       </form>
-      <br />
-      <br />
+      <div className="margB2"></div>
     </section>
   );
 };

@@ -34,7 +34,7 @@ export const fetchPlantById = createAsyncThunk(
 
 export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
-  async ({newPlant}) => {
+  async ({ newPlant }) => {
     try {
       const response = await fetch(`/plants`, {
         method: "POST",
@@ -47,9 +47,9 @@ export const addPlantToApi = createAsyncThunk(
       if (!response.ok) {
         throw new Error("Failed to add plant to API");
       }
-      console.log("newPlant from addPlantToApi", {newPlant})
+      console.log("newPlant from addPlantToApi", { newPlant });
       const data = await response.json();
-      console.log("data from addPlantToAPI", data)
+      console.log("data from addPlantToAPI", data);
       return data;
     } catch (error) {
       throw error;
@@ -105,7 +105,7 @@ export const deletePlantFromApi = createAsyncThunk(
       if (response.ok) {
         thunkAPI.dispatch(deleteUserPlant(plantId));
         console.log("Plant deleted successfully.");
-        return plantId
+        return plantId;
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
       }
@@ -137,11 +137,12 @@ const plantSlice = createSlice({
     },
     updateEntryInPlant: (state, action) => {
       const updatedEntry = action.payload;
-  
+
       // Update the plant's entries with updatedEntry
-      state.plant.individualPlant.entries = state.plant.individualPlant.entries.map(
-        (entry) => (entry.id === updatedEntry.id ? updatedEntry : entry)
-      );
+      state.plant.individualPlant.entries =
+        state.plant.individualPlant.entries.map((entry) =>
+          entry.id === updatedEntry.id ? updatedEntry : entry
+        );
     },
     deleteEntryInPlant: (state, action) => {
       const deletedEntryId = action.payload;
@@ -160,20 +161,21 @@ const plantSlice = createSlice({
           : plant
       );
     },
-  
-  
+
     filterOutUserEntries: (state, action) => {
       const deletedUserId = action.payload;
-      console.log("deletedUserId from filterOutUserEntries", deletedUserId)
-  
+      console.log("deletedUserId from filterOutUserEntries", deletedUserId);
+
       // Update each plant's entries by filtering out entries with deletedUserId
       state.allPlants = state.allPlants.map((plant) => ({
         ...plant,
-        entries: plant.entries.filter((entry) => entry.user_id !== deletedUserId),
+        entries: plant.entries.filter(
+          (entry) => entry.user_id !== deletedUserId
+        ),
       }));
     },
   },
-  
+
   extraReducers: (builder) => {
     builder
       .addCase(fetchAllPlants.pending, (state, action) => {
@@ -202,15 +204,13 @@ const plantSlice = createSlice({
         state.loadingIndividualPlant = true;
       })
       .addCase(addPlantToApi.fulfilled, (state, action) => {
-
         if (action.payload.plant) {
-          state.allPlants = [...state.allPlants, action.payload.plant]
+          state.allPlants = [...state.allPlants, action.payload.plant];
+        } else {
+          state.allPlants = [...state.allPlants, action.payload];
         }
-        else {
-          state.allPlants = [...state.allPlants, action.payload]
-        }
-      
-        console.log("allPlants after Push", state.allPlants)
+
+        console.log("allPlants after Push", state.allPlants);
         state.loadingIndividualPlant = false;
       })
 
@@ -229,8 +229,7 @@ const plantSlice = createSlice({
       })
       .addCase(deletePlantFromApi.fulfilled, (state, action) => {
         // delete from allPlants,
-        const deletedPlantId = action.payload
-
+        const deletedPlantId = action.payload;
 
         state.allPlants = state.allPlants.filter(
           (plant) => plant.id !== deletedPlantId
@@ -270,7 +269,7 @@ export const {
   deletePlant,
   updateEntryInPlant,
   deleteEntryInPlant,
-  filterOutUserEntries
+  filterOutUserEntries,
 } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;

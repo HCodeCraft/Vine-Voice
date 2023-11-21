@@ -1,22 +1,18 @@
 import React from "react";
-import Rosepic from "../../pictures/rosepic.png"
-
+import Rosepic from "../../pictures/rosepic.png";
 
 const NoPlant = () => {
   return (
-    <>
-      <br />
-      <br />
-      <div className="editBox">
-        <br />
+    <div>
+      <div className="editBox margT2 margB1">
         <h1>
           Sorry to say that our databases don't contain information about your
           plant!
         </h1>
-        <img src={Rosepic} className='rosepic'/>
+        <img src={Rosepic} className="rosepic" />
         <h2>
-          Feel free to email me and I'll do my best to add your plant to your
-          account ASAP
+          Feel free to email me and I'll do my best to add your plant to the
+          database ASAP
         </h2>
         <h1>Please provide: </h1>
         <ol>
@@ -29,12 +25,11 @@ const NoPlant = () => {
         </ol>
         <h2>You're welcome to list multiple plants you want added.</h2>
         <h2> Thank you for using Vine Voice!</h2>
-        <a href="mailto:vinevoice@yahoo.com">
+        <a href="mailto:vinevoice@yahoo.com" className="margB1">
           <h2>Send Email</h2>
         </a>
-        <br />
       </div>
-    </>
+    </div>
   );
 };
 

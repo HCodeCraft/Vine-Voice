@@ -1,8 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { addCommentToEntry, deleteCommentFromEntry, updateCommentInEntry } from "../entries/entriesSlice";
-
-
+import {
+  addCommentToEntry,
+  deleteCommentFromEntry,
+  updateCommentInEntry,
+} from "../entries/entriesSlice";
 
 export const fetchAllComments = createAsyncThunk(
   "comments/fetchAllComments",
@@ -32,29 +34,28 @@ export const fetchCommentById = createAsyncThunk(
 );
 
 export const addCommentToApi = createAsyncThunk(
-    'comments/addCommentToApi',
-    async (newComment, thunkAPI) => {
-     
-      try {
-        const response = await fetch(`/comments`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newComment),
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to add comment to API');
-        }
-        const data = await response.json();
-        thunkAPI.dispatch(addCommentToEntry(data))
-        return data;
-      } catch (error) {
-        throw error;
+  "comments/addCommentToApi",
+  async (newComment, thunkAPI) => {
+    try {
+      const response = await fetch(`/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newComment),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add comment to API");
       }
+      const data = await response.json();
+      thunkAPI.dispatch(addCommentToEntry(data));
+      return data;
+    } catch (error) {
+      throw error;
     }
-  );
+  }
+);
 
 export const updateCommentInApi = createAsyncThunk(
   "comment/updateCommentInApi",
@@ -74,7 +75,7 @@ export const updateCommentInApi = createAsyncThunk(
       }
 
       const updatedCommentData = await response.json();
-      thunkAPI.dispatch(updateCommentInEntry(updatedCommentData))
+      thunkAPI.dispatch(updateCommentInEntry(updatedCommentData));
       return updatedCommentData;
     } catch (error) {
       throw error;
@@ -91,7 +92,7 @@ export const deleteCommentFromApi = createAsyncThunk(
       });
 
       if (response.ok) {
-        thunkAPI.dispatch(deleteCommentFromEntry(commentId))
+        thunkAPI.dispatch(deleteCommentFromEntry(commentId));
         console.log("Comment deleted successfully.");
         return commentId;
       } else {
@@ -154,8 +155,7 @@ const commentSlice = createSlice({
         const newComment = action.payload;
 
         state.allComments.push(newComment);
-        state.individualComment = action.payload
-        
+        state.individualComment = action.payload;
 
         state.loadingIndividualComment = false;
       })

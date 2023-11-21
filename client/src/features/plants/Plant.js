@@ -21,7 +21,7 @@ const Plant = () => {
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
-  console.log("plant (individualPlant)", plant)
+  console.log("plant (individualPlant)", plant);
 
   // plant is getting plants from individualPlant
 
@@ -80,41 +80,36 @@ const Plant = () => {
 
   return (
     <>
-      <br />
-      <br />
-      <Box sx={{ width: "100%", maxWidth: "100%", marginTop: "2.5em" }}>
-        <Typography variant="h4" align="center">
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "100%",
+          marginTop: "4.5em",
+          marginBottom: "2em",
+        }}
+      >
+        <Typography variant="h4" align="center" style={{ marginTop: "1em" }}>
           {plant.common_name}
         </Typography>
         <Typography variant="h6" align="center">
           {plant.scientific_name}
         </Typography>
       </Box>
-      <br />
-      <br />
-      <div className="pos_top">
-        <br />
-        <br />
-        <img className="img_deg" src={plant.image_url}></img>
-        <div className="text-box">
+      <div className="pos_top margT2">
+        <img className="img_deg margT3" src={plant.image_url}></img>
+        <div className="text-box margT2">
           <p className="desc">{plant.description}</p>
         </div>
-        <Box sx={{ flexGrow: 1 }}>
-          <br />
-          <br />
-          <div className="button_box">
+        <Box sx={{ flexGrow: 1, marginBottom: "2em" }}>
+          <div className="button_box margT2 margB2">
             <p>Added on {plant.create_date}</p>
           </div>
-          <br />
-          <br />
           <Grid container spacing={1}>
             <Grid container item spacing={3}>
               <FormRow />
             </Grid>
           </Grid>
         </Box>
-        <br />
-        <br />{" "}
         {user.admin === true ? (
           <Box display="flex" justifyContent="flex-start">
             <Link to={`/plants/${plant.id}/edit`}>
@@ -128,19 +123,20 @@ const Plant = () => {
             </CommonButton>
           </Box>
         ) : null}
-        <Box display="flex" justifyContent="flex-end">
+        <Box
+          display="flex"
+          justifyContent="flex-end"
+          style={{ marginBottom: "1em" }}
+        >
           <Link to={`/plants/${plant.id}/entries/new`}>
             <CommonButton>Add an Entry</CommonButton>
           </Link>
         </Box>
-        <br />
-        <Typography variant="h5" align="center">
+        <Typography variant="h5" align="center" style={{ marginBottom: "1em" }}>
           Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
-        <br />
         <EntryTable entries={entriesDesc} comments={plant.comments} />
-        <br />
-        <br />
+        <div className="margB2"></div>
       </div>
     </>
   );

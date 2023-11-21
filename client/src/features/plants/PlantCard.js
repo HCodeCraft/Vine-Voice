@@ -24,10 +24,7 @@ const PlantCard = ({
 
   const plant = plants.find((plant) => plant.id === id);
 
-
   // getting the entries from allPlants
-
-
 
   return (
     <Grid item xs={12} sm={6} md={2} lg={2}>
@@ -53,7 +50,7 @@ const PlantCard = ({
               alignItems: "center",
             }}
           >
-            <div>
+            <div className="margB1">
               <Typography variant="subtitle2">
                 {plant?.entries?.length > 0
                   ? `${plant.entries.length} ${
@@ -62,7 +59,7 @@ const PlantCard = ({
                   : "no entries yet"}
               </Typography>
             </div>
-            <br />
+
             <div>
               <Link to={`/plants/${id}`}>
                 <CommonButton>Show More</CommonButton>

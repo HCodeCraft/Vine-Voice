@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Grid, Card, CardMedia, CardContent, Typography } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 
@@ -7,7 +7,6 @@ const SmallPlantCard = ({
   commonName,
   sciName,
   plant,
-  id,
   handleSelectedPlant,
   index,
   activeCard,

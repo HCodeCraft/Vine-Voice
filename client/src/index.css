@@ -53,8 +53,10 @@ margin-top: 2%;
 }
 
 .desc {
-  padding-top: 5%;
+  padding-top: 2%;
   padding-right: 0%;
+  padding-left: 50%;
+  font-size: 1.1em;
 }
 
 .top_bar{
@@ -173,6 +175,8 @@ font-size: 1em;
   flex-direction: column;
   /* justify-content: center; */
   align-items: center;
+  margin-bottom: 1em;
+  margin-top:2em
 }
 
 .editLabel{
@@ -267,12 +271,14 @@ text-align: center;
   background-color: #fff;
   padding: 15px;
   border-radius: 2%;
+  margin-top: 1em;
 }
 
 .small-plant-card-container {
   display: flex; /* To make them display in a row */
   flex-wrap: wrap; /* Wrap cards to the next line if the container is not wide enough */
   gap: 10px; /* This sets the space between the cards */
+  margin-bottom: 1em;
 }
 
 /* Additional styling for SmallPlantCard components if needed */
@@ -361,5 +367,17 @@ justify-content: space-around;
 
 .margB2{
   margin-bottom: 2em;
+}
+
+.margT2{
+  margin-top: 2em;
+}
+
+.margT1{
+  margin-top: 1em;
+}
+
+.margT3{
+  margin-top: 3em;
 }
 

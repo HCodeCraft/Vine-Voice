@@ -367,7 +367,7 @@ const NewPlant = () => {
   };
 
   return (
-    <Container>
+    <Container style={{marginBottom:'2em'}}>
       <section>
         <div
           style={{
@@ -379,10 +379,9 @@ const NewPlant = () => {
           {" "}
           {searchBar ? (
             <>
-              <Typography variant="h4" style={{ marginTop: "3em" }}>
+              <Typography variant="h4" style={{ marginTop: "3em", marginBottom: "1em" }}>
                 Search for a Plant
               </Typography>
-              <br />
               <form>
                 <label htmlFor="commonName" className="editLabel">
                   Enter your plant's common name:
@@ -406,10 +405,9 @@ const NewPlant = () => {
             </>
           ) : (
             <>
-              <Typography variant="h4" style={{ marginTop: "3em" }}>
+              <Typography variant="h4" style={{ marginTop: "3em", marginBottom:"1em" }}>
                 You Searched for:
               </Typography>
-              <br />
               <div className="search-txt">
                 <form>
                   <Typography variant="h4" style={{ marginRight: ".5em" }}>
@@ -426,7 +424,7 @@ const NewPlant = () => {
               </div>
             </>
           )}
-          <br />
+<div className="margB1"></div>
           {showSpinner === true && resultForm && myApiData.length === 0 ? (
             <Spinner />
           ) : null}
@@ -492,7 +490,6 @@ const NewPlant = () => {
                 </div>
               )}
           </>
-          <br />
           <div className="small-plant-card-container" />
           {apiForm && speciesList && speciesList.length > 0 && (
             <>
@@ -535,12 +532,11 @@ const NewPlant = () => {
           )}
         </div>
       </section>
-      <br />
+  
       <div className="entry_box">
         {entryForm === true ? (
           <div className="entryBox">
-            <Typography variant="h5">Your Plant's Details</Typography>
-            <br />
+            <Typography variant="h5" style={{marginBottom: '1em'}}>Your Plant's Details</Typography>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 label="Nickname"
@@ -548,16 +544,16 @@ const NewPlant = () => {
                 variant="outlined"
                 color="secondary"
                 onChange={handleEntryChange}
+                style={{marginBottom:'1em'}}
               />
-              <br />
               <TextField
                 label="Location"
                 name="location"
                 variant="outlined"
                 color="secondary"
                 onChange={handleEntryChange}
+                style={{marginBottom:'1em'}}
               />
-              <br />
               <TextField
                 label="Notes"
                 name="notes"
@@ -566,25 +562,22 @@ const NewPlant = () => {
                 multiline
                 rows={4}
                 onChange={handleEntryChange}
+                style={{marginBottom:'2em'}}
               />
-              <br />
-              <br />
-              <div className="health_box">
+              <div className="health_box margB1">
                 <Typography variant="h6">Health Rating</Typography>
                 <HealthRating
                   rating={entry.health}
                   changeRating={changeRating}
                 />
               </div>
-              <br />
               <Typography>Enter problems... press enter to add</Typography>
               <TagsInput
                 tags={tags}
                 handleTagsChange={handleTagsChange}
                 removeTag={removeTag}
               />
-              <br />
-              <FormGroup>
+              <FormGroup className="margT1">
                 <FormControlLabel
                   required
                   control={<Checkbox />}
@@ -598,8 +591,6 @@ const NewPlant = () => {
             <div ref={pageEndRef}></div>
           </div>
         ) : null}
-        <br />
-        <br />
       </div>
     </Container>
   );
