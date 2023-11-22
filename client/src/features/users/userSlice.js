@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import config from "../../config";
+
+
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",
@@ -48,20 +49,7 @@ export const fetchUserData = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk("user/logout", async () => {
-  try {
-    const response = await fetch(`/logout`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      return true;
-    } else {
-      throw new Error("Logout failed");
-    }
-  } catch (error) {
-    throw error;
-  }
-});
+
 
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
@@ -353,6 +341,22 @@ const userSlice = createSlice({
         console.log("There was a problem with deleteUserFromApi");
       });
   },
+});
+
+export const logoutUser = createAsyncThunk("user/logout", async (persistor, _,) => {
+  try {
+    const response = await fetch(`/logout`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+      persistor.purge()
+      return true;
+    } else {
+      throw new Error("Logout failed");
+    }
+  } catch (error) {
+    throw error;
+  }
 });
 
 export const {

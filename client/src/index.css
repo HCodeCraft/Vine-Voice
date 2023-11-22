@@ -342,6 +342,11 @@ justify-content: space-around;
   border-radius: 15%;
 }
 
+.search-btn:hover {
+  filter: brightness(90%);
+  cursor:pointer;
+}
+
 .search-txt form{
   display:flex;
   flex-direction: row;

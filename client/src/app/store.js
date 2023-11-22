@@ -15,6 +15,8 @@ import {
   } from 'redux-persist'
 
 
+
+
 const persistConfig = {
     key: "root",
     version: 1,
@@ -33,5 +35,7 @@ export const store = configureStore({
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         }, devTools: true
 }) })
+
+export const persistor = persistStore(store);
 
 // in Production, we'll want devtools to be false

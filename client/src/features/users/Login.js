@@ -70,6 +70,7 @@ const Login = () => {
     height: "70vh",
     width: 280,
     margin: "20px auto",
+    marginTop:'6em'
   };
   const btnstyle = { margin: "8px 0" };
 

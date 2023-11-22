@@ -83,7 +83,7 @@ const CreateAccount = () => {
     height: "100vh",
     width: 400,
     margin: "20px auto",
-    marginTop: "2em",
+    marginTop: "6em",
   };
   const btnstyle = { margin: "8px 0" };
 
@@ -125,7 +125,7 @@ const CreateAccount = () => {
             <TextField
               label="First Name (optional)"
               placeholder="Enter First Name"
-              className="margB2"
+              style={{marginBottom:'1em'}}
               fullWidth
               type="text"
               id="name"
@@ -170,7 +170,8 @@ const CreateAccount = () => {
               </div>
             ) : null}
             <p className="error_msg">{errors.password_confirmation?.message}</p>
-            <label htmlFor="avatar">Add Avatar from image</label>
+            <label htmlFor="avatar" >Add Avatar from image</label>
+            <div className="margB1"></div>
             <Controller
               name="avatar"
               control={control}
@@ -180,6 +181,7 @@ const CreateAccount = () => {
                   <input
                     type="file"
                     id="avatar"
+                    className="margB1"
                     onChange={(e) => {
                       field.onChange(e.target.files);
                     }}
@@ -189,8 +191,8 @@ const CreateAccount = () => {
                 </>
               )}
             />
+                        <div className="margB1"></div>
             <Controller
-              className="margT2 margB2"
               name="devEmails"
               control={control}
               defaultValue={false} // Initial value of the checkbox
@@ -200,7 +202,8 @@ const CreateAccount = () => {
                   Recieve Developer Emails
                 </label>
               )}
-            />{" "}
+            />
+  <div className="margB1"></div>
             <Controller
               name="privacy"
               className="margB2"
@@ -213,6 +216,7 @@ const CreateAccount = () => {
                 </label>
               )}
             />
+              <div className="margB1"></div>
             <div className="margB1">
               <Button variant="contained" onClick={handleOpen}>
                 Terms of Service

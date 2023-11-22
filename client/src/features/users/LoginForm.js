@@ -14,7 +14,7 @@ const LoginForm = () => {
     padding: 20,
     height: "70vh",
     width: 280,
-    margin: "20px auto",
+    margin: "20px auto"
   };
   const btnstyle = { margin: "8px 0" };
 

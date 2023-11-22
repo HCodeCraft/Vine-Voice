@@ -77,6 +77,14 @@ const NewPlant = () => {
   const indEntry = useSelector((state) => state.entry.individualEntry);
   // how do I set the entry in NewEntry? addEntryToApi(newEntry)
 
+
+  //// Testing
+useEffect(()=> {
+console.log("SelectedPlant", selectedPlant)
+}, [selectedPlant])
+
+  ////
+
   useEffect(() => {
     console.log("myApiData.length", myApiData?.length);
     const timer = setTimeout(() => {
@@ -90,7 +98,7 @@ const NewPlant = () => {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (myApiData.length === 0 && speciesList.length === 0 && apiForm) {
+      if (myApiData.length === 0 && availPlants.length === 0 && apiForm) {
         setNoResultButton(true);
         setShowSpinner(false);
       }
@@ -365,6 +373,19 @@ const NewPlant = () => {
     }
   };
 
+  const availPlants = speciesList.filter((p_plant) => 
+  p_plant.default_image &&
+  p_plant.default_image["thumbnail"] !== "https://perenual.com/storage/image/upgrade_access.jpg" &&
+  p_plant.default_image["thumbnail"] !== null &&
+  p_plant.default_image["small_url"] !== "https://perenual.com/storage/image/upgrade_access.jpg" &&
+  p_plant.default_image["small_url"] !== null
+);
+
+
+
+  /// need to change the plants both 0 to my_api_plants and availPlants
+  /// when no results still showing spinner
+
   return (
     <Container style={{marginBottom:'2em'}}>
       <section>
@@ -417,7 +438,7 @@ const NewPlant = () => {
                     className="search-btn"
                     onClick={resetPage}
                   >
-                    Try again ?
+                    Try again?
                   </button>
                 </form>
               </div>
@@ -430,10 +451,13 @@ const NewPlant = () => {
           {showSpinner === true &&
           !resultForm &&
           apiForm &&
-          speciesList.length === 0 ? (
+          availPlants.length === 0 ? (
             <Spinner />
           ) : null}
-          {/* Maybe have a timeout on the spinner, maybe has a useEffect if show
+          {/* 
+          changed it from speciesList to availPlants 
+          
+          Maybe have a timeout on the spinner, maybe has a useEffect if show
         spinner is true after 3 seconds set it to false*/}
           {noResultButton ? (
             <div className="editBox">
@@ -490,9 +514,14 @@ const NewPlant = () => {
               )}
           </>
           <div className="small-plant-card-container" />
-          {apiForm && speciesList && speciesList.length > 0 && (
+          {apiForm && speciesList && availPlants.length > 0 && (
             <>
-              {speciesList.map((p_plant, index) => (
+            {/* const availPlants = speciesList.filter((p_plant) => p_plantdefault_image["thumbnail"] !== "https://perenual.com/storage/image/upgrade_access.jpg" )
+            filter out the plants with p_plant.default_image["thumbnail"] ===
+            "https://perenual.com/storage/image/upgrade_access.jpg"
+            */}{
+        
+              availPlants.map((p_plant, index) => (
                 <SmallPlantCard
                   key={p_plant.id}
                   className="small-plant-card"
