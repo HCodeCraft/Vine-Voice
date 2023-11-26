@@ -3,25 +3,25 @@ class EntriesController < ApplicationController
 
 # added .with_attached_picture
 
-  def index
-    entries = Entry.all.with_attached_picture.includes(:user)
-    render json: entries.to_json(include: { user: { only: [:id, :username] } })
-  end
+def index
+  entries = Entry.all.with_attached_picture.includes(:user)
+  render json: entries, include: { user: { only: [:id, :username] } }
+end
+
 
 
   def show
     entry = Entry.find_by(id: params[:id])
-    render json: EntrySerializer.new(entry).to_json(include: [:plant, :user, :comments])
+    render json: EntrySerializer.new(entry).to_json(include: [:user, :plant, :comments])
   end
-  
 
   # def show
   #   entry = Entry.find_by(id: params[:id])
-  #   render json: entry.to_json(include: [:plant, :user])
+  #   render json: entry, include: [:user, :plants, :comments]
   # end
   
-
-  # added the .to_json(include: :plant)
+  # Wasn't showing entry.username ^
+  
 
   def create
     @current_user = User.find_by(id: session[:user_id])
@@ -42,11 +42,13 @@ class EntriesController < ApplicationController
     render json: entry
   end
 
+
   def destroy
     entry = find_entry
     entry.destroy
-    head :no_content
+    render json: { message: 'Entry successfully destroyed' }
   end
+  
 
   private
 
@@ -56,6 +58,6 @@ class EntriesController < ApplicationController
   end
 
   def entry_params
-    params.require(:entry).permit(:nickname, :location, :notes, :user_id, :plant_id, :open_to_advice, :picture, :health, :problems => [])
+    params.require(:entry).permit(:nickname, :location, :notes, :user_id, :plant_id, :recieve_dev_emails,:open_to_advice, :picture, :health, :problems => [])
   end
 end

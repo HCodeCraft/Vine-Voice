@@ -118,6 +118,14 @@ const entrySlice = createSlice({
     errorIndividualEntry: null,
   },
   reducers: {
+    clearEntries: (state) => {
+      state.allEntries = [];
+      state.individualEntry = null;
+      state.loadingAllEntries = false;
+      state.loadingIndividualEntry = false;
+      state.errorAllEntries = null;
+      state.errorIndividualEntry = null;
+    },
     addEntry: (state, action) => {
       state.allEntries.push(action.payload);
     },
@@ -235,6 +243,7 @@ export const {
   deleteCommentFromEntry,
   updateCommentInEntry,
   addEntryToAllAndIndState,
+  clearEntries
 } = entrySlice.actions;
 
 export const entryReducer = entrySlice.reducer;

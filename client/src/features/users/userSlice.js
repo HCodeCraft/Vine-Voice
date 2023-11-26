@@ -26,6 +26,22 @@ export const loginUser = createAsyncThunk(
   }
 );
 
+export const logoutUser = createAsyncThunk("user/logout", async ( _,) => {
+  try {
+    const response = await fetch(`/logout`, {
+      method: "DELETE",
+    });
+    if (response.ok) {
+  
+      return true;
+    } else {
+      throw new Error("Logout failed");
+    }
+  } catch (error) {
+    throw error;
+  }
+});
+
 export const fetchUserData = createAsyncThunk(
   "user/fetchUserData",
   async (_) => {
@@ -88,17 +104,33 @@ export const registerUserInApi = createAsyncThunk(
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.errors); // assuming errors are in JSON format
+        console.log('response', response)
+        // Check if the body has been used
+        const bodyUsed = response.bodyUsed;
+
+        // If the body has not been used, read it as text
+        let errorData;
+        if (!bodyUsed) {
+          errorData = await response.text();
+        } else {
+          // If the body has been used, provide a generic error message
+          errorData = "Response body already consumed";
+        }
+
+        throw new Error(`Server responded with status ${response.status}: ${errorData}`);
       }
 
       const data = await response.json();
+      console.log("data from registerUserInApi", data)
       return data;
     } catch (error) {
       throw error;
     }
   }
 );
+
+
+
 
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
@@ -209,15 +241,6 @@ const userSlice = createSlice({
       );
     },
 
-    // I probably need to change it for all users, but I don't have all users loaded yet,
-    // but it would be changed for individual plant and all plants
-    // it loads the individual plant every time someone opens the plant page, but they could still
-    // see an errored description or image
-    // I as the admin would be the only one able to change it though
-
-    // addPlantToUser: (state, action) => {
-    //   const
-    // }
   },
   extraReducers: (builder) => {
     builder
@@ -343,21 +366,7 @@ const userSlice = createSlice({
   },
 });
 
-export const logoutUser = createAsyncThunk("user/logout", async (persistor, _,) => {
-  try {
-    const response = await fetch(`/logout`, {
-      method: "DELETE",
-    });
-    if (response.ok) {
-      persistor.purge()
-      return true;
-    } else {
-      throw new Error("Logout failed");
-    }
-  } catch (error) {
-    throw error;
-  }
-});
+
 
 export const {
   setUser,

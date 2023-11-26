@@ -44,14 +44,16 @@ const CreateAccount = () => {
 
       data.email = data.email.toLowerCase();
       const newUser = new FormData();
-
+      
       Object.keys(data).forEach((key) => {
         const value = data[key];
-
-        if (value !== null && value !== undefined) {
+      
+        // Exclude 'agreeToTerms' key
+        if (key !== 'agreeToTerms' && value !== null && value !== undefined) {
           newUser.append(`user[${key}]`, value);
         }
       });
+      
 
       const action = await dispatch(registerUserInApi(newUser));
 
@@ -183,7 +185,7 @@ const CreateAccount = () => {
                     id="avatar"
                     className="margB1"
                     onChange={(e) => {
-                      field.onChange(e.target.files);
+                      field.onChange(e)
                     }}
                     accept=".jpg, .jpeg, .png, .webp"
                   />
@@ -193,7 +195,7 @@ const CreateAccount = () => {
             />
                         <div className="margB1"></div>
             <Controller
-              name="devEmails"
+              name="recieve_dev_emails"
               control={control}
               defaultValue={false} // Initial value of the checkbox
               render={({ field }) => (
@@ -300,7 +302,7 @@ const CreateAccount = () => {
               fullWidth
               variant="contained"
               style={btnstyle}
-              onSubmit={handleSubmit(onSubmit)}
+              // onSubmit={handleSubmit(onSubmit)}
             >
               Sign Up
             </Button>

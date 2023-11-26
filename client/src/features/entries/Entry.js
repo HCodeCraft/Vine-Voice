@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { fetchEntryById, deleteEntryFromApi } from "./entriesSlice";
 import CommentCard from "../comments/CommentCard";
 import { deleteEntryInPlant } from "../plants/plantSlice";
-import { deleteUserPlant } from "../users/userSlice";
+import { deleteUserPlant, updateUserPlant } from "../users/userSlice";
 import default_plant from "../../pictures/nopic.png";
 
 const Entry = () => {
@@ -50,11 +50,19 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.user.username
   );
 
+  console.log("entryUsername", entryUsername)
+
+  // not getting this at first, it is there though
+
+const indEntry = useSelector(
+  (state) => state.entry.individualEntry)
+
+  console.log("indEntry", indEntry)
+
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
   );
 
-  console.log("indEntryComments", indEntryComments);
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
@@ -66,7 +74,8 @@ const Entry = () => {
     } else {
       setCurrentUser(false);
     }
-  }, []);
+  }, [entryUsername]);
+
 
   const scrollToSection = (elementRef) => {
     window.scrollTo({
@@ -97,12 +106,25 @@ const Entry = () => {
       const userPlant = user.plants.find((p) => p.id === plant.id);
       navigate(`/users/plants`);
 
+
+
       // DELETE ENTRY FROM ALLPLANTS
       if (userPlant && userPlant.entries?.length === 1) {
         dispatch(deleteUserPlant({ id: userPlant.id }));
 
         navigate(`/users/plants`);
       } else {
+              /// need to delete the entry for indUser.plants
+      // could use updateUserPlant again which takes in the specific plant
+      // have access to the entry.id, updateUserPlant wants the plant
+      /////////////////////////////////////////////////////////////////////////////////////////////////////
+      const newPlantEntries = plant.entries.filter((entry) => entry.id !== entryId)
+      const plantWithoutEntry = {...plant, entries: [newPlantEntries]}
+      dispatch(updateUserPlant(plantWithoutEntry))
+
+      // check indUser.plant.entries
+
+
       }
     } catch (error) {
       console.error("An error occurred:", error);

@@ -126,6 +126,15 @@ const plantSlice = createSlice({
     error: null,
   },
   reducers: {
+    clearPlants: (state) => {
+      state.allPlants = [];
+      state.individualPlant = null;
+      state.loadingAllPlants = false;
+      state.loadingIndividualPlant = false;
+      state.errorAllPlants = null;
+      state.errorIndividualPlant = null;
+      state.error = null;
+    },
     addPlant: (state, action) => {
       state.allPlants.push(action.payload);
     },
@@ -269,6 +278,7 @@ export const {
   updateEntryInPlant,
   deleteEntryInPlant,
   filterOutUserEntries,
+  clearPlants
 } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;

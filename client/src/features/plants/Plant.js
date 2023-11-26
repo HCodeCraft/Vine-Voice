@@ -19,6 +19,10 @@ const Plant = () => {
 
   const user = useSelector((state) => state.user.loggedInUser);
 
+  console.log("loggedInUser", user)
+
+
+
   const plant = useSelector((state) => state.plant.individualPlant);
 
   console.log("plant (individualPlant)", plant);
@@ -26,6 +30,8 @@ const Plant = () => {
   // plant is getting plants from individualPlant
 
   const allPlants = useSelector((state) => state.plant.allPlants);
+
+  console.log("allPlants", allPlants)
 
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));

@@ -1,7 +1,7 @@
 class PlantSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   attributes :id, :common_name, :scientific_name, :image_url, :med_image_url, :description, :water_rec, :sunlight, :indoor, :cycle, :poisonous_to_humans, :poisonous_to_pets, :edible, :medicinal, :short_description, :create_date, :sunlight_emojis, :water_emojis, :in_out_emojis,  :cycle_emojis, :human_poison_emoji, :pet_poison_emoji, :edible_emoji, :medicinal_emoji
-has_many :entries
+has_many :entries, include: [:users]
  has_many :users
  has_many :comments
 

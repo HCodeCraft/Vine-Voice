@@ -19,12 +19,6 @@ class PlantsController < ApplicationController
     render json: @plants
   end
 
-  # def create
-  #   plant = Plant.create(plant_params)
-
-
-  #   render json: plant, status: :created
-  # end
 
   def create
     @current_user = User.find_by(id: session[:user_id])

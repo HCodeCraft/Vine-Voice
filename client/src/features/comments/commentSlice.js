@@ -115,6 +115,14 @@ const commentSlice = createSlice({
     errorIndividualComment: null,
   },
   reducers: {
+    clearComments: (state) => {
+      state.allComments = [];
+      state.individualComment = null;
+      state.loadingAllComments = false;
+      state.loadingIndividualComment = false;
+      state.errorAllComments = null;
+      state.errorIndividualComment =null;
+    }, 
     addComment: (state, action) => {
       state.allComments.push(action.payload);
     },
@@ -205,6 +213,6 @@ const commentSlice = createSlice({
   },
 });
 
-export const { addComment, deleteComment } = commentSlice.actions;
+export const { addComment, deleteComment, clearComments } = commentSlice.actions;
 
 export const commentReducer = commentSlice.reducer;

@@ -1,16 +1,34 @@
 class UsersController < ApplicationController
-  skip_before_action :authorize, only: [:create]
+skip_before_action :authorize, only: [:create]
 
-  def create
-    user = User.create!(user_params)
-  
-    if user.valid?
-      session[:user_id] = user.id
-      render json: user
-    else
-      render json: { errors: user.errors.full_messages.join(', ') }, status: :unprocessable_entity
-    end
+
+
+def create
+  puts "Received parameters: #{params.inspect}"
+  user = User.new(user_params)
+
+  # Attach avatar if present
+  user.avatar.attach(params[:user][:avatar]) if params[:user][:avatar]
+
+  if user.save
+    session[:user_id] = user.id
+    render json: user, status: :created
+  else
+    render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
   end
+end
+
+  # def create
+  #   puts "Received parameters: #{params.inspect}"
+  #   user = User.create(user_params)
+  
+  #   if user.valid?
+  #     session[:user_id] = user.id
+  #     render json: user, status: :created
+  #   else
+  #     render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+  #   end
+  # end
   
 
   # added .with_attached_avatar

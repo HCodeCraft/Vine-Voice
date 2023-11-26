@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { DevTool } from "@hookform/devtools";
-import { fetchUserData, loginUser } from "./userSlice";
+import { fetchUserData, loginUser, fetchAllUsers } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entriesSlice";
 import { fetchAllComments } from "../comments/commentSlice";
@@ -42,9 +42,10 @@ const Login = () => {
 
       if (loginUser.fulfilled.match(action)) {
         setFormErrors([]);
-        dispatch(fetchAllPlants());
-        dispatch(fetchAllEntries());
-        dispatch(fetchAllComments());
+        await dispatch(fetchAllUsers())
+        await dispatch(fetchAllPlants());
+        await dispatch(fetchAllEntries());
+         await dispatch(fetchAllComments());
         navigate(`/users/plants`);
       }
     } catch (error) {

@@ -2,26 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
-  Container,
+FormGroup, FormControlLabel, Checkbox,
   Typography,
-  Button,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
   Box,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
 import { addEntryToApi } from "./entriesSlice";
-import { addPlantToUser } from "../users/userSlice";
-import { addEntryToPlant } from "../plants/plantSlice";
+import { addPlantToUser, updateUserPlant } from "../users/userSlice";
 import TagsInput from "../../TagsInput";
-
-// I have a feeling i'll need to update plant state so it will have the entry, using useSelector
-// and useEffect probably
-
-// Maybe have a reminder of what kind of plant you're making an entry about
 
 const NewEntry = () => {
   const params = useParams();
@@ -38,10 +28,6 @@ const NewEntry = () => {
     user_id: null,
     open_to_advice: false,
   });
-
-  // maybe remove user_id, not sure yet, testing
-
-  /////
 
   const [tags, setTags] = useState([]);
 
@@ -62,10 +48,6 @@ const NewEntry = () => {
     setEntry({ ...entry, problems: tags });
   }, [tags]);
 
-  // Testing
-
-  //
-
   const allPlants = useSelector((state) => state.plant.allPlants);
 
   const plant = allPlants.find((plant) => plant.id === Number(params.plant_id));
@@ -73,9 +55,7 @@ const NewEntry = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   useEffect(() => {
-    console.log("loggedInUser.id", loggedInUser.id);
     setEntry({ ...entry, user_id: loggedInUser.id });
-    console.log("entry.user_id", entry.user_id);
   }, [loggedInUser]);
 
   const handleEntryChange = (e) => {
@@ -93,7 +73,7 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const newEntry = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
@@ -106,21 +86,36 @@ const NewEntry = () => {
         }
       }
     }
+  
     dispatch(addEntryToApi(newEntry))
-      .then(() => dispatch(addEntryToPlant()))
-      .then(() => {
+      .then((action) => {
         const specificPlant = plant;
         const isPlantInArray = loggedInUser.plants.some(
           (plant) => plant.id === specificPlant.id
         );
-
+  
         if (!isPlantInArray) {
           dispatch(addPlantToUser(specificPlant));
+        } else {
+          const newestEntry = action.payload; // Assuming action.payload already contains the newestEntry
+  
+          const specificPlantWithEntry = {
+            ...specificPlant,
+            entries: [...specificPlant.entries, newestEntry],
+          };
+  
+          dispatch(updateUserPlant(specificPlantWithEntry));
         }
+      })
+      .catch((error) => {
+        console.error("Error occurred:", error);
+        // Handle error if needed
       });
-
+  
     navigate(`/plants/${entry.plant_id}`);
   };
+  
+  
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -202,7 +197,6 @@ const NewEntry = () => {
           <TagsInput
             tags={tags}
             handleTagsChange={handleTagsChange}
-            // handleKeyDown={handleKeyDown}
             removeTag={removeTag}
           />
 
@@ -223,3 +217,4 @@ const NewEntry = () => {
 };
 
 export default NewEntry;
+

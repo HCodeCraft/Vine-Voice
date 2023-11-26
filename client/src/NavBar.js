@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
+import { clearComments } from "./features/comments/commentSlice";
+import { clearPlants } from "./features/plants/plantSlice";
+import { clearEntries } from "./features/entries/entriesSlice";
 import { resetUser, logoutUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -31,9 +34,14 @@ const NavBar = () => {
     setSelectedTab(value);
   };
 
+  // need to import clearPlants, clearEntries, clearComments
   const handleLogout = () => {
     dispatch(logoutUser());
+
     dispatch(resetUser());
+    dispatch(clearPlants())
+    dispatch(clearEntries())
+    dispatch(clearComments())
     navigate("/login");
   };
 

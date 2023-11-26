@@ -6,16 +6,19 @@ class Comment < ApplicationRecord
 
 
     def username
-        self.user.username
+        self.user&.username
     end
 
+# maybe comment needs to include user?
 
-    def avatar_thumbnail
-        if self.user.avatar.attached?
-          variant = self.user.avatar.variant(resize_to_limit: [120, 120]).processed
-          Rails.application.routes.url_helpers.rails_representation_url(variant, only_path: true)
-        end
-      end
+
+def avatar_thumbnail
+  if self.user&.avatar&.attached?
+    variant = self.user.avatar.variant(resize_to_limit: [120, 120]).processed
+    Rails.application.routes.url_helpers.rails_representation_url(variant, only_path: true)
+  end
+end
+
       
       
       

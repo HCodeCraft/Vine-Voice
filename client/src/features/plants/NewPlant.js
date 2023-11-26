@@ -86,6 +86,11 @@ console.log("SelectedPlant", selectedPlant)
   ////
 
   useEffect(() => {
+    setEntry(prevEntry => ({ ...prevEntry, user_id: loggedInUser.id }));
+  }, []);
+  
+
+  useEffect(() => {
     console.log("myApiData.length", myApiData?.length);
     const timer = setTimeout(() => {
       if (myApiData.length === 0) {
