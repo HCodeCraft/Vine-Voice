@@ -44,7 +44,7 @@ const EditEntry = () => {
     }
   };
 
-  console.log("entry", entry);
+
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -68,7 +68,13 @@ Set up the image upload
   const plant = allPlants.find((plant) => plant.id === apiEntry.plant_id);
 
   useEffect(() => {
-    setEntry(apiEntry);
+    const updatedEntry = { ...apiEntry };
+
+
+    delete updatedEntry.picture;
+
+    setEntry(updatedEntry);
+
     setTags(apiEntry.problems);
   }, []);
 
@@ -86,6 +92,10 @@ Set up the image upload
   };
 
   const handleSubmit = (e) => {
+    console.log("entry from handleSubmit", entry)
+
+    /// if entry.picture is unchanged, i don't want it added to formdata
+    // maybe if it's the same 
     e.preventDefault();
     const entryId = entry.id;
     const updatedEntry = new FormData();
@@ -110,7 +120,7 @@ Set up the image upload
     // what kind of state needs to be updated? IndividualEntry, allEntries, IndividualPlant.entry
     // replacing the stuff
 
-    navigate(`/plants/${plant.id}`);
+    navigate(`/plants/${plant.id}/entries/${entryId}`);
   };
 
   const boxStyle = {
@@ -155,8 +165,8 @@ Set up the image upload
             className="entry_pic"
             src={
               entry.picture instanceof File
-                ? URL.createObjectURL(entry.picture)
-                : entry.picture || default_plant
+                ? URL.createObjectURL(apiEntry.picture)
+                : apiEntry.picture || default_plant
             }
             alt="Entry"
           />

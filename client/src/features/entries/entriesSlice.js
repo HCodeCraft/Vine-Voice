@@ -81,6 +81,7 @@ export const addEntryToApi = createAsyncThunk(
       }
 
       const data = await response.json();
+      console.log("data from addEntry", data)
       return data;
     } catch (error) {
       throw error;

@@ -40,7 +40,7 @@ const Entry = () => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);
-      console.log("result.payload from fetchEntry", result.payload);
+    
     };
 
     fetchEntry();
@@ -50,14 +50,13 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.user.username
   );
 
-  console.log("entryUsername", entryUsername)
+
 
   // not getting this at first, it is there though
 
 const indEntry = useSelector(
   (state) => state.entry.individualEntry)
 
-  console.log("indEntry", indEntry)
 
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
@@ -98,7 +97,7 @@ const indEntry = useSelector(
   // If user's entry s/he can delete everyone's comment and also edit the entry
 
   const handleDeleteEntry = async (entryId) => {
-    console.log("entryId from handleDeleteEntry", entryId);
+
     try {
       await dispatch(deleteEntryInPlant(entryId));
       await dispatch(deleteEntryFromApi(entryId));
@@ -159,7 +158,7 @@ const indEntry = useSelector(
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
-  console.log("entry", entry);
+
   return entry ? (
     <section className="section" align="center">
       <Typography variant="h4" align="center" style={{ marginTop: "3em" }}>

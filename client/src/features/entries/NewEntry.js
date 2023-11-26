@@ -86,6 +86,15 @@ const NewEntry = () => {
         }
       }
     }
+
+    console.log("FormData object:");
+
+const formDataObject = {};
+newEntry.forEach((value, key) => {
+  formDataObject[key] = value;
+});
+
+console.log(formDataObject);
   
     dispatch(addEntryToApi(newEntry))
       .then((action) => {
