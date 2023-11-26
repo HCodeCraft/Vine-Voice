@@ -18,17 +18,6 @@ def create
   end
 end
 
-  # def create
-  #   puts "Received parameters: #{params.inspect}"
-  #   user = User.create(user_params)
-  
-  #   if user.valid?
-  #     session[:user_id] = user.id
-  #     render json: user, status: :created
-  #   else
-  #     render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
-  #   end
-  # end
   
 
   # added .with_attached_avatar
@@ -46,20 +35,21 @@ end
     end
   end
 
-
   def show
     user = User.find_by(id: params[:id])
-
+  
     if user
       if user.privacy === true
-        render json: user.slice(:username, :name, :avatar_url, :status)
+        render json: user.slice(:username, :name, :avatar_url, :status, :id, :privacy, :plants).to_json
       else
-        render json: user
+        render json: user, serializer: UserSerializer
       end
     else
       render json: { errors: ["User not found"] }, status: :not_found
     end
   end
+  
+
 
 
 

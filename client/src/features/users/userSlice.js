@@ -117,7 +117,7 @@ export const registerUserInApi = createAsyncThunk(
           errorData = "Response body already consumed";
         }
 
-        throw new Error(`Server responded with status ${response.status}: ${errorData}`);
+        throw new Error(`${errorData}`);
       }
 
       const data = await response.json();

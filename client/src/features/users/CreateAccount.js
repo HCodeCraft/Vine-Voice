@@ -13,8 +13,11 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { useDispatch } from "react-redux";
-import { registerUserInApi } from "./userSlice";
+import { registerUserInApi, fetchAllUsers } from "./userSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchAllPlants } from "../plants/plantSlice";
+import { fetchAllEntries } from "../entries/entriesSlice";
+import { fetchAllComments } from "../comments/commentSlice";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -71,6 +74,10 @@ for (let pair of newUser.entries()) {
 
       if (registerUserInApi.fulfilled.match(action)) {
         setFormErrors([]);
+        await dispatch(fetchAllUsers())
+        await dispatch(fetchAllPlants());
+        await dispatch(fetchAllEntries());
+         await dispatch(fetchAllComments());
         navigate(`/users/plants`);
       } else if (registerUserInApi.rejected.match(action)) {
         const error = action.error.message;
