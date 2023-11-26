@@ -165,7 +165,7 @@ Set up the image upload
             className="entry_pic"
             src={
               entry.picture instanceof File
-                ? URL.createObjectURL(apiEntry.picture)
+                ? URL.createObjectURL(entry.picture)
                 : apiEntry.picture || default_plant
             }
             alt="Entry"
