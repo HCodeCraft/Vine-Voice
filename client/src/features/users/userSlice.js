@@ -232,6 +232,7 @@ const userSlice = createSlice({
       );
     },
     deleteUserPlant: (state, action) => {
+      console.log("action.payload from deleteUserPlant", action.payload)
       console.log("Deleting plant with ID:", action.payload.id);
 
       const deletedPlantId = action.payload.id;

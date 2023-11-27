@@ -386,3 +386,7 @@ justify-content: space-around;
   margin-top: 3em;
 }
 
+.statusText{
+  font-size: 17px;
+}
+

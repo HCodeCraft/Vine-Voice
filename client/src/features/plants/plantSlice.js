@@ -250,7 +250,9 @@ const plantSlice = createSlice({
         const entry = action.payload;
 
         // Update the individualPlant with the new entry
-        state.individualPlant.entries.push(entry);
+        /// might need to make individualplant entries as an empty array
+        /// before doing that
+        state.individualPlant?.entries.push(entry);
 
         // Find the plant and update it with the new entry in allPlants
         const plantToUpdate = state.allPlants.find(

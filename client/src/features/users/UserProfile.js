@@ -135,7 +135,7 @@ const UserProfile = () => {
             style={{ marginTop: "1em", marginBottom: "1em" }}
           >
             {currentUser ? `I have` : "They have"}{" "}
-            {user.plants?.length > 0 ? user.plants.length : `no`}{" "}
+            {user.plants?.length > 0 ? user.plants?.length : `no`}{" "}
             {user.plants?.length === 1 ? `plant` : `plants`} logged!
           </Typography>
           {currentUser === true ? (
@@ -160,7 +160,7 @@ const UserProfile = () => {
               <>
                 <Typography variant="h5">Status: </Typography>
                 <p>Limit 10-75 characters</p>
-                <p>currently: {newStatus.length}</p>
+                <p>currently: {newStatus?.length}</p>
                 <textarea
                   rows={5}
                   cols={20}
@@ -169,7 +169,7 @@ const UserProfile = () => {
                   onChange={handleStatusChange}
                   type="text"
                   style={{ width: "100%" }}
-                  className="margB1"
+                  className="margB1 statusText"
                 />
                 <CommonButton onClick={handleStatusEditSubmit}>
                   Set Status

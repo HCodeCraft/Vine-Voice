@@ -50,10 +50,10 @@ const CreateAccount = () => {
 
       Object.keys(data).forEach((key) => {
         const value = data[key];
-      
+
         // Exclude 'agreeToTerms' key
-        if (key !== 'agreeToTerms' && value !== null && value !== undefined) {
-          if (key === 'avatar' && value[0] instanceof File) {
+        if (key !== "agreeToTerms" && value !== null && value !== undefined) {
+          if (key === "avatar" && value[0] instanceof File) {
             // Handle file upload separately
             newUser.append(`user[${key}]`, value[0]);
           } else {
@@ -65,25 +65,30 @@ const CreateAccount = () => {
 
       console.log("FormData entries:");
 
-for (let pair of newUser.entries()) {
-  console.log(pair[0] + ', ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
-}
-
+      for (let pair of newUser.entries()) {
+        console.log(
+          pair[0] + ", " + (pair[1] instanceof File ? pair[1].name : pair[1])
+        );
+      }
 
       const action = await dispatch(registerUserInApi(newUser));
 
       if (registerUserInApi.fulfilled.match(action)) {
         setFormErrors([]);
-        await dispatch(fetchAllUsers())
+        await dispatch(fetchAllUsers());
         await dispatch(fetchAllPlants());
         await dispatch(fetchAllEntries());
-         await dispatch(fetchAllComments());
+        await dispatch(fetchAllComments());
         navigate(`/users/plants`);
       } else if (registerUserInApi.rejected.match(action)) {
         const error = action.error.message;
-        const errorList = error.split(",");
 
-        setFormErrors(errorList);
+        const errorObject = JSON.parse(error);
+
+        // Access the 'errors' array
+        const errors = errorObject.errors;
+
+        setFormErrors(errors);
       }
     } catch (error) {
       console.error("Login failed:", error);
@@ -146,7 +151,7 @@ for (let pair of newUser.entries()) {
             <TextField
               label="First Name (optional)"
               placeholder="Enter First Name"
-              style={{marginBottom:'1em'}}
+              style={{ marginBottom: "1em" }}
               fullWidth
               type="text"
               id="name"
@@ -191,20 +196,23 @@ for (let pair of newUser.entries()) {
               </div>
             ) : null}
             <p className="error_msg">{errors.password_confirmation?.message}</p>
-            <label htmlFor="avatar" >Add Avatar from image</label>
+            <label htmlFor="avatar">Add Avatar from image</label>
             <div className="margB1"></div>
             <label htmlFor="avatar">Avatar:</label>
-      <input
-        type="file"
-        id="avatar"
-        className="margB1"
-        onChange={(e) => {
-          register("avatar", { value: e.target.files[0], required: "File is required" });
-        }}
-        accept=".jpg, .jpeg, .png, .webp"
-      />
-      {errors.avatar && <span>{errors.avatar.message}</span>}
-                        <div className="margB1"></div>
+            <input
+              type="file"
+              id="avatar"
+              className="margB1"
+              onChange={(e) => {
+                register("avatar", {
+                  value: e.target.files[0],
+                  required: "File is required",
+                });
+              }}
+              accept=".jpg, .jpeg, .png, .webp"
+            />
+            {errors.avatar && <span>{errors.avatar.message}</span>}
+            <div className="margB1"></div>
             <Controller
               name="recieve_dev_emails"
               control={control}
@@ -216,7 +224,7 @@ for (let pair of newUser.entries()) {
                 </label>
               )}
             />
-  <div className="margB1"></div>
+            <div className="margB1"></div>
             <Controller
               name="privacy"
               className="margB2"
@@ -229,7 +237,7 @@ for (let pair of newUser.entries()) {
                 </label>
               )}
             />
-              <div className="margB1"></div>
+            <div className="margB1"></div>
             <div className="margB1">
               <Button variant="contained" onClick={handleOpen}>
                 Terms of Service

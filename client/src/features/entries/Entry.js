@@ -40,39 +40,33 @@ const Entry = () => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);
-    
     };
 
     fetchEntry();
   }, []);
 
   const entryUsername = useSelector(
-    (state) => state.entry.individualEntry?.user.username
+    (state) => state.entry.individualEntry?.user?.username
   );
 
   //// testing
-  const allPlants = useSelector((state) => state.plant.allPlants)
-  
-  useEffect(() => {
-    console.log("allPlants", allPlants)
-  }, [allPlants])
-
+  const allPlants = useSelector((state) => state.plant.allPlants);
 
   // not getting this at first, it is there though
 
-const indEntry = useSelector(
-  (state) => state.entry.individualEntry)
-
+  const indEntry = useSelector((state) => state.entry.individualEntry);
 
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
   );
 
-
   const plant = useSelector((state) => state.plant.individualPlant);
+
 
   const user = useSelector((state) => state.user.loggedInUser);
 
+  const myEntries = plant.entries.filter((e) => e.user_id === user.id)
+  console.log("myEntries", myEntries)
   useEffect(() => {
     if (entryUsername === user.username) {
       setCurrentUser(true);
@@ -80,7 +74,6 @@ const indEntry = useSelector(
       setCurrentUser(false);
     }
   }, [entryUsername]);
-
 
   const scrollToSection = (elementRef) => {
     window.scrollTo({
@@ -103,33 +96,31 @@ const indEntry = useSelector(
   // If user's entry s/he can delete everyone's comment and also edit the entry
 
   const handleDeleteEntry = async (entryId) => {
-
     try {
       await dispatch(deleteEntryInPlant(entryId));
       await dispatch(deleteEntryFromApi(entryId));
 
       const userPlant = user.plants.find((p) => p.id === plant.id);
-      navigate(`/users/plants`);
+      console.log("userPlant", userPlant)
 
-
-
+      /// it doesn't look like userPlant ever has entries....
       // DELETE ENTRY FROM ALLPLANTS
-      if (userPlant && userPlant.entries?.length === 1) {
+      console.log("myEntries.length", myEntries.length)
+      if (userPlant && myEntries?.length === 1) {
+        console.log("The condition was met")
         dispatch(deleteUserPlant({ id: userPlant.id }));
 
         navigate(`/users/plants`);
       } else {
-              /// need to delete the entry for indUser.plants
-      // could use updateUserPlant again which takes in the specific plant
-      // have access to the entry.id, updateUserPlant wants the plant
-      /////////////////////////////////////////////////////////////////////////////////////////////////////
-      const newPlantEntries = plant.entries.filter((entry) => entry.id !== entryId)
-      const plantWithoutEntry = {...plant, entries: [newPlantEntries]}
-      dispatch(updateUserPlant(plantWithoutEntry))
+        console.log("The condition WASTNT MET")
+        const newPlantEntries = plant.entries.filter(
+          (entry) => entry.id !== entryId
+        );
+        const plantWithoutEntry = { ...plant, entries: [newPlantEntries] };
+        dispatch(updateUserPlant(plantWithoutEntry));
 
-      // check indUser.plant.entries
-
-
+        // check indUser.plant.entries
+        navigate(`/users/plants`);
       }
     } catch (error) {
       console.error("An error occurred:", error);
@@ -163,7 +154,6 @@ const indEntry = useSelector(
   };
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
-
 
   return entry ? (
     <section className="section" align="center">

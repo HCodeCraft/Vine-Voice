@@ -50,8 +50,16 @@ const EditEntry = () => {
     setTags(tags.filter((el, i) => i !== index));
   };
 
-  // Testing
 
+  useEffect(() => {
+    setEntry({ ...entry, problems: tags });
+  }, [tags]);
+
+  // Testing
+useEffect(() => {
+  console.log("entry.problems", entry.problems)
+  console.log("tags", tags)
+}, [entry.problems, tags])
   //
 
   /*** To Do
@@ -98,6 +106,8 @@ Set up the image upload
     // maybe if it's the same 
     e.preventDefault();
     const entryId = entry.id;
+
+
     const updatedEntry = new FormData();
 
     for (const key in entry) {
