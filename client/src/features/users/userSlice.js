@@ -353,7 +353,7 @@ const userSlice = createSlice({
           (user) => user.id !== deletedUserId
         );
 
-        if (state.loggedInUser.id === deletedUserId) {
+        if (state.loggedInUser?.id === deletedUserId) {
           state.loggedInUser = null;
           state.loggedIn = null;
         }

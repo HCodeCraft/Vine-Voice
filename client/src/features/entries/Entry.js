@@ -50,6 +50,12 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.user.username
   );
 
+  //// testing
+  const allPlants = useSelector((state) => state.plant.allPlants)
+  
+  useEffect(() => {
+    console.log("allPlants", allPlants)
+  }, [allPlants])
 
 
   // not getting this at first, it is there though

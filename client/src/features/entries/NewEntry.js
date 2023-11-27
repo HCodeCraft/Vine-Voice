@@ -12,6 +12,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { addEntryToApi } from "./entriesSlice";
 import { addPlantToUser, updateUserPlant } from "../users/userSlice";
 import TagsInput from "../../TagsInput";
+import { addEntryToPlant } from "../plants/plantSlice";
 
 const NewEntry = () => {
   const params = useParams();
@@ -102,6 +103,9 @@ console.log(formDataObject);
         const isPlantInArray = loggedInUser.plants.some(
           (plant) => plant.id === specificPlant.id
         );
+
+        dispatch(addEntryToPlant())
+        /// the entry needs to be the individualentry in state
   
         if (!isPlantInArray) {
           dispatch(addPlantToUser(specificPlant));
