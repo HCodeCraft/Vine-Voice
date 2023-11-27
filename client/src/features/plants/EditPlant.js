@@ -12,9 +12,10 @@ const EditPlant = () => {
   const dispatch = useDispatch();
 
   const apiPlant = useSelector((state) => state.plant.individualPlant);
+  console.log("apiPlant", apiPlant)
 
   const user = useSelector((state) => state.user.loggedInUser);
-
+console.log("user", user)
   const [plant, setPlant] = useState({
     common_name: "",
     scientific_name: "",
@@ -92,8 +93,12 @@ const EditPlant = () => {
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
+
+    /// somehow this is changing loggedInUser to the plant
     const plantId = apiPlant.id;
+    console.log("plantId", plantId)
     const updatedPlant = plant;
+    console.log("updatedPlant", updatedPlant)
     dispatch(updatePlantInApi({ plantId, updatedPlant }));
 
     navigate(`/plants/${plant.id}`);

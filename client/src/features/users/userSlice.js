@@ -225,7 +225,9 @@ const userSlice = createSlice({
       );
     },
     updateUserPlant: (state, action) => {
+      
       const updatedPlant = action.payload;
+      console.log("updatedPlant from updateUserPlant", updatedPlant)
 
       state.loggedInUser.plants = state.loggedInUser.plants.map((plant) =>
         plant.id === updatedPlant.id ? updatedPlant : plant

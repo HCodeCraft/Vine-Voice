@@ -6,6 +6,7 @@ import CommonButton from "../../common/CommonButton";
 import EntryTable from "../entries/EntryTable";
 import { fetchPlantById } from "./plantSlice";
 import { deletePlantFromApi } from "./plantSlice";
+import { deleteUserPlant } from "../users/userSlice";
 
 const Plant = () => {
   const params = useParams();
@@ -18,6 +19,8 @@ const Plant = () => {
   // add edit and delete buttons for the admin
 
   const user = useSelector((state) => state.user.loggedInUser);
+  console.log("user", user)
+  /// why is user being set to coral TREE???
 
   console.log("loggedInUser", user)
 
@@ -36,6 +39,8 @@ const Plant = () => {
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));
     // ? Change user plant state ?
+    /// delete plant from user? with the plant you want to delete
+    dispatch(deleteUserPlant(plant))
 
     navigate(`/plants`);
   };

@@ -58,7 +58,7 @@ export const addPlantToApi = createAsyncThunk(
 );
 
 export const updatePlantInApi = createAsyncThunk(
-  "user/updateUserInApi",
+  "user/updatePlantInApi",
   async ({ plantId, updatedPlant }, thunkAPI) => {
     try {
       const response = await fetch(`/plants/${plantId}`, {
@@ -75,6 +75,7 @@ export const updatePlantInApi = createAsyncThunk(
       }
 
       const updatedPlantData = await response.json();
+      console.log("updatedPlantData from UPIAPI", updatedPlantData)
       thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
     } catch (error) {
@@ -227,6 +228,7 @@ const plantSlice = createSlice({
         state.errorIndividualPlant = action.error.message;
       })
       .addCase(updatePlantInApi.fulfilled, (state, action) => {
+        console.log("action.payload for updatePlantInApi", action.payload)
         state.individualPlant = action.payload;
 
         const updatedPlant = state.individualPlant;
