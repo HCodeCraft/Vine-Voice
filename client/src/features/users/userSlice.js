@@ -11,17 +11,49 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify({ username, password }),
       });
 
+      if (!response.ok) {
+        console.error(`Login failed with status: ${response.status}`);
+        const errorText = await response.text();
+        console.error(`Error response text: ${errorText}`);
+        throw new Error("Login failed");
+      }
+
       const user = await response.json();
+
       if (user.error) {
         throw new Error("Invalid Username or Password");
       }
 
       return user;
     } catch (error) {
+      console.error("Error in loginUser:", error);
       throw error;
     }
   }
 );
+
+
+// export const loginUser = createAsyncThunk(
+//   "user/loginUser",
+//   async ({ username, password }) => {
+//     try {
+//       const response = await fetch(`/login`, {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({ username, password }),
+//       });
+
+//       const user = await response.json();
+//       if (user.error) {
+//         throw new Error("Invalid Username or Password");
+//       }
+
+//       return user;
+//     } catch (error) {
+//       throw error;
+//     }
+//   }
+// );
 
 export const logoutUser = createAsyncThunk("user/logout", async (_) => {
   try {
