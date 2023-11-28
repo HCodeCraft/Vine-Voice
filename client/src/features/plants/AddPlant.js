@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import Restricted from "../../Restricted";
 import Unauthorized from "../../Unauthorized";
 import { addPlantToApi } from "./plantSlice";
@@ -8,10 +7,7 @@ import tomato from "../../pictures/tomato.png";
 
 const AddPlant = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user.loggedInUser);
-
-  /// Missing water rec! frequent, average, minimum, none
 
   const [plant, setPlant] = useState({
     common_name: "",
@@ -78,8 +74,6 @@ const AddPlant = () => {
     e.preventDefault();
 
     dispatch(addPlantToApi({ plant }));
-    /// put in the backend to add the plant to user's plants if it has an entry
-    // add entry to user
 
     setPlantFieldsToBlank();
   };
@@ -335,10 +329,7 @@ const AddPlant = () => {
           <option>Biannual</option>
         </select>
         <div className="margB2"></div>
-        <button
-          className="save-btn"
-          type="submit"
-        >
+        <button className="save-btn" type="submit">
           {" "}
           Save
         </button>

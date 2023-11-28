@@ -14,33 +14,13 @@ const Plant = () => {
   const id = Number(params.id);
   const navigate = useNavigate();
 
-  // To-Do
-  // add medium image Urls to existing plants and use them for the plant page image
-  // add edit and delete buttons for the admin
-
   const user = useSelector((state) => state.user.loggedInUser);
-  console.log("user", user)
-  /// why is user being set to coral TREE???
-
-  console.log("loggedInUser", user)
-
-
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
-  console.log("plant (individualPlant)", plant);
-
-  // plant is getting plants from individualPlant
-
-  const allPlants = useSelector((state) => state.plant.allPlants);
-
-  console.log("allPlants", allPlants)
-
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));
-    // ? Change user plant state ?
-    /// delete plant from user? with the plant you want to delete
-    dispatch(deleteUserPlant(plant))
+    dispatch(deleteUserPlant(plant));
 
     navigate(`/plants`);
   };

@@ -12,7 +12,6 @@ export const fetchAllComments = createAsyncThunk(
     try {
       const response = await fetch(`/comments`);
       const data = await response.json();
-      console.log("data from fetchAllComments", data);
       return data;
     } catch (error) {
       throw error;
@@ -121,8 +120,8 @@ const commentSlice = createSlice({
       state.loadingAllComments = false;
       state.loadingIndividualComment = false;
       state.errorAllComments = null;
-      state.errorIndividualComment =null;
-    }, 
+      state.errorIndividualComment = null;
+    },
     addComment: (state, action) => {
       state.allComments.push(action.payload);
     },
@@ -213,6 +212,7 @@ const commentSlice = createSlice({
   },
 });
 
-export const { addComment, deleteComment, clearComments } = commentSlice.actions;
+export const { addComment, deleteComment, clearComments } =
+  commentSlice.actions;
 
 export const commentReducer = commentSlice.reducer;

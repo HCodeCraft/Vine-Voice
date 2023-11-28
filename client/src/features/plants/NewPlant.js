@@ -27,7 +27,6 @@ import { addEntryToPlant } from "./plantSlice";
 const NewPlant = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const inputRef = useRef(null);
   const pageEndRef = useRef(null);
   const [searchName, setSearchName] = useState("");
   const [searchBar, setSearchBar] = useState(true);
@@ -51,9 +50,9 @@ const NewPlant = () => {
     user_id: null,
     problems: [],
   });
-  // took out problems: ""
+
   const [plant, setPlant] = useState({
-    id: null, // not sure if I should have this < but otherwise how could I set it?
+    id: null,
     common_name: "",
     scientific_name: "",
     image_url: "",
@@ -73,25 +72,12 @@ const NewPlant = () => {
   const [tags, setTags] = useState([]);
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
-  const allPlants = useSelector((state) => state.plant.allPlants);
-  const indEntry = useSelector((state) => state.entry.individualEntry);
-  // how do I set the entry in NewEntry? addEntryToApi(newEntry)
-
-
-  //// Testing
-useEffect(()=> {
-console.log("SelectedPlant", selectedPlant)
-}, [selectedPlant])
-
-  ////
 
   useEffect(() => {
-    setEntry(prevEntry => ({ ...prevEntry, user_id: loggedInUser.id }));
+    setEntry((prevEntry) => ({ ...prevEntry, user_id: loggedInUser.id }));
   }, []);
-  
 
   useEffect(() => {
-    console.log("myApiData.length", myApiData?.length);
     const timer = setTimeout(() => {
       if (myApiData.length === 0) {
         setShowSpinner(true);
@@ -109,7 +95,6 @@ console.log("SelectedPlant", selectedPlant)
       }
     }, 3000);
 
-    // Clear the timeout if the component unmounts or the dependency changes
     return () => clearTimeout(timeoutId);
   }, [myApiData, speciesList]);
 
@@ -125,10 +110,6 @@ console.log("SelectedPlant", selectedPlant)
     setEntry({ ...entry, problems: [...entry.problems, value] });
     e.target.value = "";
   };
-
-  useEffect(() => {
-    console.log("showSpinner", showSpinner);
-  }, [showSpinner]);
 
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
@@ -183,13 +164,9 @@ console.log("SelectedPlant", selectedPlant)
   const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
-    console.log("SelectedPlant from HSP", selectedPlant);
     setActiveCard(index);
 
     if (apiForm === false) {
-      // If apiform is false
-      console.log("apiform was false");
-
       setEntry({
         ...entry,
         plant_id: selectedPlant.id,
@@ -230,8 +207,6 @@ console.log("SelectedPlant", selectedPlant)
           medicinal: apiPlant.medicinal,
         }));
 
-        console.log("Plant from in axios thing", plant);
-
         pageEndRef.current &&
           pageEndRef.current.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
@@ -243,15 +218,11 @@ console.log("SelectedPlant", selectedPlant)
   const addPlant = (plant) => {
     dispatch(addPlantToApi(plant))
       .then((action) => {
-        // Log the data from the action
-        console.log("Data after addPlantToApi dispatch:", action.payload);
-
         const entry = action.payload.plant.entries[0];
         dispatch(addEntryToAllAndIndState(entry));
         dispatch(addPlantToUser());
       })
       .catch((error) => {
-        // Handle error if needed
         console.error("Error adding plant:", error);
       });
   };
@@ -273,7 +244,6 @@ console.log("SelectedPlant", selectedPlant)
       .then(() => dispatch(addEntryToPlant()))
       .then(() => dispatch(addPlantToUser()));
 
-    // resetEntryAndPlant()
     navigate(`/plants/${entry.plant_id}`);
   };
 
@@ -300,9 +270,7 @@ console.log("SelectedPlant", selectedPlant)
     setSearchBar(false);
 
     try {
-      // First Axios request
       const localResponse = await axios.get(`/search.json?q=${searchName}`);
-      console.log("Local API Data:", localResponse.data);
       setMyApiData(localResponse.data);
       setTriggerTimeout(true);
     } catch (error) {
@@ -320,35 +288,22 @@ console.log("SelectedPlant", selectedPlant)
       }, 3000);
     }
 
-    // Clear the timeout if the component unmounts or myApiData changes
     return () => clearTimeout(timeoutId);
   }, [myApiData, triggerTimeout]);
 
-  // maybe do something similar for the duration of the spinner
-  // for between when SpeciesListRequest is clicked and speciesList.length ==0
-  //
-
   const speciesListRequest = async () => {
-    console.log("SpeciesListRequest was clicked");
     setResultForm(false);
     setApiForm(true);
-    /// just added
     setShowSpinner(true);
-    ///////
 
     try {
       const url = `https://perenual.com/api/species-list?key=${API_KEY}&q=${searchName}`;
       const externalResponse = await axios.get(url);
-      console.log("External API Data:", externalResponse.data.data);
       await setSpeciesList(externalResponse.data.data);
 
-      // just added
       speciesList.length > 0
         ? setShowSpinner(false)
         : setTimeout(() => setShowSpinner(true), 3000);
-      //// just added
-
-      // Eventually I want only the elements of speciesList that are not in myApiData
     } catch (error) {
       console.error("API Error:", error);
     }
@@ -363,13 +318,10 @@ console.log("SelectedPlant", selectedPlant)
       } else {
         const newPlant = {
           ...plant,
-          entries_attributes: [entry], // Ensure entries_attributes is an array
+          entries_attributes: [entry],
         };
 
         const createdPlantWithEntry = await addPlant({ newPlant });
-
-        // add Entry to plant?
-        /// how would I get the id of the created plant???
 
         navigate(`/users/plants`);
       }
@@ -378,21 +330,19 @@ console.log("SelectedPlant", selectedPlant)
     }
   };
 
-  const availPlants = speciesList.filter((p_plant) => 
-  p_plant.default_image &&
-  p_plant.default_image["thumbnail"] !== "https://perenual.com/storage/image/upgrade_access.jpg" &&
-  p_plant.default_image["thumbnail"] !== null &&
-  p_plant.default_image["small_url"] !== "https://perenual.com/storage/image/upgrade_access.jpg" &&
-  p_plant.default_image["small_url"] !== null
-);
-
-
-
-  /// need to change the plants both 0 to my_api_plants and availPlants
-  /// when no results still showing spinner
+  const availPlants = speciesList.filter(
+    (p_plant) =>
+      p_plant.default_image &&
+      p_plant.default_image["thumbnail"] !==
+        "https://perenual.com/storage/image/upgrade_access.jpg" &&
+      p_plant.default_image["thumbnail"] !== null &&
+      p_plant.default_image["small_url"] !==
+        "https://perenual.com/storage/image/upgrade_access.jpg" &&
+      p_plant.default_image["small_url"] !== null
+  );
 
   return (
-    <Container style={{marginBottom:'2em'}}>
+    <Container style={{ marginBottom: "2em" }}>
       <section>
         <div
           style={{
@@ -404,7 +354,10 @@ console.log("SelectedPlant", selectedPlant)
           {" "}
           {searchBar ? (
             <>
-              <Typography variant="h4" style={{ marginTop: "3em", marginBottom: "1em" }}>
+              <Typography
+                variant="h4"
+                style={{ marginTop: "3em", marginBottom: "1em" }}
+              >
                 Search for a Plant
               </Typography>
               <form>
@@ -430,7 +383,10 @@ console.log("SelectedPlant", selectedPlant)
             </>
           ) : (
             <>
-              <Typography variant="h4" style={{ marginTop: "3em", marginBottom:"1em" }}>
+              <Typography
+                variant="h4"
+                style={{ marginTop: "3em", marginBottom: "1em" }}
+              >
                 You Searched for:
               </Typography>
               <div className="search-txt">
@@ -449,7 +405,7 @@ console.log("SelectedPlant", selectedPlant)
               </div>
             </>
           )}
-<div className="margB1"></div>
+          <div className="margB1"></div>
           {showSpinner === true && resultForm && myApiData.length === 0 ? (
             <Spinner />
           ) : null}
@@ -459,11 +415,6 @@ console.log("SelectedPlant", selectedPlant)
           availPlants.length === 0 ? (
             <Spinner />
           ) : null}
-          {/* 
-          changed it from speciesList to availPlants 
-          
-          Maybe have a timeout on the spinner, maybe has a useEffect if show
-        spinner is true after 3 seconds set it to false*/}
           {noResultButton ? (
             <div className="editBox">
               <Typography
@@ -521,12 +472,7 @@ console.log("SelectedPlant", selectedPlant)
           <div className="small-plant-card-container" />
           {apiForm && speciesList && availPlants.length > 0 && (
             <>
-            {/* const availPlants = speciesList.filter((p_plant) => p_plantdefault_image["thumbnail"] !== "https://perenual.com/storage/image/upgrade_access.jpg" )
-            filter out the plants with p_plant.default_image["thumbnail"] ===
-            "https://perenual.com/storage/image/upgrade_access.jpg"
-            */}{
-        
-              availPlants.map((p_plant, index) => (
+              {availPlants.map((p_plant, index) => (
                 <SmallPlantCard
                   key={p_plant.id}
                   className="small-plant-card"
@@ -565,11 +511,13 @@ console.log("SelectedPlant", selectedPlant)
           )}
         </div>
       </section>
-  
+
       <div className="entry_box">
         {entryForm === true ? (
           <div className="entryBox">
-            <Typography variant="h5" style={{marginBottom: '1em'}}>Your Plant's Details</Typography>
+            <Typography variant="h5" style={{ marginBottom: "1em" }}>
+              Your Plant's Details
+            </Typography>
             <form noValidate autoComplete="off" onSubmit={handleSubmit}>
               <TextField
                 label="Nickname"
@@ -577,7 +525,7 @@ console.log("SelectedPlant", selectedPlant)
                 variant="outlined"
                 color="secondary"
                 onChange={handleEntryChange}
-                style={{marginBottom:'1em'}}
+                style={{ marginBottom: "1em" }}
               />
               <TextField
                 label="Location"
@@ -585,7 +533,7 @@ console.log("SelectedPlant", selectedPlant)
                 variant="outlined"
                 color="secondary"
                 onChange={handleEntryChange}
-                style={{marginBottom:'1em'}}
+                style={{ marginBottom: "1em" }}
               />
               <TextField
                 label="Notes"
@@ -595,7 +543,7 @@ console.log("SelectedPlant", selectedPlant)
                 multiline
                 rows={4}
                 onChange={handleEntryChange}
-                style={{marginBottom:'2em'}}
+                style={{ marginBottom: "2em" }}
               />
               <div className="health_box margB1">
                 <Typography variant="h6">Health Rating</Typography>

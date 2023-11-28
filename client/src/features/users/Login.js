@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Grid,
   Paper,
@@ -42,10 +41,10 @@ const Login = () => {
 
       if (loginUser.fulfilled.match(action)) {
         setFormErrors([]);
-        await dispatch(fetchAllUsers())
+        await dispatch(fetchAllUsers());
         await dispatch(fetchAllPlants());
         await dispatch(fetchAllEntries());
-         await dispatch(fetchAllComments());
+        await dispatch(fetchAllComments());
         navigate(`/users/plants`);
       }
     } catch (error) {
@@ -53,25 +52,18 @@ const Login = () => {
     }
   };
 
-  // I think I might need to make this wait until the login finishes
   useEffect(() => {
     if (loggedIn === true) {
       dispatch(fetchUserData());
     }
   }, [loggedIn, dispatch]);
 
-  // useEffect(() => {
-  //   if (indUser) {
-  //   navigate(`/users/${indUser.id}`)
-
-  // }},[indUser])
-
   const paperStyle = {
     padding: 20,
     height: "70vh",
     width: 280,
     margin: "20px auto",
-    marginTop:'6em'
+    marginTop: "6em",
   };
   const btnstyle = { margin: "8px 0" };
 

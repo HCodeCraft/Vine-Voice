@@ -13,24 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 
-// when I have multiple users I'll want to just show the most recent entry per user
-
-/// entries are coming from individualPlant.entries which doesn't have a user
-/// for some reason, idk why
-/// I could find the user from allUsers
-
-
 const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
-/// indPlant > indPlant.entries (no user)
-// can find out how to get a user
-
 const EntryTable = ({ entries, comments }) => {
-  // const entryComments = comments.filter((comment) => comment.entry_id ==entry.id)
-  // probably a more concise way of putting the comments in...
-
-  console.log("entries from EntryTable", entries)
-
   return (
     <div
       style={{

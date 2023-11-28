@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
-FormGroup, FormControlLabel, Checkbox,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
   Typography,
   Box,
 } from "@mui/material";
@@ -74,7 +76,7 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const newEntry = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
@@ -88,15 +90,6 @@ const NewEntry = () => {
       }
     }
 
-    console.log("FormData object:");
-
-const formDataObject = {};
-newEntry.forEach((value, key) => {
-  formDataObject[key] = value;
-});
-
-console.log(formDataObject);
-  
     dispatch(addEntryToApi(newEntry))
       .then((action) => {
         const specificPlant = plant;
@@ -104,31 +97,27 @@ console.log(formDataObject);
           (plant) => plant.id === specificPlant.id
         );
 
-        dispatch(addEntryToPlant())
-        /// the entry needs to be the individualentry in state
-  
+        dispatch(addEntryToPlant());
+
         if (!isPlantInArray) {
           dispatch(addPlantToUser(specificPlant));
         } else {
-          const newestEntry = action.payload; // Assuming action.payload already contains the newestEntry
-  
+          const newestEntry = action.payload;
+
           const specificPlantWithEntry = {
             ...specificPlant,
             entries: [...specificPlant.entries, newestEntry],
           };
-  
+
           dispatch(updateUserPlant(specificPlantWithEntry));
         }
       })
       .catch((error) => {
         console.error("Error occurred:", error);
-        // Handle error if needed
       });
-  
+
     navigate(`/plants/${entry.plant_id}`);
   };
-  
-  
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -230,4 +219,3 @@ console.log(formDataObject);
 };
 
 export default NewEntry;
-

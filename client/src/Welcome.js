@@ -1,11 +1,10 @@
 import React from "react";
 import CommonButton from "./common/CommonButton";
-import { useSelector } from "react-redux";
 import { Typography, Grid, Paper, useMediaQuery, useTheme } from "@mui/material";
 import PlantPhone from "./pictures/plantphone.jpg";
 import { Link } from 'react-router-dom'
 
-// Step into your ultimate destination for all things plant-related! Immerse yourself in a world where you can discover fascinating plant facts, meticulously track your plant's well-being and details, and engage with a vibrant community of fellow plant enthusiasts. Share your wealth of plant knowledge, explore others' green companions, and cultivate a thriving community together! Join us in celebrating the beauty and wonder of plants – you're invited to our flourishing plant-loving community!
+
 
 const Welcome = () => {
   const theme = useTheme();
@@ -13,8 +12,8 @@ const Welcome = () => {
 
   const paperStyle = {
     padding: "20px",
-    width: isMobile ? "80%" : "600px", // Adjust the width based on screen size
-    margin: "0 auto", // Center the Paper component
+    width: isMobile ? "80%" : "600px", 
+    margin: "0 auto", 
   };
 
   return (

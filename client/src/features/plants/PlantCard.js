@@ -20,11 +20,7 @@ const PlantCard = ({
 }) => {
   const plants = useSelector((state) => state.plant.allPlants);
 
-  // still showing an entry after it's been deleted (from deleting a user)
-
   const plant = plants.find((plant) => plant.id === id);
-
-  // getting the entries from allPlants
 
   return (
     <Grid item xs={12} sm={6} md={2} lg={2}>

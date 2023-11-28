@@ -54,8 +54,6 @@ export const updateEntryInApi = createAsyncThunk(
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
   async (newEntry) => {
-    console.log("newEntry from in addEntryToApi", newEntry);
-
     try {
       let requestBody;
 
@@ -81,7 +79,7 @@ export const addEntryToApi = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log("data from addEntry", data)
+
       return data;
     } catch (error) {
       throw error;
@@ -153,13 +151,11 @@ const entrySlice = createSlice({
     },
     addEntryToAllAndIndState: (state, action) => {
       const newEntry = action.payload;
-      console.log("newEntry from AETAAIS", newEntry);
 
       state.allEntries.push(newEntry);
       state.individualEntry = newEntry;
       state.loadingIndividualEntry = false;
     },
-    // Maybe make a reducer here that would make the state changes? that are the same as addEntryToApi Extra REducer
   },
   extraReducers: (builder) => {
     builder
@@ -244,7 +240,7 @@ export const {
   deleteCommentFromEntry,
   updateCommentInEntry,
   addEntryToAllAndIndState,
-  clearEntries
+  clearEntries,
 } = entrySlice.actions;
 
 export const entryReducer = entrySlice.reducer;

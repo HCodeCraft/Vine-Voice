@@ -39,7 +39,6 @@ const UserProfile = () => {
       setUser(loggedInUser);
     } else {
       dispatch(fetchUserById(userId)).then((response) => {
-        console.log("response.payload", response.payload)
         setUser(response.payload);
         setCurrentUser(false);
       });
@@ -52,20 +51,14 @@ const UserProfile = () => {
     }
   }, [user?.status]);
 
-//// Testing
-
-/////
 
   const handleStatusChange = (e) => {
     setNewStatus(e.target.value);
   };
 
-  useEffect(() => {
-    console.log("user.status", user.status);
-  }, [user.status]);
+
 
   const handleStatusFormClick = (e) => {
-    console.log("handleStatusFormClick was clicked");
     setStatusForm(true);
     setNewStatus(user.status);
   };
@@ -90,7 +83,6 @@ const UserProfile = () => {
 
       setStatusForm(false);
     } catch (error) {
-      console.log("Caught an error:", error.message);
       setError(error.message);
     }
   };
@@ -102,9 +94,7 @@ const UserProfile = () => {
     navigate(`/`);
   };
 
-  useEffect(() => {
-    console.log("error", error);
-  }, [error]);
+
 
   useEffect(() => {
     if (user) {

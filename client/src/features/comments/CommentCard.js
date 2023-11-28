@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import CommonButton from "../../common/CommonButton";
 import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,8 +6,6 @@ import { updateCommentInApi } from "./commentSlice";
 import { deleteCommentFromApi } from "../comments/commentSlice";
 import { Link } from "react-router-dom";
 import default_avatar from "../../pictures/defaultleaf.png";
-
-/// want to put the logic for this seperately especially so I can set the review edit form to each one
 
 const CommentCard = ({ comment, setComment }) => {
   const indEntryComments = useSelector(

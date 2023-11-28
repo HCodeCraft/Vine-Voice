@@ -34,7 +34,7 @@ const EditEntry = () => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      e.preventDefault(); // Prevent the default behavior of adding a line break in the input field.
+      e.preventDefault();
       const value = e.target.value.trim();
       if (value) {
         setTags([...tags, value]);
@@ -44,30 +44,13 @@ const EditEntry = () => {
     }
   };
 
-
-
   const removeTag = (index) => {
     setTags(tags.filter((el, i) => i !== index));
   };
 
-
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
   }, [tags]);
-
-  // Testing
-useEffect(() => {
-  console.log("entry.problems", entry.problems)
-  console.log("tags", tags)
-}, [entry.problems, tags])
-  //
-
-  /*** To Do
-Make a space where the uploaded image will be displayed
-Set up the image upload
-
-
-  /****/
 
   const apiEntry = useSelector((state) => state.entry.individualEntry);
 
@@ -77,7 +60,6 @@ Set up the image upload
 
   useEffect(() => {
     const updatedEntry = { ...apiEntry };
-
 
     delete updatedEntry.picture;
 
@@ -100,13 +82,8 @@ Set up the image upload
   };
 
   const handleSubmit = (e) => {
-    console.log("entry from handleSubmit", entry)
-
-    /// if entry.picture is unchanged, i don't want it added to formdata
-    // maybe if it's the same 
     e.preventDefault();
     const entryId = entry.id;
-
 
     const updatedEntry = new FormData();
 
@@ -122,13 +99,7 @@ Set up the image upload
       }
     }
 
-    for (var pair of updatedEntry.entries()) {
-      console.log(pair[0] + "," + pair[1]);
-    }
-
     dispatch(updateEntryInApi({ entryId, updatedEntry }));
-    // what kind of state needs to be updated? IndividualEntry, allEntries, IndividualPlant.entry
-    // replacing the stuff
 
     navigate(`/plants/${plant.id}/entries/${entryId}`);
   };

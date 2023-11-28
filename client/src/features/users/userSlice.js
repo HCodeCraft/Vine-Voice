@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-
-
 export const loginUser = createAsyncThunk(
   "user/loginUser",
   async ({ username, password }) => {
@@ -14,7 +12,6 @@ export const loginUser = createAsyncThunk(
       });
 
       const user = await response.json();
-      console.log("user from login", user);
       if (user.error) {
         throw new Error("Invalid Username or Password");
       }
@@ -26,13 +23,12 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const logoutUser = createAsyncThunk("user/logout", async ( _,) => {
+export const logoutUser = createAsyncThunk("user/logout", async (_) => {
   try {
     const response = await fetch(`/logout`, {
       method: "DELETE",
     });
     if (response.ok) {
-  
       return true;
     } else {
       throw new Error("Logout failed");
@@ -48,24 +44,18 @@ export const fetchUserData = createAsyncThunk(
     try {
       const response = await fetch(`/me`);
 
-      console.log("fetchUserData is running");
-
       if (!response.ok) {
-        const errorData = await response.json(); // Retrieve the error data
+        const errorData = await response.json(); 
         throw new Error(errorData.message || "fetchUserData failed");
       }
 
-      // If the response is okay, return the user data
       const userData = await response.json();
-      console.log("userDatat from fetchUserData", userData);
       return userData;
     } catch (error) {
       throw error;
     }
   }
 );
-
-
 
 export const fetchAllUsers = createAsyncThunk(
   "users/fetchAllUsers",
@@ -86,50 +76,33 @@ export const fetchUserById = createAsyncThunk(
     try {
       const response = await fetch(`/users/${userId}`);
       const data = await response.json();
-      console.log("fetchUserBy Ids data", data);
       return data;
     } catch (error) {
       throw error;
     }
   }
 );
+
+
+
 
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
   async (newUser) => {
     try {
-      const response = await fetch(`/users`, {
-        method: "POST",
-        body: newUser,
-      });
+      const response = await fetch(`/users`, { method: "POST", body: newUser });
 
       if (!response.ok) {
-        console.log('response', response)
-        // Check if the body has been used
-        const bodyUsed = response.bodyUsed;
-
-        // If the body has not been used, read it as text
-        let errorData;
-        if (!bodyUsed) {
-          errorData = await response.text();
-        } else {
-          // If the body has been used, provide a generic error message
-          errorData = "Response body already consumed";
-        }
-
-        throw new Error(`${errorData}`);
+        const errorData = await response.text();
+        throw new Error(errorData);
       }
 
-      const data = await response.json();
-      console.log("data from registerUserInApi", data)
-      return data;
+      return response.json();
     } catch (error) {
       throw error;
     }
   }
 );
-
-
 
 
 export const updateUserInApi = createAsyncThunk(
@@ -146,7 +119,6 @@ export const updateUserInApi = createAsyncThunk(
     }
 
     const updatedUserData = await response.json();
-    console.log("updatedUserData in api data", updatedUserData);
     return updatedUserData;
   }
 );
@@ -174,7 +146,6 @@ export const addPlantToUser = createAsyncThunk(
   "user/addPlantToUser",
   (_, { getState }) => {
     const entry = getState().entry.individualEntry;
-    console.log("entry from addPlantToUser", entry);
     const allPlants = getState().plant.allPlants;
 
     const newPlant = allPlants.find((plant) => plant.id === entry.plant_id);
@@ -213,10 +184,9 @@ const userSlice = createSlice({
       const { id, updates } = action.payload;
       state.allUsers = state.allUsers.map((user) => {
         if (user.id === id) {
-          // Create a new object with the updated status and other attributes
           return { ...user, ...updates };
         }
-        return user; // Return unmodified users
+        return user; 
       });
     },
     deleteUser: (state, action) => {
@@ -225,25 +195,19 @@ const userSlice = createSlice({
       );
     },
     updateUserPlant: (state, action) => {
-      
       const updatedPlant = action.payload;
-      console.log("updatedPlant from updateUserPlant", updatedPlant)
 
       state.loggedInUser.plants = state.loggedInUser.plants.map((plant) =>
         plant.id === updatedPlant.id ? updatedPlant : plant
       );
     },
     deleteUserPlant: (state, action) => {
-      console.log("action.payload from deleteUserPlant", action.payload)
-      console.log("Deleting plant with ID:", action.payload.id);
-
       const deletedPlantId = action.payload.id;
 
       state.loggedInUser.plants = state.loggedInUser.plants.filter(
         (plant) => plant.id !== deletedPlantId
       );
     },
-
   },
   extraReducers: (builder) => {
     builder
@@ -276,7 +240,6 @@ const userSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        // state.individualUser = action.payload;
         state.loggedIn = true;
         state.loggedInUser = action.payload;
         state.success = true;
@@ -325,7 +288,6 @@ const userSlice = createSlice({
       })
       .addCase(fetchUserData.rejected, (state, action) => {
         state.loading = false;
-        // state.loggedIn = false;
         state.error = action.error.message;
       })
       .addCase(registerUserInApi.fulfilled, (state, action) => {
@@ -336,21 +298,13 @@ const userSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(addPlantToUser.fulfilled, (state, action) => {
-        console.log("addPlantToUser was successful!", action.payload);
         state.loggedInUser.plants.push(action.payload);
       })
       .addCase(addPlantToUser.rejected, (state, action) => {
         state.error = action.error.message;
       })
       .addCase(deleteUserFromApi.fulfilled, (state, action) => {
-        // delete from allPlants
-        console.log("action.payload from addcase", action.payload);
         const deletedUserId = action.payload;
-
-        // if the user who deleted it was logged in, set loggedInUser to null
-
-        // CANNOT READ PROPERTIES OF NULL (id) bc there is no user by then?
-        // filter out the deleted user from allUsers
 
         state.allUsers = state.allUsers.filter(
           (user) => user.id !== deletedUserId
@@ -360,16 +314,12 @@ const userSlice = createSlice({
           state.loggedInUser = null;
           state.loggedIn = null;
         }
-
-        // not working
       })
       .addCase(deleteUserFromApi.rejected, (state, action) => {
         console.log("There was a problem with deleteUserFromApi");
       });
   },
 });
-
-
 
 export const {
   setUser,

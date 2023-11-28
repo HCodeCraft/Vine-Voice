@@ -2,10 +2,6 @@ import React, { useState, useEffect } from "react";
 import {
   Container,
   Typography,
-  Button,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
   Box,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -34,13 +30,8 @@ const EditProfile = () => {
   useEffect(() => {
     if (currentUser) {
       setUser(currentUser);
-      console.log("currentUser", currentUser);
     }
   }, [currentUser]);
-
-  // Testing
-
-  /////
 
   const boxStyle = {
     backgroundColor: "#f5f5f5",
@@ -65,7 +56,6 @@ const EditProfile = () => {
         updateUserInApi(editedUserId, editedUser)
       );
       if (response.payload) {
-        console.log("Success:", response.payload);
         setError([]);
         navigate(`/users/${currentUser.id}`);
       } else {
@@ -75,8 +65,6 @@ const EditProfile = () => {
               setError(errorData.errors);
             })()
           : setError([]);
-
-        console.log("Error from updateUser: after parse", error);
       }
     } catch (error) {
       console.error("Error updating user:", error);
@@ -91,9 +79,7 @@ const EditProfile = () => {
 
     for (const key in user) {
       if (user[key] !== null && key !== "plants" && key !== "entries") {
-        // Check if the value has changed from the initial user
         if (user[key] !== initialUser[key]) {
-          console.log("something was changed");
           updatedUser.append(`user[${key}]`, user[key]);
         }
       }
@@ -102,10 +88,6 @@ const EditProfile = () => {
 
     updateUser({ userId: userId, updatedUser });
   };
-
-  useEffect(() => {
-    console.log("error from UE", error);
-  }, [error]);
 
   return (
     <>

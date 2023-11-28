@@ -49,24 +49,16 @@ const Entry = () => {
     (state) => state.entry.individualEntry?.user?.username
   );
 
-  //// testing
-  const allPlants = useSelector((state) => state.plant.allPlants);
-
-  // not getting this at first, it is there though
-
-  const indEntry = useSelector((state) => state.entry.individualEntry);
-
   const indEntryComments = useSelector(
     (state) => state.entry.individualEntry?.comments
   );
 
   const plant = useSelector((state) => state.plant.individualPlant);
 
-
   const user = useSelector((state) => state.user.loggedInUser);
 
-  const myEntries = plant.entries.filter((e) => e.user_id === user.id)
-  console.log("myEntries", myEntries)
+  const myEntries = plant.entries.filter((e) => e.user_id === user.id);
+
   useEffect(() => {
     if (entryUsername === user.username) {
       setCurrentUser(true);
@@ -91,9 +83,7 @@ const Entry = () => {
     setComment(e.target.value);
   };
 
-  // // TO-DO
-  // // make a delete button and delete handler for all comments if it's user's plant
-  // If user's entry s/he can delete everyone's comment and also edit the entry
+
 
   const handleDeleteEntry = async (entryId) => {
     try {
@@ -101,25 +91,18 @@ const Entry = () => {
       await dispatch(deleteEntryFromApi(entryId));
 
       const userPlant = user.plants.find((p) => p.id === plant.id);
-      console.log("userPlant", userPlant)
 
-      /// it doesn't look like userPlant ever has entries....
-      // DELETE ENTRY FROM ALLPLANTS
-      console.log("myEntries.length", myEntries.length)
       if (userPlant && myEntries?.length === 1) {
-        console.log("The condition was met")
         dispatch(deleteUserPlant({ id: userPlant.id }));
 
         navigate(`/users/plants`);
       } else {
-        console.log("The condition WASTNT MET")
         const newPlantEntries = plant.entries.filter(
           (entry) => entry.id !== entryId
         );
         const plantWithoutEntry = { ...plant, entries: [newPlantEntries] };
         dispatch(updateUserPlant(plantWithoutEntry));
 
-        // check indUser.plant.entries
         navigate(`/users/plants`);
       }
     } catch (error) {
@@ -140,11 +123,11 @@ const Entry = () => {
 
       if (addCommentToApi.fulfilled.match(resultAction)) {
         const updatedEntry = resultAction.payload;
-        // Update the entry with the new comment
-        setComment(""); // Clear the comment input
+
+        setComment("");
         setCommentForm(false);
 
-        return updatedEntry; // Close the comment form
+        return updatedEntry;
       } else {
         console.log("error", resultAction.error);
       }

@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@hookform/devtools": "^4.3.1",
     "clean-webpack-plugin": "^4.0.0"
   }

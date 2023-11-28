@@ -11,7 +11,6 @@ import {
   TableRow,
   TableCell,
   Card,
-  Container,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -57,7 +56,6 @@ const AllUsers = () => {
     return <Restricted />;
   }
 
-  // make a list of all users with their username, name email, dev email show profile and delete user button
 
   const handleOpenDialog = (row) => {
     setUserToDelete(row);

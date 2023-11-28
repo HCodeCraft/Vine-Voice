@@ -7,7 +7,6 @@ import dirthand from "../../pictures/dirthand.jpg";
 
 const UserPlants = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
-  // const entries = useSelector((state) => state.entry.allEntries)
 
   const plants = loggedInUser?.plants;
 
@@ -36,7 +35,7 @@ const UserPlants = () => {
 
   const content = plants?.map((plant) => {
     if (!plant) {
-      return null; // Skip rendering if plant is undefined
+      return null; 
     }
 
     return (
@@ -61,7 +60,7 @@ const UserPlants = () => {
           <Typography
             variant="h4"
             align="center"
-            style={{ marginTop: "1.75em", marginBottom:'1em' }}
+            style={{ marginTop: "1.75em", marginBottom: "1em" }}
           >
             My Plants
           </Typography>

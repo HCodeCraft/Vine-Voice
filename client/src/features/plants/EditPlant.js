@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Restricted from "../../Restricted";
 import Unauthorized from "../../Unauthorized";
 import { updatePlantInApi } from "./plantSlice";
 
 const EditPlant = () => {
-  const { plantId } = useParams();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const apiPlant = useSelector((state) => state.plant.individualPlant);
-  console.log("apiPlant", apiPlant)
 
   const user = useSelector((state) => state.user.loggedInUser);
-console.log("user", user)
+
   const [plant, setPlant] = useState({
     common_name: "",
     scientific_name: "",
@@ -33,8 +30,6 @@ console.log("user", user)
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
 
-  // I want water rec to be a dropdown with the options
-
   useEffect(() => setPlant(apiPlant), []);
 
   useEffect(() => {
@@ -51,14 +46,6 @@ console.log("user", user)
   if (user.admin !== true) {
     return <Restricted />;
   }
-
-  // To Do
-  // make a change handler for sunlight so multiple options are added to array
-  // also get it so the original sunlight options are shown, maybe a textbox? So can standardize
-  // add the editPlant function code
-  // add the redirect to the plantpage
-  // test if everything is working
-  // figure out which state needs to change
 
   const handlePlantChange = (e) => {
     const value =
@@ -89,16 +76,12 @@ console.log("user", user)
     });
   };
 
-  // const canSave = [common_name, scientific_name, image_url].every(Boolean) && !isLoading;
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
 
-    /// somehow this is changing loggedInUser to the plant
     const plantId = apiPlant.id;
-    console.log("plantId", plantId)
     const updatedPlant = plant;
-    console.log("updatedPlant", updatedPlant)
     dispatch(updatePlantInApi({ plantId, updatedPlant }));
 
     navigate(`/plants/${plant.id}`);
@@ -342,7 +325,6 @@ console.log("user", user)
         <button
           type="submit"
           className="save-btn"
-          // disabled={!canSave}
         >
           {" "}
           Save

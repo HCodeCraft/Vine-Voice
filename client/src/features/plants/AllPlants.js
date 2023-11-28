@@ -1,18 +1,11 @@
-import React, { useEffect } from "react";
-import { fetchAllPlants } from "./plantSlice";
-import { useSelector, useDispatch } from "react-redux";
-import CommonButton from "../../common/CommonButton";
+import React from "react";
+import { useSelector } from "react-redux";
 import PlantCard from "./PlantCard";
 import { Typography, Grid, Box } from "@mui/material";
 import Unauthorized from "../../Unauthorized";
 
 const AllPlants = () => {
-  // const state = useSelector((state) => state)
-  // console.log("state", state)
-
   const plants = useSelector((state) => state.plant.allPlants);
-  const entries = useSelector((state) => state.entry.allEntries);
-
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   if (!loggedInUser) {

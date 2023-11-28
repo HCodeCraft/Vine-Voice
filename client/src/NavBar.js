@@ -20,7 +20,7 @@ const NavBar = () => {
   const user = useSelector((state) => state.user.loggedInUser);
 
   useEffect(() => {
-    // Define routes and their corresponding tab indexes
+
     const routes = {
       [`/users/${user?.id}`]: 0,
       "/users/plants": 1,
@@ -34,7 +34,7 @@ const NavBar = () => {
     setSelectedTab(value);
   };
 
-  // need to import clearPlants, clearEntries, clearComments
+
   const handleLogout = () => {
     dispatch(logoutUser());
 

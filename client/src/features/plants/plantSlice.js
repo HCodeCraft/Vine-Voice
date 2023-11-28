@@ -30,8 +30,6 @@ export const fetchPlantById = createAsyncThunk(
   }
 );
 
-// need to do a conditional in here for if there's entries_attributes
-
 export const addPlantToApi = createAsyncThunk(
   "plants/addPlantToApi",
   async ({ newPlant }) => {
@@ -75,7 +73,6 @@ export const updatePlantInApi = createAsyncThunk(
       }
 
       const updatedPlantData = await response.json();
-      console.log("updatedPlantData from UPIAPI", updatedPlantData)
       thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
     } catch (error) {
@@ -87,8 +84,6 @@ export const updatePlantInApi = createAsyncThunk(
 export const addEntryToPlant = createAsyncThunk(
   "user/addEntryPlant",
   (_, { getState }) => {
-    // get the entry's plant and add that plant to the loggedInUser.plants array
-    // what does this function need to know? The entry info (state.entry.individualEntry)
     const entry = getState().entry.individualEntry;
 
     return entry;
@@ -104,7 +99,6 @@ export const deletePlantFromApi = createAsyncThunk(
       });
       if (response.ok) {
         thunkAPI.dispatch(deleteUserPlant(plantId));
-        console.log("Plant deleted successfully.");
         return plantId;
       } else {
         throw new Error(`Failed to delete plant: ${response.status}`);
@@ -147,7 +141,6 @@ const plantSlice = createSlice({
     updateEntryInPlant: (state, action) => {
       const updatedEntry = action.payload;
 
-      // Update the plant's entries with updatedEntry
       state.plant.individualPlant.entries =
         state.plant.individualPlant.entries.map((entry) =>
           entry.id === updatedEntry.id ? updatedEntry : entry
@@ -155,14 +148,11 @@ const plantSlice = createSlice({
     },
     deleteEntryInPlant: (state, action) => {
       const deletedEntryId = action.payload;
-      console.log("deletedEntryId from deleteEntryInPlant", deletedEntryId);
 
-      // Remove the entry from individualPlant.entries
       const updatedEntries = state.individualPlant.entries.filter(
         (entry) => entry.id !== deletedEntryId
       );
 
-      // Update the state in an immutable way using immer
       state.individualPlant.entries = updatedEntries;
       state.allPlants = state.allPlants.map((plant) =>
         plant.id === state.individualPlant.id
@@ -173,9 +163,7 @@ const plantSlice = createSlice({
 
     filterOutUserEntries: (state, action) => {
       const deletedUserId = action.payload;
-      console.log("deletedUserId from filterOutUserEntries", deletedUserId);
 
-      // Update each plant's entries by filtering out entries with deletedUserId
       state.allPlants = state.allPlants.map((plant) => ({
         ...plant,
         entries: plant.entries.filter(
@@ -219,7 +207,6 @@ const plantSlice = createSlice({
           state.allPlants = [...state.allPlants, action.payload];
         }
 
-        console.log("allPlants after Push", state.allPlants);
         state.loadingIndividualPlant = false;
       })
 
@@ -228,7 +215,6 @@ const plantSlice = createSlice({
         state.errorIndividualPlant = action.error.message;
       })
       .addCase(updatePlantInApi.fulfilled, (state, action) => {
-        console.log("action.payload for updatePlantInApi", action.payload)
         state.individualPlant = action.payload;
 
         const updatedPlant = state.individualPlant;
@@ -238,25 +224,18 @@ const plantSlice = createSlice({
         );
       })
       .addCase(deletePlantFromApi.fulfilled, (state, action) => {
-        // delete from allPlants,
         const deletedPlantId = action.payload;
 
         state.allPlants = state.allPlants.filter(
           (plant) => plant.id !== deletedPlantId
         );
-
-        // delete from userPlants (do I need to include deleting the entries and comments?)
       })
       .addCase(addEntryToPlant.fulfilled, (state, action) => {
         const plantId = action.payload.plant_id;
         const entry = action.payload;
 
-        // Update the individualPlant with the new entry
-        /// might need to make individualplant entries as an empty array
-        /// before doing that
         state.individualPlant?.entries.push(entry);
 
-        // Find the plant and update it with the new entry in allPlants
         const plantToUpdate = state.allPlants.find(
           (plant) => plant.id === plantId
         );
@@ -282,7 +261,7 @@ export const {
   updateEntryInPlant,
   deleteEntryInPlant,
   filterOutUserEntries,
-  clearPlants
+  clearPlants,
 } = plantSlice.actions;
 
 export const plantReducer = plantSlice.reducer;
