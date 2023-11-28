@@ -99,7 +99,7 @@ const AddPlant = () => {
   return (
     <section className="editBox">
       <h2>Add a Plant</h2>
-      <img className="img_deg margB2" src={tomato}></img>
+      <img className="img_deg margB2" alt='tomato plant' src={tomato}></img>
       <form className="margB2" onSubmit={onSavePlantClicked}>
         <label htmlFor="common_name" className="editLabel">
           Common Name:

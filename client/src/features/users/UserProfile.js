@@ -43,13 +43,13 @@ const UserProfile = () => {
         setCurrentUser(false);
       });
     }
-  }, [loggedInUser]);
+  }, [loggedInUser, userId, dispatch]);
 
   useEffect(() => {
     if (user) {
       setStatusForm(false);
     }
-  }, [user?.status]);
+  }, [user?.status, user]);
 
 
   const handleStatusChange = (e) => {
@@ -100,7 +100,7 @@ const UserProfile = () => {
     if (user) {
       setStatusForm(false);
     }
-  }, [user?.status]);
+  }, [user?.status, user]);
 
   if (user.errors) {
     return (
@@ -186,7 +186,7 @@ const UserProfile = () => {
 
           <img
             src={user.avatar ? user.avatar : default_avatar}
-            className="avatarBig"
+            className="avatarBig" alt='user avatar'
             style={{ display: "block", marginTop: "1.75em" }}
           />
           <Typography
@@ -215,7 +215,7 @@ const UserProfile = () => {
 
           <div className="margB1"></div>
         </div>
-        {currentUser == true ? (
+        {currentUser === true ? (
           <Link to={`/users/${user.id}/edit`} style={{ textAlign: "center" }}>
             <CommonButton>Edit Info</CommonButton>
           </Link>

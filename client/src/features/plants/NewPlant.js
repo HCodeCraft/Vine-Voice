@@ -75,7 +75,7 @@ const NewPlant = () => {
 
   useEffect(() => {
     setEntry((prevEntry) => ({ ...prevEntry, user_id: loggedInUser.id }));
-  }, []);
+  }, [loggedInUser.id]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -87,6 +87,17 @@ const NewPlant = () => {
     return () => clearTimeout(timer);
   }, [myApiData]);
 
+  const availPlants = speciesList.filter(
+    (p_plant) =>
+      p_plant.default_image &&
+      p_plant.default_image["thumbnail"] !==
+        "https://perenual.com/storage/image/upgrade_access.jpg" &&
+      p_plant.default_image["thumbnail"] !== null &&
+      p_plant.default_image["small_url"] !==
+        "https://perenual.com/storage/image/upgrade_access.jpg" &&
+      p_plant.default_image["small_url"] !== null
+  );
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (myApiData.length === 0 && availPlants.length === 0 && apiForm) {
@@ -96,7 +107,7 @@ const NewPlant = () => {
     }, 3000);
 
     return () => clearTimeout(timeoutId);
-  }, [myApiData, speciesList]);
+  }, [myApiData, speciesList, apiForm, availPlants.length]);
 
   if (!loggedInUser) {
     return <Unauthorized />;
@@ -330,16 +341,7 @@ const NewPlant = () => {
     }
   };
 
-  const availPlants = speciesList.filter(
-    (p_plant) =>
-      p_plant.default_image &&
-      p_plant.default_image["thumbnail"] !==
-        "https://perenual.com/storage/image/upgrade_access.jpg" &&
-      p_plant.default_image["thumbnail"] !== null &&
-      p_plant.default_image["small_url"] !==
-        "https://perenual.com/storage/image/upgrade_access.jpg" &&
-      p_plant.default_image["small_url"] !== null
-  );
+
 
   return (
     <Container style={{ marginBottom: "2em" }}>

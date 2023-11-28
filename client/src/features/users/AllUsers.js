@@ -46,7 +46,7 @@ const AllUsers = () => {
 
     fetchUsers();
     fetchComments();
-  }, []);
+  }, [dispatch]);
 
   if (!user) {
     return <Unauthorized />;
@@ -137,7 +137,7 @@ const AllUsers = () => {
                 <TableCell align="center">{row.entries.length}</TableCell>
                 <TableCell align="center">
                   {
-                    comments?.filter((comment) => comment.user_id == row.id)
+                    comments?.filter((comment) => comment.user_id === row.id)
                       .length
                   }
                 </TableCell>

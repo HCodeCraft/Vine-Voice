@@ -36,14 +36,14 @@ const Entry = () => {
     create_date: null,
   });
 
-  useEffect(() => {
+  useEffect((dispatch) => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);
     };
 
     fetchEntry();
-  }, []);
+  }, [entryId]);
 
   const entryUsername = useSelector(
     (state) => state.entry.individualEntry?.user?.username
@@ -65,7 +65,7 @@ const Entry = () => {
     } else {
       setCurrentUser(false);
     }
-  }, [entryUsername]);
+  }, [entryUsername, user.username]);
 
   const scrollToSection = (elementRef) => {
     window.scrollTo({

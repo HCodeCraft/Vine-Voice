@@ -50,7 +50,7 @@ const EditEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-  }, [tags]);
+  }, [tags, entry]);
 
   const apiEntry = useSelector((state) => state.entry.individualEntry);
 
@@ -66,7 +66,7 @@ const EditEntry = () => {
     setEntry(updatedEntry);
 
     setTags(apiEntry.problems);
-  }, []);
+  }, [apiEntry]);
 
   const handleEntryChange = (e) => {
     const value =

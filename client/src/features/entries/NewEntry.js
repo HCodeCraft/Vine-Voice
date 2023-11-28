@@ -49,7 +49,7 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, problems: tags });
-  }, [tags]);
+  }, [tags, entry]);
 
   const allPlants = useSelector((state) => state.plant.allPlants);
 
@@ -59,7 +59,7 @@ const NewEntry = () => {
 
   useEffect(() => {
     setEntry({ ...entry, user_id: loggedInUser.id });
-  }, [loggedInUser]);
+  }, [loggedInUser, entry]);
 
   const handleEntryChange = (e) => {
     const { name, value, type, checked } = e.target;

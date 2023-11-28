@@ -13,7 +13,7 @@ const CommentCard = ({ comment, setComment }) => {
   );
 
   const oneComment = indEntryComments.find(
-    (indComment) => comment.id == indComment.id
+    (indComment) => comment.id === indComment.id
   );
 
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const CommentCard = ({ comment, setComment }) => {
       <div className="comment_box" style={{ marginBottom: "10px" }}>
         <div className="flex-comment-box">
           <div className="comment-avatar-box">
-            <img
+            <img alt='user avatar'
               className="avatar"
               src={
                 comment.avatar_thumbnail
@@ -84,7 +84,7 @@ const CommentCard = ({ comment, setComment }) => {
             </Typography>
             <div className="btn-box">
               <Typography variant="h6" align="left">
-                {editForm == true ? (
+                {editForm === true ? (
                   <>
                     <textarea
                       className="commentField"
@@ -103,7 +103,7 @@ const CommentCard = ({ comment, setComment }) => {
                   oneComment.text
                 )}
               </Typography>
-              {(user.username === comment.username) & (editForm == false) ? (
+              {(user.username === comment.username) & (editForm === false) ? (
                 <div className="marginTop">
                   <CommonButton onClick={() => handleFormClick(comment)}>
                     Edit

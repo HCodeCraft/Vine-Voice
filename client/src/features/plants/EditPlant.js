@@ -30,7 +30,7 @@ const EditPlant = () => {
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
 
-  useEffect(() => setPlant(apiPlant), []);
+  useEffect(() => setPlant(apiPlant), [apiPlant]);
 
   useEffect(() => {
     if (typeof plant.sunlight === "string") {
@@ -90,7 +90,7 @@ const EditPlant = () => {
   return (
     <section className="editBox">
       <h2 className="margB1">Edit {apiPlant.common_name}</h2>
-      <img className="img_deg" src={apiPlant.image_url}></img>
+      <img className="img_deg" alt='plant' src={apiPlant.image_url}></img>
       <form className="editForm" onSubmit={onSavePlantClicked}>
         <div className="margB2"></div>
         <label htmlFor="common_name" className="editLabel">

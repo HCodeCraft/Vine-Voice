@@ -24,7 +24,7 @@ const UserPlants = () => {
         >
           You don't have any plants logged!
         </Typography>
-        <img src={dirthand} className="rosepic" />
+        <img src={dirthand} className="rosepic" alt='a persons hands holding dirt' />
         <Typography variant="h5" style={{ marginTop: "1.75em" }}>
           Feel free to browse Everyone's plants and add an entry for your plant,
           or add a new plant

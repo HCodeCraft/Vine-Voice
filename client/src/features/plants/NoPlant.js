@@ -9,7 +9,7 @@ const NoPlant = () => {
           Sorry to say that our databases don't contain information about your
           plant!
         </h1>
-        <img src={Rosepic} className="rosepic" />
+        <img src={Rosepic} className="rosepic" alt='orange and red multicolored rose'/>
         <h2>
           Feel free to email me and I'll do my best to add your plant to the
           database ASAP

@@ -109,7 +109,7 @@ const CreateAccount = () => {
             <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
             <h2>Sign Up</h2>
           </Grid>
-          <p aria-live="assertive marginB1"></p>
+          <p aria-live="assertive" className="marginB1"></p>
           <form onSubmit={handleSubmit(onSubmit)}>
             <TextField
               label="Username"

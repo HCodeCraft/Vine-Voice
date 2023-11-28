@@ -27,7 +27,7 @@ const Plant = () => {
 
   useEffect(() => {
     dispatch(fetchPlantById(id));
-  }, []);
+  }, [id, dispatch]);
 
   if (!plant) {
     return (
@@ -87,7 +87,7 @@ const Plant = () => {
         </Typography>
       </Box>
       <div className="pos_top margT2">
-        <img className="img_deg margT3" src={plant.image_url}></img>
+        <img className="img_deg margT3" alt='plant' src={plant.image_url}></img>
         <div className="text-box margT2">
           <p className="desc">{plant.description}</p>
         </div>
