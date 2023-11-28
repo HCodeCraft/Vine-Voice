@@ -35,9 +35,9 @@ const Login = () => {
 
   const submitForm = async (data) => {
     try {
-      console.log("data from login user submit", data);
       const action = await dispatch(loginUser(data));
-      action.error?.message ? setFormErrors(action.error.message) : null;
+      action.error?.message && setFormErrors(action.error.message);
+
 
       if (loginUser.fulfilled.match(action)) {
         setFormErrors([]);

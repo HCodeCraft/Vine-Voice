@@ -74,6 +74,19 @@ const NewPlant = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   useEffect(() => {
+    let timeoutId;
+
+    if (triggerTimeout && myApiData.length === 0) {
+      timeoutId = setTimeout(() => {
+        speciesListRequest();
+        setTriggerTimeout(false);
+      }, 3000);
+    }
+
+    return () => clearTimeout(timeoutId);
+  }, [myApiData, triggerTimeout]);
+
+  useEffect(() => {
     setEntry((prevEntry) => ({ ...prevEntry, user_id: loggedInUser.id }));
   }, [loggedInUser.id]);
 
@@ -289,18 +302,7 @@ const NewPlant = () => {
     }
   };
 
-  useEffect(() => {
-    let timeoutId;
 
-    if (triggerTimeout && myApiData.length === 0) {
-      timeoutId = setTimeout(() => {
-        speciesListRequest();
-        setTriggerTimeout(false);
-      }, 3000);
-    }
-
-    return () => clearTimeout(timeoutId);
-  }, [myApiData, triggerTimeout]);
 
   const speciesListRequest = async () => {
     setResultForm(false);
