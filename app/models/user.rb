@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  after_create_commit :avatar_thumbnail
+  # testing ^
   has_many :entries, dependent: :destroy
   has_many :comments
   has_many :plants, -> { distinct }, through: :entries
