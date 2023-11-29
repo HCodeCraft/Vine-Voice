@@ -5,12 +5,8 @@ class FallbackController < ActionController::Base
 
   def index
     # React app index page
-    render file: Rails.root.join('client', 'public', 'index.html')
+    render file: 'public/index.html'
   end
 
-  # def index
-  #   # React app index page
-  #   render file:'/Users/hannabeytebiere/Development/code/phase-5/Vine-Voice/client/public/index.html'
-  # end
-  # #'public/index.html'
+
 end
