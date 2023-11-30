@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
@@ -7,16 +7,26 @@ import EntryTable from "../entries/EntryTable";
 import { fetchPlantById } from "./plantSlice";
 import { deletePlantFromApi } from "./plantSlice";
 import { deleteUserPlant } from "../users/userSlice";
+import Spinner from "../../Spinner";
 
 const Plant = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const id = Number(params.id);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true)
 
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+
+    return () => clearTimeout(timeoutId); 
+  }, []);
 
   const handleDeletePlant = (id) => {
     dispatch(deletePlantFromApi(plant.id));
@@ -26,16 +36,30 @@ const Plant = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchPlantById(id));
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchPlantById(id));
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching plant:", error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, [id, dispatch]);
 
-  if (!plant) {
-    return (
-      <section>
-        <h2>Plant not found!</h2>
-      </section>
-    );
+  if (isLoading) {
+
+    return <div className="margT2"><Spinner /></div>
+
   }
+
+  if (!plant) {
+    return <h2 className="margT2">Plant not found!</h2>;
+  }
+
+
   function FormRow() {
     return (
       <React.Fragment>

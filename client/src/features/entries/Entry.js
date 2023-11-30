@@ -36,7 +36,7 @@ const Entry = () => {
     create_date: null,
   });
 
-  useEffect((dispatch) => {
+  useEffect(() => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
       setEntry(result.payload);

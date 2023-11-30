@@ -39,7 +39,6 @@ const Login = () => {
   
       if (loginUser.rejected.match(action)) {
         console.error('Error in loginUser action:', action.error);
-        // Update error handling based on the structure of the error response.
         setFormErrors(["An error occurred. Please try again."]);
       }
   
@@ -58,24 +57,6 @@ const Login = () => {
   };
   
 
-  // const submitForm = async (data) => {
-  //   try {
-  //     const action = await dispatch(loginUser(data));
-  //     action.error?.message && setFormErrors(action.error.message);
-
-
-  //     if (loginUser.fulfilled.match(action)) {
-  //       setFormErrors([]);
-  //       await dispatch(fetchAllUsers());
-  //       await dispatch(fetchAllPlants());
-  //       await dispatch(fetchAllEntries());
-  //       await dispatch(fetchAllComments());
-  //       navigate(`/users/plants`);
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //   }
-  // };
 
   useEffect(() => {
     if (loggedIn === true) {
