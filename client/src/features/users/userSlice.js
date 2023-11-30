@@ -34,28 +34,6 @@ export const loginUser = createAsyncThunk(
 
 
 
-// export const loginUser = createAsyncThunk(
-//   "user/loginUser",
-//   async ({ username, password }) => {
-//     try {
-//       const response = await fetch(`/login`, {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify({ username, password }),
-//       });
-
-//       const user = await response.json();
-//       if (user.error) {
-//         throw new Error("Invalid Username or Password");
-//       }
-
-//       return user;
-//     } catch (error) {
-//       throw error;
-//     }
-//   }
-// );
-
 export const logoutUser = createAsyncThunk("user/logout", async (_) => {
   try {
     const response = await fetch(`/logout`, {

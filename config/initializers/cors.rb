@@ -21,7 +21,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'https://www.vinevoice.org' 
+    origins 'http://localhost:4000' 
      # This should match your frontend origin maybe change to * during prod http://localhost:4000
     resource '*',
       headers: :any,
