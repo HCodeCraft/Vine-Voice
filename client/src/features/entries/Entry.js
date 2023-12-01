@@ -166,13 +166,13 @@ const Entry = () => {
           <FaSquare color={colorArray[entry.health - 1]} />
         </Typography>
       </div>
-      <p className="margB1">{entry.notes}</p>
-      <Typography style={{ marginBottom: "3em" }}>
-        Problems:{" "}
+      <div className="margB2 margT1">{entry.notes}</div>
+      <div className="margB2">
+        Problems:
         {entry.problems && entry.problems.length > 0
-          ? entry.problems.map((problem, index) => <p key={index}>{problem}</p>)
+          ? entry.problems.map((problem, index) => <p className='margT1' key={index}>{problem} </p>)
           : "No Problems :)"}
-      </Typography>
+      </div>
       {currentUser ? (
         <div className="margB1">
           <Link to={`edit`}>
