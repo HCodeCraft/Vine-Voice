@@ -34,13 +34,16 @@ const NewEntry = () => {
 
   const [tags, setTags] = useState([]);
 
-  const handleTagsChange = (e) => {
-    if (e.key !== "Enter") return;
-    const value = e.target.value;
-    if (!value.trim()) return;
-    setTags([...tags, value]);
-    setEntry({ ...entry, problems: [...entry.problems, value] });
-    e.target.value = "";
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = e.target.value.trim();
+      if (value) {
+        setTags([...tags, value]);
+        e.target.value = "";
+        setEntry({ ...entry, problems: [...entry.problems, value] });
+      }
+    }
   };
 
   const removeTag = (index) => {
@@ -96,12 +99,17 @@ const NewEntry = () => {
         const isPlantInArray = loggedInUser.plants.some(
           (plant) => plant.id === specificPlant.id
         );
-
+// if user has the plant already in their plants array, 
+/// we'll just add the entry to the plant
         dispatch(addEntryToPlant());
 
         if (!isPlantInArray) {
           dispatch(addPlantToUser(specificPlant));
+          /// if the plant isn't in the user's array, well add the plant
+          // to the user
         } else {
+          // if the plant is in the array 
+          // we'll update the user's plant by adding the entry
           const newestEntry = action.payload;
 
           const specificPlantWithEntry = {
@@ -198,7 +206,7 @@ const NewEntry = () => {
           <Typography>Enter problems... press enter to add</Typography>
           <TagsInput
             tags={tags}
-            handleTagsChange={handleTagsChange}
+            handleKeyDown={handleKeyDown}
             removeTag={removeTag}
           />
 
