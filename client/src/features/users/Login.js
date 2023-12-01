@@ -38,8 +38,16 @@ const Login = () => {
       const action = await dispatch(loginUser(data));
   
       if (loginUser.rejected.match(action)) {
-        console.error('Error in loginUser action:', action.error);
-        setFormErrors(["An error occurred. Please try again."]);
+        const error = action.error.message;
+        console.log("error", error)
+
+        const errorObject = JSON.parse(error);
+        console.log("errorObject", errorObject)
+
+        const errors = errorObject.error;
+        console.log("errors", errors)
+
+        setFormErrors(errors);
       }
   
       if (loginUser.fulfilled.match(action)) {
@@ -117,7 +125,7 @@ const Login = () => {
               Sign in
             </Button>
           </form>
-          {formErrors.length > 0 ? (
+          {formErrors?.length > 0 ? (
             <div
               style={{ color: "red", fontWeight: "bold", marginTop: "10px" }}
             >

@@ -15,7 +15,7 @@ export const loginUser = createAsyncThunk(
         console.error(`Login failed with status: ${response.status}`);
         const errorText = await response.text();
         console.error(`Error response text: ${errorText}`);
-        throw new Error("Login failed");
+        throw new Error(`${errorText}`);
       }
 
       const user = await response.json();
