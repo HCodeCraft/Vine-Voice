@@ -43,7 +43,7 @@ const Entry = () => {
     };
 
     fetchEntry();
-  }, [entryId]);
+  }, [entryId, dispatch]);
 
   const entryUsername = useSelector(
     (state) => state.entry.individualEntry?.user?.username

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
@@ -69,9 +69,29 @@ const NewPlant = () => {
     entries: [],
   });
 
+  const API_KEY = process.env.REACT_APP_API_KEY;
+
   const [tags, setTags] = useState([]);
 
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+
+  const speciesListRequest = useCallback(async () => {
+    setResultForm(false);
+    setApiForm(true);
+    setShowSpinner(true);
+
+    try {
+      const url = `https://perenual.com/api/species-list?key=${API_KEY}&q=${searchName}`;
+      const externalResponse = await axios.get(url);
+      await setSpeciesList(externalResponse.data.data);
+
+      speciesList.length > 0
+        ? setShowSpinner(false)
+        : setTimeout(() => setShowSpinner(true), 3000);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  }, [API_KEY, searchName, speciesList.length]);
 
   useEffect(() => {
     let timeoutId;
@@ -84,7 +104,7 @@ const NewPlant = () => {
     }
 
     return () => clearTimeout(timeoutId);
-  }, [myApiData, triggerTimeout]);
+  }, [myApiData, triggerTimeout, speciesListRequest]);
 
   useEffect(() => {
     setEntry((prevEntry) => ({ ...prevEntry, user_id: loggedInUser.id }));
@@ -184,8 +204,6 @@ const NewPlant = () => {
     setEntry({ ...defaultValues.entry });
     setPlant({ ...defaultValues.plant });
   };
-
-  const API_KEY = process.env.REACT_APP_API_KEY;
 
   const handleSelectedPlant = async (selectedPlant, index) => {
     setActiveCard(index);
@@ -302,25 +320,6 @@ const NewPlant = () => {
     }
   };
 
-
-
-  const speciesListRequest = async () => {
-    setResultForm(false);
-    setApiForm(true);
-    setShowSpinner(true);
-
-    try {
-      const url = `https://perenual.com/api/species-list?key=${API_KEY}&q=${searchName}`;
-      const externalResponse = await axios.get(url);
-      await setSpeciesList(externalResponse.data.data);
-
-      speciesList.length > 0
-        ? setShowSpinner(false)
-        : setTimeout(() => setShowSpinner(true), 3000);
-    } catch (error) {
-      console.error("API Error:", error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
