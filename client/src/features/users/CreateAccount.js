@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { registerUserInApi, fetchAllUsers } from "./userSlice";
 import { useNavigate } from "react-router-dom";
 import { fetchAllPlants } from "../plants/plantSlice";
-import { fetchAllEntries } from "../entries/entriesSlice";
+import { fetchAllEntries } from "../entries/entrySlice";
 import { fetchAllComments } from "../comments/commentSlice";
 
 const CreateAccount = () => {

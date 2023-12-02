@@ -8,7 +8,7 @@ import Tab from "@mui/material/Tab";
 import Button from "@mui/material/Button";
 import { clearComments } from "./features/comments/commentSlice";
 import { clearPlants } from "./features/plants/plantSlice";
-import { clearEntries } from "./features/entries/entriesSlice";
+import { clearEntries } from "./features/entries/entrySlice";
 import { resetUser, logoutUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 

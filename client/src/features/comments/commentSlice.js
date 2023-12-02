@@ -4,7 +4,7 @@ import {
   addCommentToEntry,
   deleteCommentFromEntry,
   updateCommentInEntry,
-} from "../entries/entriesSlice";
+} from "../entries/entrySlice";
 
 export const fetchAllComments = createAsyncThunk(
   "comments/fetchAllComments",

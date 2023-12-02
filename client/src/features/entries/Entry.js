@@ -6,7 +6,7 @@ import { FaSquare } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { addCommentToApi } from "../comments/commentSlice";
 import { useDispatch } from "react-redux";
-import { fetchEntryById, deleteEntryFromApi } from "./entriesSlice";
+import { fetchEntryById, deleteEntryFromApi } from "./entrySlice";
 import CommentCard from "../comments/CommentCard";
 import { deleteEntryInPlant } from "../plants/plantSlice";
 import { deleteUserPlant, updateUserPlant } from "../users/userSlice";

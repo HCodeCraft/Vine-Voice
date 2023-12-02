@@ -11,7 +11,7 @@ import {
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
-import { updateEntryInApi } from "./entriesSlice";
+import { updateEntryInApi } from "./entrySlice";
 import TagsInput from "../../TagsInput";
 import default_plant from "../../pictures/nopic.png";
 

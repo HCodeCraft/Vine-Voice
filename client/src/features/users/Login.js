@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { DevTool } from "@hookform/devtools";
 import { fetchUserData, loginUser, fetchAllUsers } from "./userSlice";
 import { fetchAllPlants } from "../plants/plantSlice";
-import { fetchAllEntries } from "../entries/entriesSlice";
+import { fetchAllEntries } from "../entries/entrySlice";
 import { fetchAllComments } from "../comments/commentSlice";
 
 const Login = () => {

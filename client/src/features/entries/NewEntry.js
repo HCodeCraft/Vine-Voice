@@ -11,7 +11,7 @@ import {
 import TextField from "@mui/material/TextField";
 import HealthRating from "../../HealthRating";
 import { useParams, useNavigate } from "react-router-dom";
-import { addEntryToApi } from "./entriesSlice";
+import { addEntryToApi } from "./entrySlice";
 import { addPlantToUser, updateUserPlant } from "../users/userSlice";
 import TagsInput from "../../TagsInput";
 import { addEntryToPlant } from "../plants/plantSlice";
@@ -99,11 +99,15 @@ const NewEntry = () => {
         const isPlantInArray = loggedInUser.plants.some(
           (plant) => plant.id === specificPlant.id
         );
+
+        // newEntry is set as individualEntry
 // if user has the plant already in their plants array, 
 /// we'll just add the entry to the plant
         dispatch(addEntryToPlant());
+        // adds the entry to the plant
 
         if (!isPlantInArray) {
+          // How does the specificplant get the new entry in it
           dispatch(addPlantToUser(specificPlant));
           /// if the plant isn't in the user's array, well add the plant
           // to the user

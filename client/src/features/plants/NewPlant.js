@@ -6,7 +6,7 @@ import { addPlantToApi } from "./plantSlice";
 import {
   addEntryToApi,
   addEntryToAllAndIndState,
-} from "../entries/entriesSlice";
+} from "../entries/entrySlice";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
