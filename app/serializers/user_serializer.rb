@@ -8,23 +8,10 @@ def avatar
   rails_blob_path(object.avatar, only_path:true) if object.avatar.attached?
 end
 
-# def avatar_thumbnail
-#   rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
-# end
-
 def avatar_thumbnail
-  return unless object.avatar.attached?
-
-  begin
-
-    thumbnail_variant = object.avatar.variant(resize_to_limit: [200, 200]).processed
-    return rails_representation_url(thumbnail_variant, only_path: true)
-  rescue Aws::Errors::MissingCredentialsError
-
-    Rails.logger.error("AWS credentials are missing")
-    return nil
-  end
+  rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
 end
+
 
 
 end

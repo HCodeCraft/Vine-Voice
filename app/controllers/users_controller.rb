@@ -7,8 +7,6 @@ def create
   puts "Received parameters: #{params.inspect}"
   user = User.new(user_params)
 
-  # Attach avatar if present
-  user.avatar.attach(params[:user][:avatar]) if params[:user][:avatar]
 
   if user.save
     session[:user_id] = user.id
