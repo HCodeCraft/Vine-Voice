@@ -146,13 +146,16 @@ const NewPlant = () => {
     return <Unauthorized />;
   }
 
-  const handleTagsChange = (e) => {
-    if (e.key !== "Enter") return;
-    const value = e.target.value;
-    if (!value.trim()) return;
-    setTags([...tags, value]);
-    setEntry({ ...entry, problems: [...entry.problems, value] });
-    e.target.value = "";
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const value = e.target.value.trim();
+      if (value) {
+        setTags([...tags, value]);
+        e.target.value = "";
+        setEntry({ ...entry, problems: [...entry.problems, value] });
+      }
+    }
   };
 
   const removeTag = (index) => {
@@ -558,7 +561,7 @@ const NewPlant = () => {
               <Typography>Enter problems... press enter to add</Typography>
               <TagsInput
                 tags={tags}
-                handleTagsChange={handleTagsChange}
+                handleKeyDown={handleKeyDown}
                 removeTag={removeTag}
               />
               <FormGroup className="margT1">

@@ -51,7 +51,7 @@ const Plant = () => {
 
   if (isLoading) {
 
-    return <div className="margT2"><Spinner /></div>
+    return <div className="margT4"><Spinner /></div>
 
   }
 
