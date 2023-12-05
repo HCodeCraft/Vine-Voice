@@ -105,7 +105,7 @@ const UserProfile = () => {
   if (user.errors) {
     return (
       <>
-        <Typography variant="h4">User not found</Typography>
+        <Typography variant="h4" style={{marginTop:'4em'}}>User not found</Typography>
       </>
     );
   }
@@ -224,6 +224,9 @@ const UserProfile = () => {
           <div className="all_btn">
             <Link to={`/users/all`}>
               <CommonButton>All User's Page</CommonButton>
+            </Link>
+            <Link to={`/plants/add`}>
+              <CommonButton style={{marginLeft:".5em"}}>Add a Plant</CommonButton>
             </Link>
           </div>
         ) : null}

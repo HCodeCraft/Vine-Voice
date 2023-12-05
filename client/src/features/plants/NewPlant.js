@@ -261,6 +261,8 @@ const NewPlant = () => {
   };
 
   const addPlant = (plant) => {
+    console.log(
+      "plant", plant)
     dispatch(addPlantToApi(plant))
       .then((action) => {
         const entry = action.payload.plant.entries[0];

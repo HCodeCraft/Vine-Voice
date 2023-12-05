@@ -22,7 +22,7 @@ class PlantsController < ApplicationController
 
   def create
     @current_user = User.find_by(id: session[:user_id])
-  
+    puts "Received plant_params: #{plant_params.inspect}"
     # Build a new plant
     plant = Plant.new(plant_params)
   
@@ -72,7 +72,6 @@ class PlantsController < ApplicationController
       :image_url,
       :description,
       :water_rec,
-      :sunlight,
       :indoor,
       :cycle,
       :poisonous_to_humans,
@@ -81,6 +80,7 @@ class PlantsController < ApplicationController
       :medicinal,
       :med_image_url,
       :id,
+      sunlight: [],
       entries_attributes: [
         :nickname,
         :location,
@@ -90,7 +90,7 @@ class PlantsController < ApplicationController
         :health,
         :open_to_advice,
         problems: [],
-      ],
+      ],  
     )
   end
 end

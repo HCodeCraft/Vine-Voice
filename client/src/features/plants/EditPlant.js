@@ -20,7 +20,7 @@ const EditPlant = () => {
     med_image_url: "",
     cycle: "",
     description: "",
-    sunlight: "",
+    sunlight: [],
     edible: false,
     indoor: false,
     medicinal: false,
@@ -32,9 +32,13 @@ const EditPlant = () => {
 
   useEffect(() => setPlant(apiPlant), [apiPlant]);
 
+
+  useEffect(() => {
+    console.log("selectedSunlightOptions", selectedSunlightOptions)
+  }, [selectedSunlightOptions])
   useEffect(() => {
     if (typeof plant.sunlight === "string") {
-      const initialSelectedOptions = plant.sunlight.split(", ");
+      const initialSelectedOptions = plant.sunlight.split(", ")
       setSelectedSunlightOptions(initialSelectedOptions);
     }
   }, [plant.sunlight]);
@@ -60,6 +64,7 @@ const EditPlant = () => {
   const handleSunlightOptionChange = (e) => {
     const option = e.target.name;
     const updatedOptions = [...selectedSunlightOptions];
+    console.log("updatedOptions", updatedOptions)
 
     if (e.target.checked) {
       updatedOptions.push(option);
@@ -80,8 +85,10 @@ const EditPlant = () => {
   const onSavePlantClicked = (e) => {
     e.preventDefault();
 
+    console.log("plant from onSPC", plant)
+
     const plantId = apiPlant.id;
-    const updatedPlant = plant;
+    const updatedPlant = {...plant, sunlight: [plant.sunlight]}
     dispatch(updatePlantInApi({ plantId, updatedPlant }));
 
     navigate(`/plants/${plant.id}`);

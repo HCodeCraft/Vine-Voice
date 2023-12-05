@@ -39,8 +39,8 @@ end
       emojis << "🌤️/🌥️ Part Sun/Part Shade"
     end
   
-    if sunlight == "Shade"
-      emojis << "🌥️ Shade"
+    if sunlight == "full_shade"
+      emojis << "🌥️ Full Shade"
     end
   
     emojis.join(", ")
@@ -50,9 +50,13 @@ end
   
   def water_emojis
     case object.water_rec
-    when 'Average'
+    when 'none'
+      '🚫 None'
+    when 'minimum'
+      '💧 Minimum'
+    when 'average'
       '💧💧 Average'
-    when 'Frequent'
+    when 'frequent'
       '💧💧💧 Frequent'
     else
       nil

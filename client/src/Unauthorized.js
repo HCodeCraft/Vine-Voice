@@ -7,7 +7,7 @@ const Unauthorized = () => {
     <>
     <br />
     <br />
-    <div className='editBox'>
+    <div className='editBox MargT4'>
       <br />
       <h1>You must be logged in to view this page, please</h1>
       <br />

@@ -19,6 +19,7 @@ const Plant = () => {
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
+  console.log("plant from plant page", plant)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
