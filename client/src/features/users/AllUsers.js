@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Unauthorized from "../../Unauthorized";
 import Restricted from "../../Restricted";
@@ -47,6 +47,10 @@ const AllUsers = () => {
     fetchUsers();
     fetchComments();
   }, [dispatch]);
+
+  const filteredComments = useMemo(() => {
+    return comments.filter((comment) => comment.user_id === user.id);
+  }, [comments, user.id]);
 
   if (!user) {
     return <Unauthorized />;
@@ -137,8 +141,7 @@ const AllUsers = () => {
                 <TableCell align="center">{row.entries.length}</TableCell>
                 <TableCell align="center">
                   {
-                    comments?.filter((comment) => comment.user_id === row.id)
-                      .length
+                   filteredComments.length
                   }
                 </TableCell>
                 <TableCell align="center">

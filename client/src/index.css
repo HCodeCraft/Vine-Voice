@@ -34,7 +34,7 @@ margin-top: 2%;
 
 
 .pos_top{
-  width:45%;
+  width:60%;
   position:absolute;
   left: 25%;
   top: 15%;
@@ -396,5 +396,10 @@ justify-content: space-around;
 
 .margLBtn{
   margin-left:.5em;
+}
+
+.text-box{
+flex:1;
+margin-left:10px;
 }
 

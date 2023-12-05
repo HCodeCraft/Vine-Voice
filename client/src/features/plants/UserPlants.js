@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
 import PlantCard from "./PlantCard";
@@ -9,12 +9,13 @@ const UserPlants = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
   const plants = loggedInUser?.plants;
+  const memoizedPlants = useMemo(() => plants, [plants]);
 
   if (!loggedInUser) {
     return <Unauthorized />;
   }
 
-  if (!plants || plants.length === 0) {
+  if (!memoizedPlants || memoizedPlants.length === 0) {
     return (
       <div className="center">
         <Typography
@@ -33,7 +34,7 @@ const UserPlants = () => {
     );
   }
 
-  const content = plants?.map((plant) => {
+  const content = memoizedPlants?.map((plant) => {
     if (!plant) {
       return null; 
     }
