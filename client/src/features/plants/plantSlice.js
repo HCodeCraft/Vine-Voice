@@ -43,17 +43,22 @@ export const addPlantToApi = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add plant to API");
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
       }
-      console.log("newPlant from addPlantToApi", { newPlant });
+
+
       const data = await response.json();
-      console.log("data from addPlantToAPI", data);
       return data;
     } catch (error) {
       throw error;
     }
   }
 );
+
+
+
+
 
 export const updatePlantInApi = createAsyncThunk(
   "user/updatePlantInApi",

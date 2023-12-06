@@ -4,8 +4,10 @@ class Plant < ApplicationRecord
     has_many :comments, through: :entries
     accepts_nested_attributes_for :entries
 
-    #removed the -> distinct from users to entries
 
+    validates :common_name, presence: true, length: { maximum: 255 }
+    validates :scientific_name, presence: true, length: { maximum: 255 }
+    validates :description, presence: true
 
 
   

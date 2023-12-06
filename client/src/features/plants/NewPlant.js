@@ -3,10 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import SmallPlantCard from "./SmallPlantCard";
 import axios from "axios";
 import { addPlantToApi } from "./plantSlice";
-import {
-  addEntryToApi,
-  addEntryToAllAndIndState,
-} from "../entries/entrySlice";
+import { addEntryToApi, addEntryToAllAndIndState } from "../entries/entrySlice";
 import { useDispatch, useSelector } from "react-redux";
 import CommonButton from "../../common/CommonButton";
 import {
@@ -35,6 +32,7 @@ const NewPlant = () => {
   const [apiForm, setApiForm] = useState(false);
   const [entryForm, setEntryForm] = useState(false);
   const [myApiData, setMyApiData] = useState([]);
+  const [formErrors, setFormErrors] = useState([]);
   const [noResultButton, setNoResultButton] = useState(false);
   const [triggerTimeout, setTriggerTimeout] = useState(false);
   const [speciesList, setSpeciesList] = useState([]);
@@ -92,6 +90,10 @@ const NewPlant = () => {
       console.error("API Error:", error);
     }
   }, [API_KEY, searchName, speciesList.length]);
+
+  useEffect(() => {
+    console.log("formErrors", formErrors);
+  }, [formErrors]);
 
   useEffect(() => {
     let timeoutId;
@@ -261,13 +263,24 @@ const NewPlant = () => {
   };
 
   const addPlant = (plant) => {
-    console.log(
-      "plant", plant)
+    console.log("plant", plant);
+
     dispatch(addPlantToApi(plant))
       .then((action) => {
-        const entry = action.payload.plant.entries[0];
-        dispatch(addEntryToAllAndIndState(entry));
-        dispatch(addPlantToUser());
+        if (addPlantToApi.fulfilled.match(action)) {
+          setFormErrors([]);
+          const entry = action.payload.plant.entries[0];
+          dispatch(addEntryToAllAndIndState(entry));
+          dispatch(addPlantToUser());
+        } else if (addPlantToApi.rejected.match(action)) {
+          const error = action.error.message;
+
+          const errorObject = JSON.parse(error);
+
+          const errors = errorObject.errors;
+
+          setFormErrors(errors);
+        }
       })
       .catch((error) => {
         console.error("Error adding plant:", error);
@@ -325,7 +338,6 @@ const NewPlant = () => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -340,14 +352,19 @@ const NewPlant = () => {
 
         const createdPlantWithEntry = await addPlant({ newPlant });
 
-        navigate(`/users/plants`);
+        if (!error) {
+          navigate(`/users/plants`);
+        }
       }
     } catch (error) {
+      // Handle errors as needed
       console.error("Submission Error:", error);
+
+      // Check if 'plant' property exists in the error response
+      const errorMessage = error.response?.data?.plant || "Unknown error";
+      console.error("Error Message:", errorMessage);
     }
   };
-
-
 
   return (
     <Container style={{ marginBottom: "2em" }}>
@@ -575,6 +592,32 @@ const NewPlant = () => {
                   onChange={handleEntryChange}
                 />
               </FormGroup>
+              {formErrors.length > 0 ? (
+                <div
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginTop: "10px",
+                    textAlign: "center", // Center align the text
+                  }}
+                >
+                  <Typography variant="h6">Validation errors:</Typography>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: "0",
+                      margin: "0 auto",
+                    }}
+                  >
+                    {formErrors.map((error) => (
+                      <Typography key={error}>
+                        <li style={{ marginBottom: "10px" }}>{error}</li>
+                      </Typography>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
               <CommonButton onClick={handleSubmit}>Submit</CommonButton>
             </form>
             <div ref={pageEndRef}></div>
