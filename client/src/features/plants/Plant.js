@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Typography, Grid } from "@mui/material";
@@ -19,7 +19,8 @@ const Plant = () => {
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
-  console.log("plant from plant page", plant)
+  const memoizedPlant = useMemo(() => plant, [plant]);
+  console.log("plant", plant)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -65,34 +66,34 @@ const Plant = () => {
     return (
       <React.Fragment>
         <Grid item xs={4}>
-          <p>{plant.sunlight_emojis}</p>
+          <p>{memoizedPlant.sunlight_emojis}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.water_emojis}</p>
+          <p>{memoizedPlant.water_emojis}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.in_out_emojis}</p>
+          <p>{memoizedPlant.in_out_emojis}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.cycle_emojis}</p>
+          <p>{memoizedPlant.cycle_emojis}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.human_poison_emoji}</p>
+          <p>{memoizedPlant.human_poison_emoji}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.pet_poison_emoji}</p>
+          <p>{memoizedPlant.pet_poison_emoji}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.edible_emoji}</p>
+          <p>{memoizedPlant.edible_emoji}</p>
         </Grid>
         <Grid item xs={4}>
-          <p>{plant.medicinal_emoji}</p>
+          <p>{memoizedPlant.medicinal_emoji}</p>
         </Grid>
       </React.Fragment>
     );
   }
 
-  const entriesDesc = plant.entries.slice().sort((a, b) => b.id - a.id);
+  const entriesDesc = memoizedPlant.entries.slice().sort((a, b) => b.id - a.id);
 
   return (
     <>
@@ -105,20 +106,20 @@ const Plant = () => {
         }}
       >
         <Typography variant="h4" align="center" style={{ marginTop: "1em" }}>
-          {plant.common_name}
+          {memoizedPlant.common_name}
         </Typography>
         <Typography variant="h6" align="center">
-          {plant.scientific_name}
+          {memoizedPlant.scientific_name}
         </Typography>
       </Box>
       <div className="pos_top margT2">
-        <img className="img_deg margT3" alt='plant' src={plant.image_url}></img>
+        <img className="img_deg margT3" alt='plant' src={memoizedPlant.image_url}></img>
         <div className="text-box margT2">
-          <p className="desc">{plant.description}</p>
+          <p className="desc">{memoizedPlant.description}</p>
         </div>
         <Box sx={{ flexGrow: 1, marginBottom: "2em" }}>
           <div className="button_box margT2 margB2">
-            <p>Added on {plant.create_date}</p>
+            <p>Added on {memoizedPlant.create_date}</p>
           </div>
           <Grid container spacing={1}>
             <Grid container item spacing={3}>
@@ -128,12 +129,12 @@ const Plant = () => {
         </Box>
         {user.admin === true ? (
           <Box display="flex" justifyContent="flex-start">
-            <Link to={`/plants/${plant.id}/edit`}>
+            <Link to={`/plants/${memoizedPlant.id}/edit`}>
               <CommonButton>Edit Plant</CommonButton>
             </Link>
             <CommonButton
               style={{ marginLeft: "10px" }}
-              onClick={() => handleDeletePlant(plant.id)}
+              onClick={() => handleDeletePlant(memoizedPlant.id)}
             >
               Delete Plant
             </CommonButton>
@@ -144,14 +145,14 @@ const Plant = () => {
           justifyContent="flex-end"
           style={{ marginBottom: "1em" }}
         >
-          <Link to={`/plants/${plant.id}/entries/new`}>
+          <Link to={`/plants/${memoizedPlant.id}/entries/new`}>
             <CommonButton>Add an Entry</CommonButton>
           </Link>
         </Box>
         <Typography variant="h5" align="center" style={{ marginBottom: "1em" }}>
-          Latest {plant.entries.length > 1 ? "Entries" : "Entry"}
+          Latest {memoizedPlant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
-        <EntryTable entries={entriesDesc} comments={plant.comments} />
+        <EntryTable entries={entriesDesc} comments={memoizedPlant.comments} />
         <div className="margB2"></div>
       </div>
     </>

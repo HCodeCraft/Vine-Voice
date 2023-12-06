@@ -12,77 +12,100 @@ import { clearEntries } from "./features/entries/entrySlice";
 import { resetUser, logoutUser } from "./features/users/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 
+const TabComponent = React.memo(({ user, selectedTab, handleTabClick }) => (
+  <Tabs indicatorColor="primary" value={selectedTab}>
+    <Tab
+      sx={{ textTransform: "none" }}
+      label="My Profile"
+      component={Link}
+      to={`/users/${user.id}`}
+      onClick={(event) => handleTabClick(event, 0)}
+    />
+    <Tab
+      sx={{ textTransform: "none" }}
+      label="My Plants"
+      component={Link}
+      to="/users/plants"
+      onClick={(event) => handleTabClick(event, 1)}
+    />
+    <Tab
+      sx={{ textTransform: "none" }}
+      label="Add A Plant"
+      component={Link}
+      to="/plants/new"
+      onClick={(event) => handleTabClick(event, 2)}
+    />
+    <Tab
+      sx={{ textTransform: "none" }}
+      label="Everyone's Plants"
+      component={Link}
+      to="/plants"
+      onClick={(event) => handleTabClick(event, 3)}
+    />
+  </Tabs>
+));
+
 const NavBar = () => {
-  const [selectedTab, setSelectedTab] = useState(0);
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.loggedInUser);
 
-  useEffect(() => {
+  const [selectedTab, setSelectedTab] = useState(null);
 
+  useEffect(() => {
     const routes = {
       [`/users/${user?.id}`]: 0,
       "/users/plants": 1,
       "/plants/new": 2,
       "/plants": 3,
     };
-    setSelectedTab(routes[location.pathname] || 0);
+
+    const defaultTab = routes[location.pathname];
+
+    setSelectedTab(defaultTab);
   }, [location.pathname, user]);
 
   const handleTabClick = (event, value) => {
     setSelectedTab(value);
   };
 
-
   const handleLogout = () => {
     dispatch(logoutUser());
-
     dispatch(resetUser());
-    dispatch(clearPlants())
-    dispatch(clearEntries())
-    dispatch(clearComments())
+    dispatch(clearPlants());
+    dispatch(clearEntries());
+    dispatch(clearComments());
     navigate("/login");
   };
 
+  if (selectedTab === null || selectedTab === undefined) {
+    // Return a loading indicator or null during the initialization phase
+    return (
+      <AppBar
+        className="topbar"
+        sx={{ textTransform: "none", background: "#81C784" }}
+      >
+        {/* Add your loading indicator content here */}
+      </AppBar>
+    );
+  }
+
   return (
-    <AppBar className="topbar" sx={{ textTransform: "none", background: "#81C784" }}>
+    <AppBar
+      className="topbar"
+      sx={{ textTransform: "none", background: "#81C784" }}
+    >
       <Toolbar>
-        <Typography variant="h4">Vine Voice</Typography>
+        <Typography variant="h4" style={{ marginRight: ".5em" }}>
+          Vine Voice
+        </Typography>
         {user && (
-          <Tabs indicatorColor="primary" value={selectedTab}>
-            <Tab
-              sx={{ textTransform: "none" }}
-              label="My Profile"
-              component={Link}
-              to={`/users/${user.id}`}
-              value={0}
-            />
-            <Tab
-              sx={{ textTransform: "none" }}
-              label="My Plants"
-              component={Link}
-              to="/users/plants"
-              onClick={handleTabClick}
-              value={1}
-            />
-            <Tab
-              sx={{ textTransform: "none" }}
-              label="Add A Plant"
-              component={Link}
-              to="/plants/new"
-              onClick={handleTabClick}
-              value={2}
-            />
-            <Tab
-              sx={{ textTransform: "none" }}
-              label="Everyone's Plants"
-              component={Link}
-              to="/plants"
-              onClick={handleTabClick}
-              value={3}
-            />
-          </Tabs>
+          <TabComponent
+            user={user}
+            selectedTab={selectedTab}
+            handleTabClick={handleTabClick}
+          />
         )}
         {user && (
           <Typography mr={3} ml={3}>
