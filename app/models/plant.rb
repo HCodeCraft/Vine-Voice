@@ -6,7 +6,7 @@ class Plant < ApplicationRecord
 
 
     validates :common_name, presence: true, length: { maximum: 255 }
-    validates :scientific_name, presence: true, length: { maximum: 255 }
+    validates :scientific_name, presence: true, uniqueness: true, length: { maximum: 255 }
     validates :description, presence: true
 
 

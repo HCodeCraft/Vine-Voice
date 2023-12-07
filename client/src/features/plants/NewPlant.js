@@ -245,7 +245,7 @@ const NewPlant = () => {
           scientific_name: apiPlant.scientific_name[0],
           description: apiPlant.description,
           water_rec: apiPlant.watering,
-          sunlight: apiPlant.sunlight[0],
+          sunlight: apiPlant.sunlight,
           indoor: apiPlant.indoor,
           cycle: apiPlant.cycle,
           poisonous_to_humans: apiPlant.poisonous_to_humans,
@@ -253,6 +253,9 @@ const NewPlant = () => {
           edible: apiPlant.edible_leaf,
           medicinal: apiPlant.medicinal,
         }));
+
+        console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0])
+        console.log("apiPlant.sunlight", apiPlant.sunlight)
 
         pageEndRef.current &&
           pageEndRef.current.scrollIntoView({ behavior: "smooth" });
