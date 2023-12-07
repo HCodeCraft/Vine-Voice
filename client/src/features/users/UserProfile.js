@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  Paper
 } from "@mui/material";
 import CommonButton from "../../common/CommonButton";
 import { Link, useParams, useNavigate } from "react-router-dom";
@@ -94,6 +95,14 @@ const UserProfile = () => {
     navigate(`/`);
   };
 
+  const paperStyle = {
+    padding: 20,
+    height: "100vh",
+    width: 600,
+    margin: "20px auto",
+    marginTop: "6em",
+  };
+
 
 
   useEffect(() => {
@@ -112,10 +121,11 @@ const UserProfile = () => {
 
   return user.username ? (
     <Container>
+      <Paper elevation={10} style={paperStyle}>
       <Box display="flex" flexDirection="column" alignItems="center">
         <Typography
           variant="h4"
-          style={{ marginTop: "2.5em", marginBottom: "1em" }}
+          style={{ marginTop: "1em", marginBottom: ".5em" }}
         >
           {currentUser ? "My" : `${user.username}'s`} Profile
         </Typography>
@@ -136,15 +146,19 @@ const UserProfile = () => {
                 </Typography>
                 <div
                   className="statusBubble"
-                  style={{ textAlign: "center", marginBottom: "2em" }}
+                  style={{ textAlign: "center", marginBottom: "1em" }}
                 >
                   <div className="status-txt">
                     <Typography variant="h7">{user.status}</Typography>
                   </div>
                 </div>
-                <CommonButton onClick={() => handleStatusFormClick()}>
-                  Edit
-                </CommonButton>
+                <CommonButton
+  onClick={() => handleStatusFormClick()}
+  style={{ display: "block", margin: "auto" }}
+>
+  Edit
+</CommonButton>
+
               </>
             ) : (
               <>
@@ -187,7 +201,6 @@ const UserProfile = () => {
           <img
             src={user.avatar ? user.avatar : default_avatar}
             className="avatarBig" alt='user avatar'
-            style={{ display: "block", marginTop: "1.75em" }}
           />
           <Typography
             variant="h5"
@@ -261,6 +274,7 @@ const UserProfile = () => {
           </>
         ) : null}
       </Box>
+      </Paper>
     </Container>
   ) : (
     <Unauthorized />

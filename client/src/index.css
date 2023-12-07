@@ -246,6 +246,7 @@ font-size: 1em;
   width: 150%; /* Adjust width to fit the content */
   display: inline-block; 
   border-radius: 45%;/* Make it inline so it wraps around the content */
+  transform: translateX(-10%);
 }
 
 
@@ -261,8 +262,13 @@ text-align: center;
   display: block;
 
 }
+/* 
+style={{ display: "block", margin: "1.75em auto" , alignContent:'center'}} */
 
 .avatarBig{
+  display: block;
+  margin: 1.75em auto;
+  align-content: center;
   width: 200px;
   height: 200px;
 }
