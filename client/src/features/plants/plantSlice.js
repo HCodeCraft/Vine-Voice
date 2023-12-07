@@ -74,7 +74,7 @@ export const updatePlantInApi = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Update plant failed");
+        throw new Error(JSON.stringify(errorData))
       }
 
       const updatedPlantData = await response.json();

@@ -29,17 +29,21 @@ const EditPlant = () => {
     water_rec: "",
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
+  const [formErrors, setFormErrors] = useState([]);
 
   useEffect(() => setPlant(apiPlant), [apiPlant]);
 
+  useEffect(()=> {
+console.log("formErrors", formErrors)
+  }, [formErrors])
 
   useEffect(() => {
-    console.log("selectedSunlightOptions", selectedSunlightOptions)
-  }, [selectedSunlightOptions])
+    console.log("selectedSunlightOptions", selectedSunlightOptions);
+  }, [selectedSunlightOptions]);
+  
   useEffect(() => {
-    if (typeof plant.sunlight === "string") {
-      const initialSelectedOptions = plant.sunlight.split(", ")
-      setSelectedSunlightOptions(initialSelectedOptions);
+    if (Array.isArray(plant.sunlight)) {
+      setSelectedSunlightOptions([...plant.sunlight]);
     }
   }, [plant.sunlight]);
 
@@ -64,9 +68,9 @@ const EditPlant = () => {
   const handleSunlightOptionChange = (e) => {
     const option = e.target.name;
     const updatedOptions = [...selectedSunlightOptions];
-    console.log("updatedOptions", updatedOptions)
 
     if (e.target.checked) {
+      console.log("option was pushed", option)
       updatedOptions.push(option);
     } else {
       const index = updatedOptions.indexOf(option);
@@ -77,27 +81,35 @@ const EditPlant = () => {
 
     setPlant({
       ...plant,
-      sunlight: updatedOptions.join(", "),
+      sunlight: updatedOptions
     });
   };
-
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
 
-    console.log("plant from onSPC", plant)
+    console.log("plant from onSavePlantClicked", plant)
 
     const plantId = apiPlant.id;
-    const updatedPlant = {...plant, sunlight: [plant.sunlight]}
-    dispatch(updatePlantInApi({ plantId, updatedPlant }));
-
-    navigate(`/plants/${plant.id}`);
+    const updatedPlant = { ...plant, sunlight: [plant.sunlight] };
+    console.log("updatedPlant", updatedPlant)
+    dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
+      if (updatePlantInApi.fulfilled.match(action)) {
+        setFormErrors([]);
+        // navigate(`/plants/${plant.id}`);
+      } else if (updatePlantInApi.rejected.match(action)) {
+        const error = action.error.message;
+        const errorObject = JSON.parse(error);
+        const errors = errorObject.errors;
+        setFormErrors(errors);
+      }
+    });
   };
 
   return (
     <section className="editBox">
       <h2 className="margB1">Edit {apiPlant.common_name}</h2>
-      <img className="img_deg" alt='plant' src={apiPlant.image_url}></img>
+      <img className="img_deg" alt="plant" src={apiPlant.image_url}></img>
       <form className="editForm" onSubmit={onSavePlantClicked}>
         <div className="margB2"></div>
         <label htmlFor="common_name" className="editLabel">
@@ -329,10 +341,32 @@ const EditPlant = () => {
           <option>Biannual</option>
         </select>
         <div className="marginB2"></div>
-        <button
-          type="submit"
-          className="save-btn"
-        >
+        {formErrors.length > 0 ? (
+          <div
+            style={{
+              color: "red",
+              fontWeight: "bold",
+              marginTop: "10px",
+              textAlign: "center", // Center align the text
+            }}
+          >
+            <Typography variant="h6">Validation errors:</Typography>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: "0",
+                margin: "0 auto",
+              }}
+            >
+              {formErrors.map((error) => (
+                <Typography key={error}>
+                  <li style={{ marginBottom: "10px" }}>{error}</li>
+                </Typography>
+              ))}
+            </ul>
+          </div>
+        ) : null}
+        <button type="submit" className="save-btn">
           {" "}
           Save
         </button>

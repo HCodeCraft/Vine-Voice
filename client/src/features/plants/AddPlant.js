@@ -16,7 +16,7 @@ const AddPlant = () => {
     med_image_url: "",
     cycle: "",
     description: "",
-    sunlight: "",
+    sunlight: [],
     edible: false,
     indoor: false,
     medicinal: false,

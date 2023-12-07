@@ -5,7 +5,7 @@ class Plant < ApplicationRecord
     accepts_nested_attributes_for :entries
 
 
-    validates :common_name, presence: true, length: { maximum: 255 }
+    validates :common_name, presence: true, length: { minimum:2 }
     validates :scientific_name, presence: true, uniqueness: true, length: { maximum: 255 }
     validates :description, presence: true
 
