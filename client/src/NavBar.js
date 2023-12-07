@@ -61,7 +61,7 @@ const NavBar = () => {
       "/plants": 3,
     };
 
-    const defaultTab = routes[location.pathname];
+    const defaultTab = routes[location.pathname] ?? 3
 
     setSelectedTab(defaultTab);
   }, [location.pathname, user]);
@@ -79,7 +79,7 @@ const NavBar = () => {
     navigate("/login");
   };
 
-  if (selectedTab === null || selectedTab === undefined) {
+  if (user === null) {
     // Return a loading indicator or null during the initialization phase
     return (
       <AppBar

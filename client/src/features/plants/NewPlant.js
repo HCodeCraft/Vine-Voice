@@ -272,6 +272,7 @@ const NewPlant = () => {
           const entry = action.payload.plant.entries[0];
           dispatch(addEntryToAllAndIndState(entry));
           dispatch(addPlantToUser());
+          navigate(`/users/plants`);
         } else if (addPlantToApi.rejected.match(action)) {
           const error = action.error.message;
 
@@ -301,10 +302,27 @@ const NewPlant = () => {
       }
     }
     dispatch(addEntryToApi(newEntry))
-      .then(() => dispatch(addEntryToPlant()))
-      .then(() => dispatch(addPlantToUser()));
+    .then( (action) => {
+      if (addEntryToApi.fulfilled.match(action)) {
+      dispatch(addEntryToPlant());
+     dispatch(addPlantToUser());
+        navigate(`/plants/${entry.plant_id}`);
+      } else if (addEntryToApi.rejected.match(action)) {
+        const error = action.error.message;
+  
+        const errorObject = JSON.parse(error);
+  
+        const errors = errorObject.errors;
+  
+        setFormErrors(errors);
+      }
+    })
+    .catch((error) => {
+      console.error("Error adding entry:", error);
+    });
+  
 
-    navigate(`/plants/${entry.plant_id}`);
+   
   };
 
   const onSearchNameChanged = (e) => {
@@ -344,25 +362,26 @@ const NewPlant = () => {
     try {
       if (apiForm === false) {
         await addEntry(entry);
+  
       } else {
         const newPlant = {
           ...plant,
           entries_attributes: [entry],
         };
 
-        const createdPlantWithEntry = await addPlant({ newPlant });
+        const createdPlantWithEntry = addPlant({ newPlant });
 
-        if (!error) {
+        if (!createdPlantWithEntry.error) {
           navigate(`/users/plants`);
         }
       }
     } catch (error) {
       // Handle errors as needed
-      console.error("Submission Error:", error);
+      // console.error("Submission Error:", error);
 
-      // Check if 'plant' property exists in the error response
-      const errorMessage = error.response?.data?.plant || "Unknown error";
-      console.error("Error Message:", errorMessage);
+      // // Check if 'plant' property exists in the error response
+      // const errorMessage = error.response?.data?.plant || "Unknown error";
+      // console.error("Error Message:", errorMessage);
     }
   };
 
