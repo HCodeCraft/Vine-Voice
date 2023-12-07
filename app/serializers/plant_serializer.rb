@@ -25,7 +25,7 @@ end
   def sunlight_emojis
     emojis = []
   
-    sunlight = object.sunlight[0] if object.sunlight
+    sunlight = object.sunlight if object.sunlight
   
     if sunlight&.include?("full_sun")
       emojis << "☀️ Full Sun"
@@ -39,7 +39,7 @@ end
       emojis << "🌤️/🌥️ Part Sun/Part Shade"
     end
   
-    if sunlight == "full_shade"
+    if  sunlight&.include?("full_shade")
       emojis << "🌥️ Full Shade"
     end
   

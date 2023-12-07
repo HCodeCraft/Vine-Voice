@@ -26,13 +26,24 @@ const AddPlant = () => {
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
 
+  // useEffect(() => {
+  //   if (typeof plant.sunlight === "string") {
+  //     const initialSelectedOptions = plant.sunlight
+  //     /// took off .split(", ")
+  //     setSelectedSunlightOptions(initialSelectedOptions);
+  //   }
+  // }, [plant.sunlight]);
+
   useEffect(() => {
-    if (typeof plant.sunlight === "string") {
-      const initialSelectedOptions = plant.sunlight
-      /// took off .split(", ")
-      setSelectedSunlightOptions(initialSelectedOptions);
+    if (Array.isArray(plant.sunlight)) {
+      setSelectedSunlightOptions([...plant.sunlight]);
     }
   }, [plant.sunlight]);
+  
+
+  useEffect(()=> {
+console.log("plant.sunlight", plant.sunlight)
+  }, [plant.sunlight])
 
   const handlePlantChange = (e) => {
     const value =
@@ -57,6 +68,7 @@ const AddPlant = () => {
     const updatedOptions = [...selectedSunlightOptions];
 
     if (e.target.checked) {
+      console.log("option was pushed", option)
       updatedOptions.push(option);
     } else {
       const index = updatedOptions.indexOf(option);
@@ -67,7 +79,7 @@ const AddPlant = () => {
 
     setPlant({
       ...plant,
-      sunlight: updatedOptions.join(", "),
+      sunlight: updatedOptions
     });
   };
 
@@ -91,7 +103,7 @@ const AddPlant = () => {
       med_image_url: "",
       cycle: "",
       description: "",
-      sunlight: "",
+      sunlight: [],
       edible: false,
       indoor: false,
       medicinal: false,
@@ -99,6 +111,7 @@ const AddPlant = () => {
       poisonous_to_pets: false,
       water_rec: "",
     });
+    selectedSunlightOptions:[]
   };
 
   return (
@@ -228,7 +241,7 @@ const AddPlant = () => {
         </div>
         <div className="margB1"></div>
         <div>
-          <label htmlFor="sunlight" className="editLabel">
+        <label htmlFor="sunlight" className="editLabel">
             Sunlight
           </label>
           <div className="margB1"></div>
