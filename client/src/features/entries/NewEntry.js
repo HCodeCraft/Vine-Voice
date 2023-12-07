@@ -20,6 +20,7 @@ const NewEntry = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [formErrors, setFormErrors] = useState([])
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
@@ -79,58 +80,65 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const newEntry = new FormData();
+  
+    const newEntryFormData = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
         if (key === "problems" && Array.isArray(entry[key])) {
           entry[key].forEach((problem) => {
-            newEntry.append("entry[problems][]", problem);
+            newEntryFormData.append("entry[problems][]", problem);
           });
         } else {
-          newEntry.append(`entry[${key}]`, entry[key]);
+          newEntryFormData.append(`entry[${key}]`, entry[key]);
         }
       }
     }
-
-    dispatch(addEntryToApi(newEntry))
+  
+    dispatch(addEntryToApi(newEntryFormData))
       .then((action) => {
-        const specificPlant = plant;
-        const isPlantInArray = loggedInUser.plants.some(
-          (plant) => plant.id === specificPlant.id
-        );
+        if (addEntryToApi.fulfilled.match(action)) {
+          const specificPlant = plant;
+          const isPlantInArray = loggedInUser.plants.some(
+            (userPlant) => userPlant.id === specificPlant.id
+          );
+  
+          // newEntry is set as individualEntry
+          // if the user has the plant already in their plants array,
+          // we'll just add the entry to the plant
+          dispatch(addEntryToPlant());
+  
+          if (!isPlantInArray) {
+            // If the plant isn't in the user's array, we'll add the plant
+            // to the user
+            dispatch(addPlantToUser(specificPlant));
+          } else {
+            // If the plant is in the array,
+            // we'll update the user's plant by adding the entry
+            const newestEntry = action.payload;
+            const specificPlantWithEntry = {
+              ...specificPlant,
+              entries: [...specificPlant.entries, newestEntry],
+            };
+            dispatch(updateUserPlant(specificPlantWithEntry));
 
-        // newEntry is set as individualEntry
-// if user has the plant already in their plants array, 
-/// we'll just add the entry to the plant
-        dispatch(addEntryToPlant());
-        // adds the entry to the plant
 
-        if (!isPlantInArray) {
-          // How does the specificplant get the new entry in it
-          dispatch(addPlantToUser(specificPlant));
-          /// if the plant isn't in the user's array, well add the plant
-          // to the user
-        } else {
-          // if the plant is in the array 
-          // we'll update the user's plant by adding the entry
-          const newestEntry = action.payload;
-
-          const specificPlantWithEntry = {
-            ...specificPlant,
-            entries: [...specificPlant.entries, newestEntry],
-          };
-
-          dispatch(updateUserPlant(specificPlantWithEntry));
+        navigate(`/plants/${entry.plant_id}`);
+          }
+        } else if (addEntryToApi.rejected.match(action)) {
+          const error = action.error.message;
+          console.error("Error during addEntryToApi:", error);
+          const errorObject = JSON.parse(error);
+          const errors = errorObject.errors;
+          setFormErrors(errors);
+          // Propagate the error to the next catch block
+          throw error;
         }
       })
       .catch((error) => {
-        console.error("Error occurred:", error);
+        console.error("Error during dispatches:", error);
       });
-
-    navigate(`/plants/${entry.plant_id}`);
   };
-
+  
   const boxStyle = {
     backgroundColor: "#f5f5f5",
     padding: "20px",
@@ -223,6 +231,32 @@ const NewEntry = () => {
               onChange={handleEntryChange}
             />
           </FormGroup>
+          {formErrors.length > 0 ? (
+                <div
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginTop: "10px",
+                    textAlign: "center", // Center align the text
+                  }}
+                >
+                  <Typography variant="h6">Validation errors:</Typography>
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      padding: "0",
+                      margin: "0 auto",
+                    }}
+                  >
+                    {formErrors.map((error) => (
+                      <Typography key={error}>
+                        <li style={{ marginBottom: "10px" }}>{error}</li>
+                      </Typography>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
           <CommonButton onClick={handleSubmit}>Submit</CommonButton>
         </form>
       </Box>
