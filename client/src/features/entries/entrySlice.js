@@ -75,7 +75,8 @@ export const addEntryToApi = createAsyncThunk(
       const response = await fetch("/entries", requestBody);
 
       if (!response.ok) {
-        throw new Error("Failed to add entry to API");
+        const errorData = await response.json()
+        throw new Error(JSON.stringify(errorData))
       }
 
       const data = await response.json();

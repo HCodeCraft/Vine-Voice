@@ -51,7 +51,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.user.loggedInUser);
 
-  const [selectedTab, setSelectedTab] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(1);
 
   useEffect(() => {
     const routes = {

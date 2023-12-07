@@ -289,41 +289,51 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
-    const newEntry = new FormData();
+    const newEntryFormData = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
         if (key === "problems" && Array.isArray(entry[key])) {
           entry[key].forEach((problem) => {
-            newEntry.append("entry[problems][]", problem);
+            newEntryFormData.append("entry[problems][]", problem);
           });
         } else {
-          newEntry.append(`entry[${key}]`, entry[key]);
+          newEntryFormData.append(`entry[${key}]`, entry[key]);
         }
       }
     }
-    dispatch(addEntryToApi(newEntry))
-    .then( (action) => {
-      if (addEntryToApi.fulfilled.match(action)) {
-      dispatch(addEntryToPlant());
-     dispatch(addPlantToUser());
+  
+    dispatch(addEntryToApi(newEntryFormData))
+      .then((action) => {
+        console.log("addEntryToApi fulfilled:", action);
+  
+        if (addEntryToApi.fulfilled.match(action)) {
+          dispatch(addEntryToPlant());
+          dispatch(addPlantToUser());
+          return action; // Pass the action to the next then block
+        } else if (addEntryToApi.rejected.match(action)) {
+          const error = action.error.message;
+  
+          console.error("Error during addEntryToApi:", error);
+  
+          const errorObject = JSON.parse(error);
+          const errors = errorObject.errors;
+  
+          setFormErrors(errors);
+  
+          // Propagate the error to the next catch block
+          throw error;
+        }
+      })
+      .then((action) => {
+        console.log("Navigation action:", action);
+  
         navigate(`/plants/${entry.plant_id}`);
-      } else if (addEntryToApi.rejected.match(action)) {
-        const error = action.error.message;
-  
-        const errorObject = JSON.parse(error);
-  
-        const errors = errorObject.errors;
-  
-        setFormErrors(errors);
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding entry:", error);
-    });
-  
-
-   
+      })
+      .catch((error) => {
+        console.error("Error during dispatches:", error);
+      });
   };
+  
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);

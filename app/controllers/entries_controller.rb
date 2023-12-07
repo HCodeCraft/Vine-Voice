@@ -25,14 +25,20 @@ end
 
   def create
     @current_user = User.find_by(id: session[:user_id])
-
+  
     if @current_user
-      new_entry = @current_user.entries.create(entry_params)
-      render json: new_entry
+      new_entry = @current_user.entries.build(entry_params)
+  
+      if new_entry.save
+        render json: new_entry
+      else
+        render json: { errors: new_entry.errors.full_messages }, status: :unprocessable_entity
+      end
     else
       render json: { error: 'User not found' }, status: :unprocessable_entity
     end
   end
+  
   
 
   def update
