@@ -42,7 +42,11 @@ class PlantsController < ApplicationController
     if @current_user.admin === true
       plant = find_plant
       plant.update(plant_params)
-      render json: plant
+      if plant.save
+        render json: { plant: plant.as_json(include: :entries) }, status: :update
+      else
+        render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
+      end
     else
       render json: { error: "You are not authorized to perform this action" }, status: :unauthorized
     end

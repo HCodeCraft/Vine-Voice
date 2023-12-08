@@ -57,34 +57,35 @@ export const addPlantToApi = createAsyncThunk(
 );
 
 
-
-
-
 export const updatePlantInApi = createAsyncThunk(
-  "user/updatePlantInApi",
+  'user/updatePlantInApi',
   async ({ plantId, updatedPlant }, thunkAPI) => {
     try {
       const response = await fetch(`/plants/${plantId}`, {
-        method: "PATCH",
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify(updatedPlant),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(JSON.stringify(errorData))
+        throw new Error(JSON.stringify(errorData));
+
       }
 
       const updatedPlantData = await response.json();
+
       thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.message || "Update plant failed");
+      // Handle other errors if needed
+      return thunkAPI.rejectWithValue(error.message || 'Update plant failed');
     }
   }
 );
+
 
 export const addEntryToPlant = createAsyncThunk(
   "user/addEntryPlant",

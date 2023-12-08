@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Restricted from "../../Restricted";
 import Unauthorized from "../../Unauthorized";
 import { updatePlantInApi } from "./plantSlice";
+import { Typography } from "@mui/material";
 
 const EditPlant = () => {
   const navigate = useNavigate();
@@ -33,14 +34,14 @@ const EditPlant = () => {
 
   useEffect(() => setPlant(apiPlant), [apiPlant]);
 
-  useEffect(()=> {
-console.log("formErrors", formErrors)
-  }, [formErrors])
+  useEffect(() => {
+    console.log("formErrors", formErrors);
+  }, [formErrors]);
 
   useEffect(() => {
     console.log("selectedSunlightOptions", selectedSunlightOptions);
   }, [selectedSunlightOptions]);
-  
+
   useEffect(() => {
     if (Array.isArray(plant.sunlight)) {
       setSelectedSunlightOptions([...plant.sunlight]);
@@ -70,7 +71,7 @@ console.log("formErrors", formErrors)
     const updatedOptions = [...selectedSunlightOptions];
 
     if (e.target.checked) {
-      console.log("option was pushed", option)
+      console.log("option was pushed", option);
       updatedOptions.push(option);
     } else {
       const index = updatedOptions.indexOf(option);
@@ -81,25 +82,24 @@ console.log("formErrors", formErrors)
 
     setPlant({
       ...plant,
-      sunlight: updatedOptions
+      sunlight: updatedOptions,
     });
   };
 
   const onSavePlantClicked = (e) => {
     e.preventDefault();
 
-    console.log("plant from onSavePlantClicked", plant)
+    console.log("plant from onSavePlantClicked", plant);
 
     const plantId = apiPlant.id;
     const updatedPlant = { ...plant, sunlight: [plant.sunlight] };
-    console.log("updatedPlant", updatedPlant)
+    console.log("updatedPlant", updatedPlant);
     dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
       if (updatePlantInApi.fulfilled.match(action)) {
         setFormErrors([]);
         // navigate(`/plants/${plant.id}`);
       } else if (updatePlantInApi.rejected.match(action)) {
-        const error = action.error.message;
-        const errorObject = JSON.parse(error);
+        const errorObject = JSON.parse(action.payload);
         const errors = errorObject.errors;
         setFormErrors(errors);
       }
