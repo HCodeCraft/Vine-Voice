@@ -40,13 +40,16 @@ end
   end
   
   
-
   def update
     entry = find_entry
-    entry.update(entry_params)
-
-    render json: entry
+  
+    if entry.update(entry_params)
+      render json: entry
+    else
+      render json: { errors: entry.errors.full_messages }, status: :unprocessable_entity
+    end
   end
+  
 
 
   def destroy
@@ -62,8 +65,10 @@ end
     @current_user = User.find_by(id: session[:user_id])
     entry = @current_user.entries.find_by(id: params[:id])
   end
+  
+# :create_date, :username, :user, :comments, :plant
 
   def entry_params
-    params.require(:entry).permit(:nickname, :location, :notes, :user_id, :plant_id, :recieve_dev_emails,:open_to_advice, :picture, :health, :problems => [])
+    params.require(:entry).permit(:nickname, :id, :location, :notes, :user_id, :plant_id, :recieve_dev_emails,:open_to_advice, :picture, :health, :problems => [])
   end
 end

@@ -43,7 +43,7 @@ class PlantsController < ApplicationController
       plant = find_plant
       plant.update(plant_params)
       if plant.save
-        render json: { plant: plant.as_json(include: :entries) }, status: :update
+        render json: { plant: plant.as_json }, status: :accepted
       else
         render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
       end
@@ -74,6 +74,8 @@ class PlantsController < ApplicationController
       :common_name,
       :scientific_name,
       :image_url,
+      :created_at,
+      :updated_at,
       :description,
       :water_rec,
       :indoor,

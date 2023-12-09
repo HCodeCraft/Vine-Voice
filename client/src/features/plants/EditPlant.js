@@ -32,7 +32,9 @@ const EditPlant = () => {
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
   const [formErrors, setFormErrors] = useState([]);
 
-  useEffect(() => setPlant(apiPlant), [apiPlant]);
+  useEffect(() => {
+    setPlant(apiPlant);
+  }, [apiPlant]);
 
   useEffect(() => {
     console.log("formErrors", formErrors);
@@ -97,11 +99,17 @@ const EditPlant = () => {
     dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
       if (updatePlantInApi.fulfilled.match(action)) {
         setFormErrors([]);
-        // navigate(`/plants/${plant.id}`);
+        navigate(`/plants/${plant.id}`);
       } else if (updatePlantInApi.rejected.match(action)) {
-        const errorObject = JSON.parse(action.payload);
-        const errors = errorObject.errors;
-        setFormErrors(errors);
+        try {
+          const errorObject = JSON.parse(action.payload); 
+          const errors = errorObject.errors;
+          setFormErrors(errors);
+        } catch (error) {
+          console.error("Error parsing JSON:", error);
+          // Handle the error, or set a default value for formErrors
+          setFormErrors(["An error occurred while processing your request."]);
+        }
       }
     });
   };

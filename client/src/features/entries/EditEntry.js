@@ -29,7 +29,7 @@ const EditEntry = () => {
     problems: [],
     open_to_advice: false,
   });
-
+  const [formErrors, setFormErrors] = useState([]);
   const [tags, setTags] = useState();
 
   const handleKeyDown = (e) => {
@@ -68,6 +68,10 @@ const EditEntry = () => {
     setTags(apiEntry.problems);
   }, [apiEntry]);
 
+  useEffect(() => {
+    console.log("formErrors", formErrors);
+  }, [formErrors]);
+
   const handleEntryChange = (e) => {
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -87,21 +91,40 @@ const EditEntry = () => {
 
     const updatedEntry = new FormData();
 
+    const excludedFields = [
+      "create_date",
+      "username",
+      "user",
+      "comments",
+      "plant",
+    ];
+
     for (const key in entry) {
-      if (entry[key] !== null) {
+      if (!excludedFields.includes(key) && entry[key] !== null) {
         if (key === "problems" && Array.isArray(entry[key])) {
           entry[key].forEach((problem) => {
             updatedEntry.append("entry[problems][]", problem);
+            console.log(`Appended: entry[problems][] = ${problem}`);
           });
         } else {
           updatedEntry.append(`entry[${key}]`, entry[key]);
+          console.log(`Appended: entry[${key}] = ${entry[key]}`);
         }
       }
     }
 
-    dispatch(updateEntryInApi({ entryId, updatedEntry }));
-
-    navigate(`/plants/${plant.id}/entries/${entryId}`);
+    dispatch(updateEntryInApi({ entryId, updatedEntry })).then((action) => {
+      if (updateEntryInApi.fulfilled.match(action)) {
+        navigate(`/plants/${plant.id}/entries/${entryId}`);
+      } else if (updateEntryInApi.rejected.match(action)) {
+        console.log("action", action);
+        const error = action.error.message;
+        console.error("Error during addEntryToApi:", error);
+        const errorObject = JSON.parse(error);
+        const errors = errorObject.errors;
+        setFormErrors(errors);
+      }
+    });
   };
 
   const boxStyle = {
@@ -136,7 +159,7 @@ const EditEntry = () => {
           />
 
           <Typography variant="h5" style={{ marginTop: "1em" }}>
-            the {plant.common_name}
+            the {plant?.common_name}
           </Typography>
           <Typography variant="h6" style={{ marginBottom: "1em" }}>
             from {entry.create_date}
@@ -182,13 +205,14 @@ const EditEntry = () => {
             name="notes"
             variant="outlined"
             color="secondary"
-            style={{ marginTop: "2em", marginBottom: "2em" }}
+            style={{ marginTop: "2em"}}
             multiline
             rows={10}
             columns={12}
             value={entry.notes}
             onChange={handleEntryChange}
           />
+          <p className="margB2">Your notes are currently {entry.notes.length} characters (20 required)</p>
 
           <div className="health_box">
             <Typography variant="h6">Health Rating</Typography>
@@ -213,6 +237,18 @@ const EditEntry = () => {
               label="Open to advice"
             />
           </FormGroup>
+          {formErrors.length > 0 ? (
+            <div className="errorDiv">
+              <Typography variant="h6">Validation errors:</Typography>
+              <ul className="errorUl">
+                {formErrors.map((error) => (
+                  <Typography key={error}>
+                    <li style={{ marginBottom: "10px" }}>{error}</li>
+                  </Typography>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <CommonButton onClick={handleSubmit}>Submit</CommonButton>
         </form>

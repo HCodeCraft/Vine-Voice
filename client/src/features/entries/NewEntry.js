@@ -20,7 +20,7 @@ const NewEntry = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [formErrors, setFormErrors] = useState([])
+  const [formErrors, setFormErrors] = useState([]);
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
@@ -80,7 +80,7 @@ const NewEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const newEntryFormData = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
@@ -93,7 +93,7 @@ const NewEntry = () => {
         }
       }
     }
-  
+
     dispatch(addEntryToApi(newEntryFormData))
       .then((action) => {
         if (addEntryToApi.fulfilled.match(action)) {
@@ -101,19 +101,12 @@ const NewEntry = () => {
           const isPlantInArray = loggedInUser.plants.some(
             (userPlant) => userPlant.id === specificPlant.id
           );
-  
-          // newEntry is set as individualEntry
-          // if the user has the plant already in their plants array,
-          // we'll just add the entry to the plant
+
           dispatch(addEntryToPlant());
-  
+
           if (!isPlantInArray) {
-            // If the plant isn't in the user's array, we'll add the plant
-            // to the user
             dispatch(addPlantToUser(specificPlant));
           } else {
-            // If the plant is in the array,
-            // we'll update the user's plant by adding the entry
             const newestEntry = action.payload;
             const specificPlantWithEntry = {
               ...specificPlant,
@@ -121,8 +114,7 @@ const NewEntry = () => {
             };
             dispatch(updateUserPlant(specificPlantWithEntry));
 
-
-        navigate(`/plants/${entry.plant_id}`);
+            navigate(`/plants/${entry.plant_id}`);
           }
         } else if (addEntryToApi.rejected.match(action)) {
           const error = action.error.message;
@@ -138,7 +130,7 @@ const NewEntry = () => {
         console.error("Error during dispatches:", error);
       });
   };
-  
+
   const boxStyle = {
     backgroundColor: "#f5f5f5",
     padding: "20px",
@@ -232,30 +224,30 @@ const NewEntry = () => {
             />
           </FormGroup>
           {formErrors.length > 0 ? (
-                <div
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    marginTop: "10px",
-                    textAlign: "center", // Center align the text
-                  }}
-                >
-                  <Typography variant="h6">Validation errors:</Typography>
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      padding: "0",
-                      margin: "0 auto",
-                    }}
-                  >
-                    {formErrors.map((error) => (
-                      <Typography key={error}>
-                        <li style={{ marginBottom: "10px" }}>{error}</li>
-                      </Typography>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
+            <div
+              style={{
+                color: "red",
+                fontWeight: "bold",
+                marginTop: "10px",
+                textAlign: "center", // Center align the text
+              }}
+            >
+              <Typography variant="h6">Validation errors:</Typography>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0",
+                  margin: "0 auto",
+                }}
+              >
+                {formErrors.map((error) => (
+                  <Typography key={error}>
+                    <li style={{ marginBottom: "10px" }}>{error}</li>
+                  </Typography>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <CommonButton onClick={handleSubmit}>Submit</CommonButton>
         </form>

@@ -76,6 +76,7 @@ export const updatePlantInApi = createAsyncThunk(
       }
 
       const updatedPlantData = await response.json();
+      console.log("updatedPlantData", updatedPlantData)
 
       thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
@@ -146,11 +147,9 @@ const plantSlice = createSlice({
     },
     updateEntryInPlant: (state, action) => {
       const updatedEntry = action.payload;
-
-      state.plant.individualPlant.entries =
-        state.plant.individualPlant.entries.map((entry) =>
-          entry.id === updatedEntry.id ? updatedEntry : entry
-        );
+      state.individualPlant.entries = state.individualPlant.entries.map((entry) =>
+        entry.id === updatedEntry.id ? updatedEntry : entry
+      );
     },
     deleteEntryInPlant: (state, action) => {
       const deletedEntryId = action.payload;

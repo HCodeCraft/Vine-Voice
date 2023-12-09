@@ -40,10 +40,20 @@ export const updateEntryInApi = createAsyncThunk(
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Update entry failed");
+        throw new Error(JSON.stringify(errorData));
       }
 
-      const updatedEntryData = await response.json();
+      // Convert FormData to a plain object
+      const updatedEntryData = {};
+      updatedEntry.forEach((value, key) => {
+        updatedEntryData[key] = value;
+      });
+
+     const indPlant = thunkAPI.getState().plant.individualPlant
+
+     console.log("individualPlant", indPlant)
+
+
       thunkAPI.dispatch(updateEntryInPlant(updatedEntryData));
       return updatedEntryData;
     } catch (error) {
@@ -51,6 +61,9 @@ export const updateEntryInApi = createAsyncThunk(
     }
   }
 );
+
+
+
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
   async (newEntry) => {
