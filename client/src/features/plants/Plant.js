@@ -97,18 +97,20 @@ const Plant = () => {
 
   return (
     <>
-      <Box
+
+ <Box
         sx={{
-          width: "100%",
-          maxWidth: "100%",
-          marginTop: "4.5em",
-          marginBottom: "2em",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          marginBottom: "3em",
+          marginTop:"1em"
         }}
       >
-        <Typography variant="h4" align="center" style={{ marginTop: "1em" }}>
+        <Typography variant="h4" align="center" style={{ marginTop: "1em"}}>
           {memoizedPlant.common_name}
         </Typography>
-        <Typography variant="h6" align="center">
+        <Typography variant="h6" align="center" style={{marginBottom:"2em"}}>
           {memoizedPlant.scientific_name}
         </Typography>
       </Box>
@@ -121,14 +123,14 @@ const Plant = () => {
           <div className="button_box margT2 margB2">
             <p>Added on {memoizedPlant.create_date}</p>
           </div>
-          <Grid container spacing={1}>
+          <Grid container spacing={1} s>
             <Grid container item spacing={3}>
               <FormRow />
             </Grid>
           </Grid>
         </Box>
         {user.admin === true ? (
-          <Box display="flex" justifyContent="flex-start">
+          <Box display="flex" justifyContent="flex-start" marginLeft="4em">
             <Link to={`/plants/${memoizedPlant.id}/edit`}>
               <CommonButton>Edit Plant</CommonButton>
             </Link>
@@ -143,16 +145,18 @@ const Plant = () => {
         <Box
           display="flex"
           justifyContent="flex-end"
-          style={{ marginBottom: "1em" }}
+          style={{ marginBottom: "1em", paddingRight:"10em" }}
         >
           <Link to={`/plants/${memoizedPlant.id}/entries/new`}>
             <CommonButton>Add an Entry</CommonButton>
           </Link>
         </Box>
-        <Typography variant="h5" align="center" style={{ marginBottom: "1em" }}>
+        <Typography variant="h5" align="center" style={{ marginBottom: "1em", marginRight:"5em" }}>
           Latest {memoizedPlant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
+        <div className='bottomEntryBox'>
         <EntryTable entries={entriesDesc} comments={memoizedPlant.comments} />
+        </div>
         <div className="margB2"></div>
       </div>
     </>

@@ -72,7 +72,7 @@ const CommentCard = ({ comment, setComment }) => {
                   verticalAlign: "top",
                 }}
               >
-                {comment.username}
+                {comment.username ? comment.username : 'Deleted user'}
               </Typography>
             </Link>
             <Typography

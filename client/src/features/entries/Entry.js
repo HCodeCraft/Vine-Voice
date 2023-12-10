@@ -171,7 +171,7 @@ const Entry = () => {
         Problems:
         {entry.problems && entry.problems.length > 0
           ? entry.problems.map((problem, index) => <p className='margT1' key={index}>{problem} </p>)
-          : "No Problems :)"}
+          : " No Problems :)"}
       </div>
       {currentUser ? (
         <div className="margB1">

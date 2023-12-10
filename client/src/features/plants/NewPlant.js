@@ -254,8 +254,8 @@ const NewPlant = () => {
           medicinal: apiPlant.medicinal,
         }));
 
-        console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0])
-        console.log("apiPlant.sunlight", apiPlant.sunlight)
+        console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0]);
+        console.log("apiPlant.sunlight", apiPlant.sunlight);
 
         pageEndRef.current &&
           pageEndRef.current.scrollIntoView({ behavior: "smooth" });
@@ -304,39 +304,38 @@ const NewPlant = () => {
         }
       }
     }
-  
+
     dispatch(addEntryToApi(newEntryFormData))
       .then((action) => {
         console.log("addEntryToApi fulfilled:", action);
-  
+
         if (addEntryToApi.fulfilled.match(action)) {
           dispatch(addEntryToPlant());
           dispatch(addPlantToUser());
           return action; // Pass the action to the next then block
         } else if (addEntryToApi.rejected.match(action)) {
           const error = action.error.message;
-  
+
           console.error("Error during addEntryToApi:", error);
-  
+
           const errorObject = JSON.parse(error);
           const errors = errorObject.errors;
-  
+
           setFormErrors(errors);
-  
+
           // Propagate the error to the next catch block
           throw error;
         }
       })
       .then((action) => {
         console.log("Navigation action:", action);
-  
+
         navigate(`/plants/${entry.plant_id}`);
       })
       .catch((error) => {
         console.error("Error during dispatches:", error);
       });
   };
-  
 
   const onSearchNameChanged = (e) => {
     setSearchName(e.target.value);
@@ -375,7 +374,6 @@ const NewPlant = () => {
     try {
       if (apiForm === false) {
         await addEntry(entry);
-  
       } else {
         const newPlant = {
           ...plant,
@@ -391,7 +389,6 @@ const NewPlant = () => {
     } catch (error) {
       // Handle errors as needed
       // console.error("Submission Error:", error);
-
       // // Check if 'plant' property exists in the error response
       // const errorMessage = error.response?.data?.plant || "Unknown error";
       // console.error("Error Message:", errorMessage);
@@ -602,6 +599,10 @@ const NewPlant = () => {
                 onChange={handleEntryChange}
                 style={{ marginBottom: "2em" }}
               />
+              <p className="margB2">
+                Your notes are currently {entry.notes.length} characters (20
+                required)
+              </p>
               <div className="health_box margB1">
                 <Typography variant="h6">Health Rating</Typography>
                 <HealthRating

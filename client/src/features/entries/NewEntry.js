@@ -184,6 +184,7 @@ const NewEntry = () => {
             columns={12}
             onChange={handleEntryChange}
           />
+          <p className="margB2">Your notes are currently {entry.notes.length} characters (20 required)</p>
           <label htmlFor="picture">
             {" "}
             <Typography variant="h6">Add a Picture</Typography>
