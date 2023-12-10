@@ -26,7 +26,7 @@ const PlantCard = ({
 
   return (
     <Grid item xs={12} sm={6} md={2} lg={2}>
-      <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <Card sx={{ height: "100%", display: "flex", flexDirection: "column", minWidth:200 }}>
         <CardMedia sx={{ height: 200 }} image={image_url} />
         <CardContent
           style={{ flex: 1, display: "flex", flexDirection: "column" }}

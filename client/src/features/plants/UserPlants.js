@@ -56,22 +56,27 @@ const UserPlants = () => {
 
   return (
     <>
-      <Grid container spacing={0} style={{ marginTop: "20px" }}>
-        <Box sx={{ width: "100%", maxWidth: "100%" }}>
-          <Typography
-            variant="h4"
-            align="center"
-            style={{ marginTop: "1.75em", marginBottom: "1em" }}
-          >
-            My Plants
-          </Typography>
-        </Box>
-        <Grid container spacing={2}>
-          {content}
-        </Grid>
+    <Grid
+item  xs={12} sm={6} md={4} lg={3}
+      spacing={0}
+      style={{ marginTop: "20px", marginBottom: "20px" }}
+    >
+      <Box sx={{ width: "100%", maxWidth: "100%" }}>
+        <Typography
+          variant="h4"
+          align="center"
+          style={{ marginTop: "1.75em", marginBottom: "1em" }}
+        >
+          My Plants
+        </Typography>
+      </Box>
+      <Grid container spacing={2}>
+        {content}
       </Grid>
-    </>
-  );
-};
+    </Grid>
+  </>
+);
+}
+
 
 export default UserPlants;

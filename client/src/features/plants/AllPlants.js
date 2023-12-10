@@ -29,7 +29,7 @@ const AllPlants = () => {
         <Grid
           container
           spacing={0}
-          style={{ marginTop: "20px", marginBottom: "20px" }}
+          style={{ marginTop: "20px", marginBottom: "20px", padding: 2 }}
         >
           <Box sx={{ width: "100%", maxWidth: "100%" }}>
             <Typography
