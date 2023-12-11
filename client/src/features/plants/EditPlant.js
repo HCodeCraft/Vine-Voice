@@ -92,9 +92,10 @@ const EditPlant = () => {
     e.preventDefault();
 
     console.log("plant from onSavePlantClicked", plant);
+    console.log("plant.sunlight", plant.sunlight)
 
     const plantId = apiPlant.id;
-    const updatedPlant = { ...plant, sunlight: [plant.sunlight] };
+    const updatedPlant = { ...plant, sunlight: [selectedSunlightOptions] };
     console.log("updatedPlant", updatedPlant);
     dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
       if (updatePlantInApi.fulfilled.match(action)) {
