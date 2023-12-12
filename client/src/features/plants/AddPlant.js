@@ -26,13 +26,6 @@ const AddPlant = () => {
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
 
-  // useEffect(() => {
-  //   if (typeof plant.sunlight === "string") {
-  //     const initialSelectedOptions = plant.sunlight
-  //     /// took off .split(", ")
-  //     setSelectedSunlightOptions(initialSelectedOptions);
-  //   }
-  // }, [plant.sunlight]);
 
   useEffect(() => {
     if (Array.isArray(plant.sunlight)) {

@@ -68,12 +68,13 @@ const EditPlant = () => {
     });
   };
 
+
   const handleSunlightOptionChange = (e) => {
     const option = e.target.name;
     const updatedOptions = [...selectedSunlightOptions];
 
     if (e.target.checked) {
-      console.log("option was pushed", option);
+      console.log("option was pushed", option)
       updatedOptions.push(option);
     } else {
       const index = updatedOptions.indexOf(option);
@@ -84,20 +85,19 @@ const EditPlant = () => {
 
     setPlant({
       ...plant,
-      sunlight: updatedOptions,
+      sunlight: updatedOptions
     });
   };
-
-  const onSavePlantClicked = (e) => {
-    e.preventDefault();
-
-    console.log("plant from onSavePlantClicked", plant);
-    console.log("plant.sunlight", plant.sunlight)
-
-    const plantId = apiPlant.id;
-    const updatedPlant = { ...plant, sunlight: [selectedSunlightOptions] };
-    console.log("updatedPlant", updatedPlant);
-    dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
+    const onSavePlantClicked = (e) => {
+      e.preventDefault();
+    
+      console.log("plant from onSavePlantClicked", plant);
+      console.log("plant.sunlight", plant.sunlight);
+    
+      const plantId = apiPlant.id;
+      const updatedPlant = { ...plant };
+      console.log("updatedPlant", updatedPlant);
+      dispatch(updatePlantInApi({ plantId, updatedPlant })).then((action) => {
       if (updatePlantInApi.fulfilled.match(action)) {
         setFormErrors([]);
         navigate(`/plants/${plant.id}`);
@@ -250,10 +250,10 @@ const EditPlant = () => {
           <div className="margB1"></div>
           <input
             type="checkbox"
-            id="full_shade"
-            name="full_shade"
+            id="full shade"
+            name="full shade"
             onChange={handleSunlightOptionChange}
-            checked={selectedSunlightOptions.includes("full_shade")}
+            checked={selectedSunlightOptions.includes("full shade")}
           />
           <label htmlFor="full_shade" className="inputText">
             Full Shade
@@ -261,37 +261,37 @@ const EditPlant = () => {
           <div className="margB1"></div>
           <input
             type="checkbox"
-            id="part_shade"
-            name="part_shade"
-            value="part_shade"
+            id="part shade"
+            name="part shade"
+            value="part shade"
             onChange={handleSunlightOptionChange}
-            checked={selectedSunlightOptions.includes("part_shade")}
+            checked={selectedSunlightOptions.includes("part shade")}
           />
-          <label htmlFor="part_shade" className="inputText">
+          <label htmlFor="part shade" className="inputText">
             Part Shade
           </label>
           <div className="margB1"></div>
           <input
             type="checkbox"
-            id="sun-part_shade"
-            name="sun-part_shade"
-            value="sun-part_shade"
+            id="sun-part shade"
+            name="sun-part shade"
+            value="sun-part shade"
             onChange={handleSunlightOptionChange}
-            checked={selectedSunlightOptions.includes("sun-part_shade")}
+            checked={selectedSunlightOptions.includes("sun-part shade")}
           />
-          <label htmlFor="sun-part_shade" className="inputText">
+          <label htmlFor="sun-part shade" className="inputText">
             Sun-Part Shade
           </label>
           <div className="margB1"></div>
           <input
             type="checkbox"
-            id="full_sun"
-            name="full_sun"
-            value="full_sun"
+            id="full sun"
+            name="full sun"
+            value="full sun"
             onChange={handleSunlightOptionChange}
-            checked={selectedSunlightOptions.includes("full_sun")}
+            checked={selectedSunlightOptions.includes("full sun")}
           />
-          <label htmlFor="full_sun" className="inputText">
+          <label htmlFor="full sun" className="inputText">
             Full Sun
           </label>
         </div>

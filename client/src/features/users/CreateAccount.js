@@ -93,11 +93,11 @@ const CreateAccount = () => {
   };
 
   const paperStyle = {
-    padding: 20,
+    padding: 15,
     height: "100vh",
     width: 400,
-    margin: "20px auto",
-    marginTop: "6em",
+    // margin: "20px auto",
+    // marginTop: ".1em",
   };
   const btnstyle = { margin: "8px 0" };
 

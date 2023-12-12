@@ -140,7 +140,7 @@ const Entry = () => {
 
   return entry ? (
     <section className="section" align="center">
-      <Typography variant="h4" align="center" style={{ marginTop: "3em" }}>
+      <Typography variant="h4" align="center" style={{ marginTop: "2em" }}>
         {"An Entry for "}
         {entry.nickname}
       </Typography>

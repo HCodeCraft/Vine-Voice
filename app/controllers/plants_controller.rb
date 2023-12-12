@@ -41,6 +41,7 @@ class PlantsController < ApplicationController
   def update
     if @current_user.admin === true
       plant = find_plant
+      puts "Received plant_params in update: #{plant_params.inspect}"
       plant.update(plant_params)
       if plant.save
         render json: { plant: plant.as_json }, status: :accepted

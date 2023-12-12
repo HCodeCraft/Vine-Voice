@@ -257,6 +257,12 @@ const NewPlant = () => {
         console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0]);
         console.log("apiPlant.sunlight", apiPlant.sunlight);
 
+        if (Array.isArray(apiPlant.sunlight) && apiPlant.sunlight.length > 0) {
+          console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0]);
+        } else {
+          console.log("apiPlant.sunlight is not an array or is empty");
+        }
+
         pageEndRef.current &&
           pageEndRef.current.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
@@ -265,6 +271,8 @@ const NewPlant = () => {
     }
   };
 
+  
+  
   const addPlant = (plant) => {
     console.log("plant", plant);
 
@@ -292,6 +300,7 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
+ 
     const newEntryFormData = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
@@ -370,6 +379,8 @@ const NewPlant = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("plant.sunlight", plant.sunlight)
 
     try {
       if (apiForm === false) {

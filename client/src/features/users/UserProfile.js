@@ -96,7 +96,7 @@ const UserProfile = () => {
   };
 
   const paperStyle = {
-    padding: 20,
+    padding: 0,
     height: "100vh",
     width: 600,
     margin: "20px auto",
@@ -234,7 +234,7 @@ const UserProfile = () => {
           </Link>
         ) : null}{" "}
         {loggedInUser.admin ? (
-          <div className="all_btn">
+          <div className="all_btn margB2">
             <Link to={`/users/all`}>
               <CommonButton>All User's Page</CommonButton>
             </Link>
