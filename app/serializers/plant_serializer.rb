@@ -11,8 +11,7 @@ class PlantSerializer < ActiveModel::Serializer
     if created_at.present?
       formatted_time = created_at.strftime("%B %d, %Y, %I:%M %p")
     else
-      # Handle the case where created_at is nil
-      formatted_time = "N/A"  # or any default value or message you prefer
+      formatted_time = "N/A"
     end
   end
 
@@ -23,7 +22,6 @@ class PlantSerializer < ActiveModel::Serializer
   def sunlight_emojis
     emojis = []
 
-    # Convert all values in the sunlight array to lowercase
     sunlight = object.sunlight&.map(&:downcase)
 
     if sunlight&.include?("full sun")
@@ -46,7 +44,6 @@ class PlantSerializer < ActiveModel::Serializer
   end
 
   def water_emojis
-
     water = object.water_rec.downcase
     case water
     when "none"

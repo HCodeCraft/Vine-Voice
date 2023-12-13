@@ -5,18 +5,12 @@ class EntrySerializer < ActiveModel::Serializer
   belongs_to :user
   belongs_to :plant
 
-
-
-
   def picture
-    rails_blob_path(object.picture, only_path:true) if object.picture.attached?
+    rails_blob_path(object.picture, only_path: true) if object.picture.attached?
   end
-
 
   def create_date
     formatted_time = object.created_at&.strftime("%A, %B %d, %Y, %I:%M %p") || "N/A"
     formatted_time
   end
-  
-  
 end

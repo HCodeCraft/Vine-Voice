@@ -1,29 +1,22 @@
 class UsersController < ApplicationController
-skip_before_action :authorize, only: [:create]
+  skip_before_action :authorize, only: [:create]
 
+  def create
+    puts "Received parameters: #{params.inspect}"
+    user = User.new(user_params)
 
-
-def create
-  puts "Received parameters: #{params.inspect}"
-  user = User.new(user_params)
-
-
-  if user.save
-    session[:user_id] = user.id
-    render json: user, status: :created
-  else
-    render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    if user.save
+      session[:user_id] = user.id
+      render json: user, status: :created
+    else
+      render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
+    end
   end
-end
 
-  
-
-  # added .with_attached_avatar
   def index
     render json: User.all.with_attached_avatar
   end
 
-  # would need to do something to delete the previous avatar
   def update
     user = User.find_by(id: params[:id])
     if user.update(user_params)
@@ -35,7 +28,7 @@ end
 
   def show
     user = User.find_by(id: params[:id])
-  
+
     if user
       if user.privacy === true
         render json: user.slice(:username, :name, :avatar_url, :status, :id, :privacy, :plants).to_json
@@ -46,14 +39,10 @@ end
       render json: { errors: ["User not found"] }, status: :not_found
     end
   end
-  
-
-
-
 
   def destroy
     user = User.find(params[:id])
-  
+
     if user
       if @current_user == user || (@current_user&.admin? && !user.admin?)
         user.destroy
@@ -65,16 +54,10 @@ end
       head :not_found
     end
   end
-  
-  
 
   private
 
-  # added avatar
   def user_params
     params.require(:user).permit(:username, :password, :name, :privacy, :email, :recieve_dev_emails, :status, :id, :admin, :avatar, :avatar_thumbnail, :password_confirmation)
   end
-
-  # I removed :avatar
-
 end

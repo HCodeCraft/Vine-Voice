@@ -68,10 +68,6 @@ const EditEntry = () => {
     setTags(apiEntry.problems);
   }, [apiEntry]);
 
-  useEffect(() => {
-    console.log("formErrors", formErrors);
-  }, [formErrors]);
-
   const handleEntryChange = (e) => {
     const value =
       e.target.type === "checkbox" ? e.target.checked : e.target.value;
@@ -104,11 +100,9 @@ const EditEntry = () => {
         if (key === "problems" && Array.isArray(entry[key])) {
           entry[key].forEach((problem) => {
             updatedEntry.append("entry[problems][]", problem);
-            console.log(`Appended: entry[problems][] = ${problem}`);
           });
         } else {
           updatedEntry.append(`entry[${key}]`, entry[key]);
-          console.log(`Appended: entry[${key}] = ${entry[key]}`);
         }
       }
     }
@@ -117,9 +111,7 @@ const EditEntry = () => {
       if (updateEntryInApi.fulfilled.match(action)) {
         navigate(`/plants/${plant.id}/entries/${entryId}`);
       } else if (updateEntryInApi.rejected.match(action)) {
-        console.log("action", action);
         const error = action.error.message;
-        console.error("Error during addEntryToApi:", error);
         const errorObject = JSON.parse(error);
         const errors = errorObject.errors;
         setFormErrors(errors);
@@ -205,14 +197,17 @@ const EditEntry = () => {
             name="notes"
             variant="outlined"
             color="secondary"
-            style={{ marginTop: "2em"}}
+            style={{ marginTop: "2em" }}
             multiline
             rows={10}
             columns={12}
             value={entry.notes}
             onChange={handleEntryChange}
           />
-          <p className="margB2">Your notes are currently {entry.notes.length} characters (20 required)</p>
+          <p className="margB2">
+            Your notes are currently {entry.notes.length} characters (20
+            required)
+          </p>
 
           <div className="health_box">
             <Typography variant="h6">Health Rating</Typography>

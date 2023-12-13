@@ -1,6 +1,5 @@
 class CommentsController < ApplicationController
 
-    # create the comment though the user
     def create
         newComment = @current_user.comments.create!(comment_params)
         render json: newComment
@@ -28,8 +27,6 @@ class CommentsController < ApplicationController
         comment = @current_user.comments.find_by(id: params[:id])
       end
     
-
-      # not sure if I need to include user_id?
       def comment_params
         params.require(:comment).permit(:text, :entry_id, :id)
       end

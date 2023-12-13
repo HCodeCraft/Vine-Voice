@@ -13,7 +13,6 @@ class PlantsController < ApplicationController
   def search
     search_query = params[:q]
 
-    # Use Ransack to search in both common_name and scientific_name
     @plants = Plant.ransack(common_name_cont: search_query).result(distinct: true).limit(5)
 
     render json: @plants
@@ -22,8 +21,6 @@ class PlantsController < ApplicationController
 
   def create
     @current_user = User.find_by(id: session[:user_id])
-    puts "Received plant_params: #{plant_params.inspect}"
-    # Build a new plant
     plant = Plant.new(plant_params)
   
     if plant.save
@@ -33,10 +30,6 @@ class PlantsController < ApplicationController
     end
   end
   
-  
-  
-
-  # not giving the entry a user
 
   def update
     if @current_user.admin === true
