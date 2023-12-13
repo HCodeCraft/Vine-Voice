@@ -80,13 +80,11 @@ const NavBar = () => {
   };
 
   if (user === null) {
-    // Return a loading indicator or null during the initialization phase
     return (
       <AppBar
         className="topbar"
         sx={{ textTransform: "none", background: "#81C784" }}
       >
-        {/* Add your loading indicator content here */}
       </AppBar>
     );
   }

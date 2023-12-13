@@ -1,7 +1,7 @@
 import React from 'react'
 import Button from '@mui/material/Button';
 
-const CommonButton = ({children, color, disabled, size, sx, variant, onClick, style, type = 'button'}) => {
+const CommonButton = ({children, color, disabled, size, variant, onClick, style, type = 'button'}) => {
 
     const buttonStyles = {
         backgroundColor: '#4CAF50',

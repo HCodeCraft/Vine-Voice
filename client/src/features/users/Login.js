@@ -36,20 +36,17 @@ const Login = () => {
   const submitForm = async (data) => {
     try {
       const action = await dispatch(loginUser(data));
-  
+
       if (loginUser.rejected.match(action)) {
         const error = action.error.message;
-        console.log("error", error)
 
         const errorObject = JSON.parse(error);
-        console.log("errorObject", errorObject)
 
         const errors = errorObject.error;
-        console.log("errors", errors)
 
         setFormErrors(errors);
       }
-  
+
       if (loginUser.fulfilled.match(action)) {
         setFormErrors([]);
         await dispatch(fetchAllUsers());
@@ -63,8 +60,6 @@ const Login = () => {
       setFormErrors(["An unexpected error occurred. Please try again."]);
     }
   };
-  
-
 
   useEffect(() => {
     if (loggedIn === true) {

@@ -190,9 +190,9 @@ const Entry = () => {
       <Typography
         sx={{
           border: `1px solid ${entry.open_to_advice ? "green" : "red"}`,
-          padding: "4px", // Add padding for better visualization
+          padding: "4px", 
           display: "inline-block",
-          marginTop: "2em", // To make the border apply to the text only
+          marginTop: "2em", 
         }}
       >
         {entry.open_to_advice ? "I'm open to advice!" : "No advice, please"}

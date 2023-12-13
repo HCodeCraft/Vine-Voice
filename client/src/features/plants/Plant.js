@@ -14,20 +14,19 @@ const Plant = () => {
   const dispatch = useDispatch();
   const id = Number(params.id);
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const user = useSelector((state) => state.user.loggedInUser);
 
   const plant = useSelector((state) => state.plant.individualPlant);
   const memoizedPlant = useMemo(() => plant, [plant]);
-  console.log("plant", plant)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setIsLoading(false);
     }, 3000);
 
-    return () => clearTimeout(timeoutId); 
+    return () => clearTimeout(timeoutId);
   }, []);
 
   const handleDeletePlant = (id) => {
@@ -52,15 +51,16 @@ const Plant = () => {
   }, [id, dispatch]);
 
   if (isLoading) {
-
-    return <div className="margT4"><Spinner /></div>
-
+    return (
+      <div className="margT4">
+        <Spinner />
+      </div>
+    );
   }
 
   if (!plant) {
     return <h2 className="margT2">Plant not found!</h2>;
   }
-
 
   function FormRow() {
     return (
@@ -97,25 +97,28 @@ const Plant = () => {
 
   return (
     <>
-
- <Box
+      <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           marginBottom: "3em",
-          marginTop:"1em"
+          marginTop: "1em",
         }}
       >
-        <Typography variant="h4" align="center" style={{ marginTop: "1em"}}>
+        <Typography variant="h4" align="center" style={{ marginTop: "1em" }}>
           {memoizedPlant.common_name}
         </Typography>
-        <Typography variant="h6" align="center" style={{marginBottom:"2em"}}>
+        <Typography variant="h6" align="center" style={{ marginBottom: "2em" }}>
           {memoizedPlant.scientific_name}
         </Typography>
       </Box>
       <div className="pos_top margT2">
-        <img className="img_deg margT3" alt='plant' src={memoizedPlant.image_url}></img>
+        <img
+          className="img_deg margT3"
+          alt="plant"
+          src={memoizedPlant.image_url}
+        ></img>
         <div className="text-box margT2">
           <p className="desc">{memoizedPlant.description}</p>
         </div>
@@ -145,17 +148,21 @@ const Plant = () => {
         <Box
           display="flex"
           justifyContent="flex-end"
-          style={{ marginBottom: "1em", paddingRight:"10em" }}
+          style={{ marginBottom: "1em", paddingRight: "10em" }}
         >
           <Link to={`/plants/${memoizedPlant.id}/entries/new`}>
             <CommonButton>Add an Entry</CommonButton>
           </Link>
         </Box>
-        <Typography variant="h5" align="center" style={{ marginBottom: "1em", marginRight:"5em" }}>
+        <Typography
+          variant="h5"
+          align="center"
+          style={{ marginBottom: "1em", marginRight: "5em" }}
+        >
           Latest {memoizedPlant.entries.length > 1 ? "Entries" : "Entry"}
         </Typography>
-        <div className='bottomEntryBox'>
-        <EntryTable entries={entriesDesc} comments={memoizedPlant.comments} />
+        <div className="bottomEntryBox">
+          <EntryTable entries={entriesDesc} comments={memoizedPlant.comments} />
         </div>
         <div className="margB2"></div>
       </div>

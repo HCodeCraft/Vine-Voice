@@ -133,7 +133,7 @@ const commentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAllComments.pending, (state, action) => {
+      .addCase(fetchAllComments.pending, (state) => {
         state.loadingAllComments = true;
       })
       .addCase(fetchAllComments.fulfilled, (state, action) => {
@@ -177,10 +177,8 @@ const commentSlice = createSlice({
         // Assuming action.payload is the updated comment
         const updatedComment = action.payload;
 
-        // Update the individualComment
         state.individualComment = updatedComment;
 
-        // Update the allComments array by mapping over it and replacing the updated comment
         state.allComments = state.allComments.map((comment) =>
           comment.id === updatedComment.id ? updatedComment : comment
         );
@@ -191,14 +189,12 @@ const commentSlice = createSlice({
         state.loadingIndividualComment = false;
         state.errorIndividualComment = action.error.message;
       })
-      .addCase(deleteCommentFromApi.pending, (state, action) => {
+      .addCase(deleteCommentFromApi.pending, (state) => {
         state.loadingIndividualComment = true;
       })
       .addCase(deleteCommentFromApi.fulfilled, (state, action) => {
-        // Assuming action.payload is the commentId of the deleted comment
         const deletedCommentId = action.payload;
 
-        // Update your state to remove the deleted comment by its commentId
         state.allComments = state.allComments.filter(
           (comment) => comment.id !== deletedCommentId
         );

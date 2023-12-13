@@ -92,10 +92,6 @@ const NewPlant = () => {
   }, [API_KEY, searchName, speciesList.length]);
 
   useEffect(() => {
-    console.log("formErrors", formErrors);
-  }, [formErrors]);
-
-  useEffect(() => {
     let timeoutId;
 
     if (triggerTimeout && myApiData.length === 0) {
@@ -225,8 +221,6 @@ const NewPlant = () => {
       }));
       setEntryForm(true);
     } else {
-      // If apiform is true
-
       setEntryForm(true);
       try {
         setPlant((prevPlant) => ({
@@ -254,15 +248,6 @@ const NewPlant = () => {
           medicinal: apiPlant.medicinal,
         }));
 
-        console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0]);
-        console.log("apiPlant.sunlight", apiPlant.sunlight);
-
-        if (Array.isArray(apiPlant.sunlight) && apiPlant.sunlight.length > 0) {
-          console.log("apiPlant.sunlight[0]", apiPlant.sunlight[0]);
-        } else {
-          console.log("apiPlant.sunlight is not an array or is empty");
-        }
-
         pageEndRef.current &&
           pageEndRef.current.scrollIntoView({ behavior: "smooth" });
       } catch (error) {
@@ -271,11 +256,7 @@ const NewPlant = () => {
     }
   };
 
-  
-  
   const addPlant = (plant) => {
-    console.log("plant", plant);
-
     dispatch(addPlantToApi(plant))
       .then((action) => {
         if (addPlantToApi.fulfilled.match(action)) {
@@ -300,7 +281,6 @@ const NewPlant = () => {
   };
 
   const addEntry = (entry) => {
- 
     const newEntryFormData = new FormData();
     for (const key in entry) {
       if (entry[key] !== null) {
@@ -316,8 +296,6 @@ const NewPlant = () => {
 
     dispatch(addEntryToApi(newEntryFormData))
       .then((action) => {
-        console.log("addEntryToApi fulfilled:", action);
-
         if (addEntryToApi.fulfilled.match(action)) {
           dispatch(addEntryToPlant());
           dispatch(addPlantToUser());
@@ -325,20 +303,15 @@ const NewPlant = () => {
         } else if (addEntryToApi.rejected.match(action)) {
           const error = action.error.message;
 
-          console.error("Error during addEntryToApi:", error);
-
           const errorObject = JSON.parse(error);
           const errors = errorObject.errors;
 
           setFormErrors(errors);
 
-          // Propagate the error to the next catch block
           throw error;
         }
       })
-      .then((action) => {
-        console.log("Navigation action:", action);
-
+      .then(() => {
         navigate(`/plants/${entry.plant_id}`);
       })
       .catch((error) => {
@@ -380,8 +353,6 @@ const NewPlant = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("plant.sunlight", plant.sunlight)
-
     try {
       if (apiForm === false) {
         await addEntry(entry);
@@ -398,11 +369,8 @@ const NewPlant = () => {
         }
       }
     } catch (error) {
-      // Handle errors as needed
-      // console.error("Submission Error:", error);
-      // // Check if 'plant' property exists in the error response
-      // const errorMessage = error.response?.data?.plant || "Unknown error";
-      // console.error("Error Message:", errorMessage);
+      const errorMessage = error.response?.data?.plant || "Unknown error";
+      console.error("Error Message:", errorMessage);
     }
   };
 
@@ -523,7 +491,6 @@ const NewPlant = () => {
               resultForm === true &&
               myApiData.length > 0 && (
                 <div className="none_btn_box">
-                  {/* After my Db data */}
                   <CommonButton
                     size="small"
                     variant="contained"
@@ -566,7 +533,6 @@ const NewPlant = () => {
               ))}
               <div className="noneBtnBox">
                 <Link to={`/plants/none`}>
-                  {/* After api Data */}
                   <CommonButton size="large">
                     None of these are my plant
                   </CommonButton>
@@ -642,7 +608,7 @@ const NewPlant = () => {
                     color: "red",
                     fontWeight: "bold",
                     marginTop: "10px",
-                    textAlign: "center", // Center align the text
+                    textAlign: "center",
                   }}
                 >
                   <Typography variant="h6">Validation errors:</Typography>

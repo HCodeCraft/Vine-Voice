@@ -74,12 +74,6 @@ justify-content: center;
 padding: 16px;
 }
 
-.none_btn_box{
-  /* display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px; */
-}
 
 .classes-field{
  margin-top: 4em;
@@ -93,8 +87,6 @@ display: block
   flex-direction: column;
 }
 
-/* font-family: 'Cabin', sans-serif;
-font-family: 'Open Sans', sans-serif; */
 
 .display_none {
   display: none;
@@ -138,13 +130,11 @@ margin-bottom: 4em;
   margin-top: .25em;
 }
 
-/* .wrapper {
-  border: 20px solid #81C784;
-} */
+
 
 .error_msg {
   color: red;
-  font-weight: bold; /* Add this line to make the text bold */
+  font-weight: bold; 
 }
 
 .list li {
@@ -173,7 +163,6 @@ font-size: 1em;
 .editBox {
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
   align-items: center;
   margin-bottom: 1em;
   margin-top:2em
@@ -242,10 +231,10 @@ font-size: 1em;
 
 .statusBubble {
   background-color: #bdb8b8;
-  height: 160%; /* Adjust height to fit the content */
-  width: 150%; /* Adjust width to fit the content */
+  height: 160%;
+  width: 150%; 
   display: inline-block; 
-  border-radius: 45%;/* Make it inline so it wraps around the content */
+  border-radius: 45%;
   transform: translateX(-10%);
 }
 
@@ -262,8 +251,7 @@ text-align: center;
   display: block;
 
 }
-/* 
-style={{ display: "block", margin: "1.75em auto" , alignContent:'center'}} */
+
 
 .avatarBig{
   display: block;
@@ -281,13 +269,12 @@ style={{ display: "block", margin: "1.75em auto" , alignContent:'center'}} */
 }
 
 .small-plant-card-container {
-  display: flex; /* To make them display in a row */
-  flex-wrap: wrap; /* Wrap cards to the next line if the container is not wide enough */
-  gap: 10px; /* This sets the space between the cards */
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 10px;
   margin-bottom: 1em;
 }
 
-/* Additional styling for SmallPlantCard components if needed */
 .small-plant-card {
 padding:2%;
 }

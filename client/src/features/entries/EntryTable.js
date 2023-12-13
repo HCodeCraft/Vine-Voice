@@ -50,7 +50,11 @@ const EntryTable = ({ entries, comments }) => {
                 </TableCell>
                 <TableCell align="center">
                   {row.picture ? (
-                    <img src={row.picture} className="tiny_pic" alt='small plant' />
+                    <img
+                      src={row.picture}
+                      className="tiny_pic"
+                      alt="small plant"
+                    />
                   ) : (
                     "No Picture"
                   )}

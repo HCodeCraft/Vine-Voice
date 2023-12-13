@@ -47,7 +47,6 @@ export const addPlantToApi = createAsyncThunk(
         throw new Error(JSON.stringify(errorData));
       }
 
-
       const data = await response.json();
       return data;
     } catch (error) {
@@ -56,15 +55,14 @@ export const addPlantToApi = createAsyncThunk(
   }
 );
 
-
 export const updatePlantInApi = createAsyncThunk(
-  'user/updatePlantInApi',
+  "user/updatePlantInApi",
   async ({ plantId, updatedPlant }, thunkAPI) => {
     try {
       const response = await fetch(`/plants/${plantId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(updatedPlant),
       });
@@ -72,21 +70,17 @@ export const updatePlantInApi = createAsyncThunk(
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(JSON.stringify(errorData));
-
       }
 
       const updatedPlantData = await response.json();
-      console.log("updatedPlantData", updatedPlantData)
 
       thunkAPI.dispatch(updateUserPlant(updatedPlantData));
       return updatedPlantData;
     } catch (error) {
-      // Handle other errors if needed
-      return thunkAPI.rejectWithValue(error.message || 'Update plant failed');
+      return thunkAPI.rejectWithValue(error.message || "Update plant failed");
     }
   }
 );
-
 
 export const addEntryToPlant = createAsyncThunk(
   "user/addEntryPlant",
@@ -147,8 +141,8 @@ const plantSlice = createSlice({
     },
     updateEntryInPlant: (state, action) => {
       const updatedEntry = action.payload;
-      state.individualPlant.entries = state.individualPlant.entries.map((entry) =>
-        entry.id === updatedEntry.id ? updatedEntry : entry
+      state.individualPlant.entries = state.individualPlant.entries.map(
+        (entry) => (entry.id === updatedEntry.id ? updatedEntry : entry)
       );
     },
     deleteEntryInPlant: (state, action) => {
@@ -202,7 +196,7 @@ const plantSlice = createSlice({
         state.loadingIndividualPlant = false;
         state.errorIndividualPlant = action.error.message;
       })
-      .addCase(addPlantToApi.pending, (state, action) => {
+      .addCase(addPlantToApi.pending, (state) => {
         state.loadingIndividualPlant = true;
       })
       .addCase(addPlantToApi.fulfilled, (state, action) => {

@@ -96,8 +96,6 @@ const CreateAccount = () => {
     padding: 15,
     height: "100vh",
     width: 400,
-    // margin: "20px auto",
-    // marginTop: ".1em",
   };
   const btnstyle = { margin: "8px 0" };
 
@@ -217,7 +215,7 @@ const CreateAccount = () => {
               name="privacy"
               className="margB2"
               control={control}
-              defaultValue={false} // Initial value of the checkbox
+              defaultValue={false} 
               render={({ field }) => (
                 <label>
                   <input type="checkbox" {...field} />

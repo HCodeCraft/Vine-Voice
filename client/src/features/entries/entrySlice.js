@@ -43,16 +43,12 @@ export const updateEntryInApi = createAsyncThunk(
         throw new Error(JSON.stringify(errorData));
       }
 
-      // Convert FormData to a plain object
       const updatedEntryData = {};
       updatedEntry.forEach((value, key) => {
         updatedEntryData[key] = value;
       });
 
-     const indPlant = thunkAPI.getState().plant.individualPlant
-
-     console.log("individualPlant", indPlant)
-
+      const indPlant = thunkAPI.getState().plant.individualPlant;
 
       thunkAPI.dispatch(updateEntryInPlant(updatedEntryData));
       return updatedEntryData;
@@ -61,8 +57,6 @@ export const updateEntryInApi = createAsyncThunk(
     }
   }
 );
-
-
 
 export const addEntryToApi = createAsyncThunk(
   "entries/addEntryToApi",
@@ -88,8 +82,8 @@ export const addEntryToApi = createAsyncThunk(
       const response = await fetch("/entries", requestBody);
 
       if (!response.ok) {
-        const errorData = await response.json()
-        throw new Error(JSON.stringify(errorData))
+        const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
       }
 
       const data = await response.json();

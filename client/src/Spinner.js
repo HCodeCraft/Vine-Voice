@@ -3,9 +3,6 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import React from "react";
 
 const Spinner = () => {
-
-
-
   return (
     <div className="loader">
       <PropagateLoader

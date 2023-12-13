@@ -26,17 +26,11 @@ const AddPlant = () => {
   });
   const [selectedSunlightOptions, setSelectedSunlightOptions] = useState([]);
 
-
   useEffect(() => {
     if (Array.isArray(plant.sunlight)) {
       setSelectedSunlightOptions([...plant.sunlight]);
     }
   }, [plant.sunlight]);
-  
-
-  useEffect(()=> {
-console.log("plant.sunlight", plant.sunlight)
-  }, [plant.sunlight])
 
   const handlePlantChange = (e) => {
     const value =
@@ -61,7 +55,6 @@ console.log("plant.sunlight", plant.sunlight)
     const updatedOptions = [...selectedSunlightOptions];
 
     if (e.target.checked) {
-      console.log("option was pushed", option)
       updatedOptions.push(option);
     } else {
       const index = updatedOptions.indexOf(option);
@@ -72,18 +65,18 @@ console.log("plant.sunlight", plant.sunlight)
 
     setPlant({
       ...plant,
-      sunlight: updatedOptions
+      sunlight: updatedOptions,
     });
   };
 
   const onSavePlantClicked = async (e) => {
-    console.log("plant", plant)
     e.preventDefault();
 
     const newPlant = {
-      ...plant}
+      ...plant,
+    };
 
-    await dispatch(addPlantToApi({newPlant}));
+    await dispatch(addPlantToApi({ newPlant }));
 
     setPlantFieldsToBlank();
   };
@@ -104,13 +97,13 @@ console.log("plant.sunlight", plant.sunlight)
       poisonous_to_pets: false,
       water_rec: "",
     });
-    selectedSunlightOptions:[]
+    selectedSunlightOptions: [];
   };
 
   return (
     <section className="editBox margT4">
       <h2>Add a Plant</h2>
-      <img className="img_deg margB2" alt='tomato plant' src={tomato}></img>
+      <img className="img_deg margB2" alt="tomato plant" src={tomato}></img>
       <form className="margB2" onSubmit={onSavePlantClicked}>
         <label htmlFor="common_name" className="editLabel">
           Common Name:
@@ -234,7 +227,7 @@ console.log("plant.sunlight", plant.sunlight)
         </div>
         <div className="margB1"></div>
         <div>
-        <label htmlFor="sunlight" className="editLabel">
+          <label htmlFor="sunlight" className="editLabel">
             Sunlight
           </label>
           <div className="margB1"></div>

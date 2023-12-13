@@ -8,7 +8,7 @@ const HealthRating = ({ changeRating, rating }) => {
 
   return (
     <div>
-      {[...Array(5)].fill().map((star, i) => {
+      {[...Array(5)].fill().map((i) => {
         const ratingValue = i + 1;
 
         return (

@@ -54,7 +54,8 @@ const CommentCard = ({ comment, setComment }) => {
       <div className="comment_box" style={{ marginBottom: "10px" }}>
         <div className="flex-comment-box">
           <div className="comment-avatar-box">
-            <img alt='user avatar'
+            <img
+              alt="user avatar"
               className="avatar"
               src={
                 comment.avatar_thumbnail
@@ -72,7 +73,7 @@ const CommentCard = ({ comment, setComment }) => {
                   verticalAlign: "top",
                 }}
               >
-                {comment.username ? comment.username : 'Deleted user'}
+                {comment.username ? comment.username : "Deleted user"}
               </Typography>
             </Link>
             <Typography

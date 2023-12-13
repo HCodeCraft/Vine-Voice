@@ -32,8 +32,6 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-
-
 export const logoutUser = createAsyncThunk("user/logout", async (_) => {
   try {
     const response = await fetch(`/logout`, {
@@ -56,7 +54,7 @@ export const fetchUserData = createAsyncThunk(
       const response = await fetch(`/me`);
 
       if (!response.ok) {
-        const errorData = await response.json(); 
+        const errorData = await response.json();
         throw new Error(errorData.message || "fetchUserData failed");
       }
 
@@ -94,9 +92,6 @@ export const fetchUserById = createAsyncThunk(
   }
 );
 
-
-
-
 export const registerUserInApi = createAsyncThunk(
   "user/registerUserInApi",
   async (newUser) => {
@@ -114,7 +109,6 @@ export const registerUserInApi = createAsyncThunk(
     }
   }
 );
-
 
 export const updateUserInApi = createAsyncThunk(
   "user/updateUserInApi",
@@ -197,7 +191,7 @@ const userSlice = createSlice({
         if (user.id === id) {
           return { ...user, ...updates };
         }
-        return user; 
+        return user;
       });
     },
     deleteUser: (state, action) => {

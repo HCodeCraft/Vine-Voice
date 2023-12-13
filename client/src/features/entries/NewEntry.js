@@ -48,7 +48,7 @@ const NewEntry = () => {
   };
 
   const removeTag = (index) => {
-    setTags(tags.filter((el, i) => i !== index));
+    setTags(tags.filter((i) => i !== index));
   };
 
   useEffect(() => {
@@ -122,7 +122,6 @@ const NewEntry = () => {
           const errorObject = JSON.parse(error);
           const errors = errorObject.errors;
           setFormErrors(errors);
-          // Propagate the error to the next catch block
           throw error;
         }
       })

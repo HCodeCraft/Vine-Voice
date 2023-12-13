@@ -45,7 +45,7 @@ const EditEntry = () => {
   };
 
   const removeTag = (index) => {
-    setTags(tags.filter((el, i) => i !== index));
+    setTags(tags.filter((i) => i !== index));
   };
 
   useEffect(() => {
