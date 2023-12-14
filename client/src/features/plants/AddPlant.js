@@ -97,7 +97,8 @@ const AddPlant = () => {
       poisonous_to_pets: false,
       water_rec: "",
     });
-    selectedSunlightOptions: [];
+
+    setSelectedSunlightOptions: ([]);
   };
 
   return (

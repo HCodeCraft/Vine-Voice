@@ -9,6 +9,8 @@ const AllPlants = () => {
   const memoizedPlants = useMemo(() => plants, [plants]);
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
 
+  console.log("allPlants", plants)
+
   if (!loggedInUser) {
     return <Unauthorized />;
   }
