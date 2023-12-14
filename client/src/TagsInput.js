@@ -1,6 +1,6 @@
 import React from "react";
 
-const TagsInput = ({ tags, removeTag, handleKeyDown }) => {
+const TagsInput = ({ tags, removeTag, handleKeyDown}) => {
   return (
     <div className="tags-input-container">
       {tags?.map((tag, index) => (

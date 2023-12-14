@@ -173,7 +173,7 @@ const UserProfile = () => {
                   onChange={handleStatusChange}
                   type="text"
                   style={{ width: "100%" }}
-                  className="margB1 statusText"
+                  className="margB1 status-txt"
                 />
                 <CommonButton onClick={handleStatusEditSubmit}>
                   Set Status
