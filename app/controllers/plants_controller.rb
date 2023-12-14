@@ -18,31 +18,16 @@ class PlantsController < ApplicationController
     render json: @plants
   end
 
-
-  # def create
-  #   @current_user = User.find_by(id: session[:user_id])
-  #   plant = Plant.new(plant_params)
-  
-  #   if plant.save
-  #     render json: { plant: plant.as_json(include: :entries) }, status: :created
-  #   else
-  #     render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
-  #   end
-  # end
-
   def create
     @current_user = User.find_by(id: session[:user_id])
     plant = Plant.new(plant_params)
-  
+
     if plant.save
       render json: { plant: PlantSerializer.new(plant).as_json(include: :entries) }, status: :created
     else
       render json: { errors: plant.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
-  
-  
 
   def update
     if @current_user.admin === true
@@ -103,7 +88,7 @@ class PlantsController < ApplicationController
         :health,
         :open_to_advice,
         problems: [],
-      ],  
+      ],
     )
   end
 end
