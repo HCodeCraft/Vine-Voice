@@ -56,9 +56,8 @@ const UserPlants = () => {
 
   return (
     <>
-    <Grid
+    <Grid 
 item  xs={12} sm={6} md={4} lg={3}
-      spacing={0}
       style={{ marginTop: "20px", marginBottom: "20px" }}
     >
       <Box sx={{ width: "100%", maxWidth: "100%" }}>
