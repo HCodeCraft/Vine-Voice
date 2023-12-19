@@ -1,12 +1,7 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
 
-# Plant.create!([{
+
+# Plant.create!([
+#     {
 #   common_name: "golden pothos",
 #   scientific_name: "Epipremnum aureum",
   
@@ -23,7 +18,7 @@
 # }, {
 #   common_name: "velvet plant",
 #   scientific_name: "Gynura aurantiaca",
-#   image_url: "",
+#   image_url: "https://images-na.ssl-images-amazon.com/images/I/51gQ5IChd%2BL._AC_SX466_.jpg",
 #   description: "The Velvet Plant (Gynura aurantiaca) is truly an amazing species of plant! It features large, glossy, velvety leaves that contrast strikingly with its bright purple veins--a real eye-catcher! It’s easy to care for and can tolerate both low and high light conditions, allowing it to thrive in most environments. It’s a great air purifier, removing toxins like formaldehyde, benzene, and xylene from the air. It also produces oxygen, creating fresher, better quality air indoors. Finally, the Velvet Plant creates an attractive, lush backdrop for other plants, making it a great addition to any plant collection.",
 #   water_rec: "Average",
 #   sunlight: "full sun/part shade",
@@ -53,9 +48,9 @@
 # }])
 
 # User.create!([{
-#     username: "GardenGreen" , name: "Gina" , privacy: false, email: "fake34@fake.com", recieve_dev_emails: true, status:"Doing great! Loving indoor gardening", admin:true, password: "test123"
-# }, {username: "GrowingEveryDay", name: "Bruce", privacy: false, email: 'fake48@fake.com', recieve_dev_emails: false, status: "Looking forward to the spring", admin:false, password: "test456"},
-# {username: "Davina", name: "Davina", privacy: false, email: 'fake56@fake.com', recieve_dev_emails: false, status: "Excited to gift my jams", admin:false, password: "test456"}])
+#     username: "GardenGreen" , name: "Gina" , privacy: false, email: "fake34@fake.com", receive_dev_emails: true, status:"Doing great! Loving indoor gardening", admin:true, password: "test123"
+# }, {username: "GrowingEveryDay", name: "Bruce", privacy: false, email: 'fake48@fake.com', receive_dev_emails: false, status: "Looking forward to the spring", admin:false, password: "test456"},
+# {username: "Davina", name: "Davina", privacy: false, email: 'fake56@fake.com', receive_dev_emails: false, status: "Excited to gift my jams", admin:false, password: "test456"}])
 
 
 
@@ -63,7 +58,6 @@
 #     nickname: "GoldenPothos",
 #     location: "Office",
 #     notes: "Grown from a tiny rooted leaf",
-#     image: "",
 #     user_id: 1,
 #     plant_id: 1,
 #     health: 4,
@@ -74,7 +68,6 @@
 #   nickname: "PurpleVelvet the 3rd",
 #   location: "Bedroom",
 #   notes: "My granddaughter plant from Vita",
-#   image: "",
 #   user_id: 1,
 #   plant_id: 2,
 #   health: 4,
@@ -85,7 +78,6 @@
 #   nickname: "Tradascantia the strong",
 #   location: "Office",
 #   notes: "A prop from my previous Tradiscantia that I threw away because of mealy bug infestation",
-#   image: "",
 #   user_id: 1,
 #   plant_id: 3,
 #   health: 4,

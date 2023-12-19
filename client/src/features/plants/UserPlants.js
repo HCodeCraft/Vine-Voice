@@ -7,6 +7,7 @@ import dirthand from "../../pictures/dirthand.jpg";
 
 const UserPlants = () => {
   const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  console.log("loggedInUser", loggedInUser)
 
   const plants = loggedInUser?.plants;
   const memoizedPlants = useMemo(() => plants, [plants]);
@@ -46,7 +47,7 @@ const UserPlants = () => {
         image_url={plant.image_url}
         sciName={plant.scientific_name}
         short_description={plant.short_description}
-        entries={loggedInUser.entries.filter(
+        entries={loggedInUser?.entries.filter(
           (entry) => entry.plant_id === plant.id
         )}
         id={plant.id}

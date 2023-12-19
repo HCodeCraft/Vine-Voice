@@ -171,7 +171,7 @@ const EditProfile = () => {
             <Box mb={2}>
               <input
                 id="receive_dev_emails"
-                name="recieve_dev_emails"
+                name="receive_dev_emails"
                 type="checkbox"
                 checked={user.recieve_dev_emails}
                 onChange={handleUserChange}

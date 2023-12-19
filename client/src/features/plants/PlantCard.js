@@ -11,6 +11,7 @@ import CommonButton from "../../common/CommonButton";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
+
 const PlantCard = ({
   commonName,
   image_url,
@@ -22,11 +23,18 @@ const PlantCard = ({
 
   const plant = plants.find((plant) => plant.id === id);
 
-
   return (
     <Grid item xs={12} sm={6} md={2} lg={2}>
-      <Card sx={{ height: "100%", display: "flex", flexDirection: "column", minWidth:200 }}>
-        <CardMedia sx={{ height: 200 }} image={image_url} />
+      <Card
+          sx={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            minWidth: 200,
+          }}
+      >
+         {/* {image_url && <CardMedia sx={{ height: 200 }} image={image_url} />} */}
+        <CardMedia sx={{ height: 200 }} image={image_url || 'https://www.ish.com.au/onCourse/doc/release-notes/images/placeholder.png'} />
         <CardContent
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
         >
@@ -49,7 +57,7 @@ const PlantCard = ({
           >
             <div className="margB1">
               <Typography variant="subtitle2">
-                {plant?.entries?.length > 0
+                {plant?.entries
                   ? `${plant.entries.length} ${
                       plant.entries.length > 1 ? "entries" : "entry"
                     }`

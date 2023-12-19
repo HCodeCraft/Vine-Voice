@@ -143,6 +143,7 @@ const CreateAccount = () => {
               id="name"
               {...register("name")}
             />
+            <p>The password must be at least 5 characters</p>
             <TextField
               label="Password"
               placeholder="Enter Password"
@@ -200,7 +201,7 @@ const CreateAccount = () => {
             {errors.avatar && <span>{errors.avatar.message}</span>}
             <div className="margB1"></div>
             <Controller
-              name="recieve_dev_emails"
+              name="receive_dev_emails"
               control={control}
               defaultValue={false} // Initial value of the checkbox
               render={({ field }) => (
