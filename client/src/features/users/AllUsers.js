@@ -23,6 +23,7 @@ import { fetchAllComments } from "../comments/commentSlice";
 import { Link } from "react-router-dom";
 import CommonButton from "../../common/CommonButton";
 import { filterOutUserEntries } from "../plants/plantSlice";
+import default_avatar from "../../pictures/defaultleaf.png";
 
 const AllUsers = () => {
   const dispatch = useDispatch();
@@ -103,7 +104,7 @@ const AllUsers = () => {
               >
                 <TableCell align="center">
                   <img
-                    src={row.avatar_thumbnail}
+                    src={row.avatar_thumbnail ? row.avatar_thumbnail : default_avatar }
                     className="tiny_pic"
                     alt="avatar"
                   />
