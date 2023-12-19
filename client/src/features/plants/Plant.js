@@ -126,7 +126,7 @@ const Plant = () => {
           <div className="button_box margT2 margB2">
             <p>Added on {memoizedPlant.create_date}</p>
           </div>
-          <Grid container spacing={1} s>
+          <Grid container spacing={1}>
             <Grid container item spacing={3}>
               <FormRow />
             </Grid>

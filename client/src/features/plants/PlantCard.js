@@ -33,7 +33,6 @@ const PlantCard = ({
             minWidth: 200,
           }}
       >
-         {/* {image_url && <CardMedia sx={{ height: 200 }} image={image_url} />} */}
         <CardMedia sx={{ height: 200 }} image={image_url || 'https://www.ish.com.au/onCourse/doc/release-notes/images/placeholder.png'} />
         <CardContent
           style={{ flex: 1, display: "flex", flexDirection: "column" }}
