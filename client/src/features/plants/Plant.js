@@ -132,7 +132,7 @@ const Plant = () => {
             </Grid>
           </Grid>
         </Box>
-        {user.admin === 'true' ? (
+        {user.admin === true ? (
           <Box display="flex" justifyContent="flex-start" marginLeft="2em">
             <Link to={`/plants/${memoizedPlant.id}/edit`}>
               <CommonButton>Edit Plant</CommonButton>

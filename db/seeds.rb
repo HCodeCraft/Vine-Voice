@@ -53,8 +53,11 @@
 # }])
 
 # User.create!([{
-#     username: "" , name: "" , privacy: false, email: "", recieve_dev_emails: true, status:"", admin:true, password: ""
-# }, {username: "", name: "", privacy: false, email: '', recieve_dev_emails: false, status: "", admin:false, password: ""}])
+#     username: "GardenGreen" , name: "Gina" , privacy: false, email: "fake34@fake.com", recieve_dev_emails: true, status:"Doing great! Loving indoor gardening", admin:true, password: "test123"
+# }, {username: "GrowingEveryDay", name: "Bruce", privacy: false, email: 'fake48@fake.com', recieve_dev_emails: false, status: "Looking forward to the spring", admin:false, password: "test456"},
+# {username: "Davina", name: "Davina", privacy: false, email: 'fake56@fake.com', recieve_dev_emails: false, status: "Excited to gift my jams", admin:false, password: "test456"}])
+
+
 
 # Entry.create!([{
 #     nickname: "GoldenPothos",
