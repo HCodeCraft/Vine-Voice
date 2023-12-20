@@ -36,6 +36,8 @@ const Entry = () => {
     create_date: null,
   });
 
+
+
   useEffect(() => {
     const fetchEntry = async () => {
       const result = await dispatch(fetchEntryById(entryId));
@@ -232,7 +234,7 @@ const Entry = () => {
       {commentForm === true ? (
         <div ref={commentBox} className="commentBox">
           <p>Your comment must be at least 10 characters.</p>
-          {comment.text?.length > 0 ? <p> It is currently {comment.text?.length} characters</p> : null }
+          {comment?.length > 0 ? <p> It is currently {comment?.length} characters</p> : null }
           <textarea
             rows={10}
             cols={50}
