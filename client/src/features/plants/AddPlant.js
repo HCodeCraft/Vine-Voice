@@ -98,8 +98,8 @@ const AddPlant = () => {
       water_rec: "",
     });
 
-    // setSelectedSunlightOptions: ([]);
-  };
+    setSelectedSunlightOptions([])
+  }
 
   return (
     <section className="editBox margT4">
