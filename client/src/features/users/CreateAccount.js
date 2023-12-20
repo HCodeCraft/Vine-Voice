@@ -314,7 +314,7 @@ const CreateAccount = () => {
             </Button>
           </form>
           <Typography style={{ marginBottom: "2em", marginTop:"1em" }}>
-            Do you have an account? <Link to={`/login`}>Sign In</Link>
+            Do you have an account? <Link to={`/login`}>Login</Link>
           </Typography>
         </Paper>
       </Grid>
