@@ -98,7 +98,7 @@ const AddPlant = () => {
       water_rec: "",
     });
 
-    setSelectedSunlightOptions: ([]);
+    // setSelectedSunlightOptions: ([]);
   };
 
   return (

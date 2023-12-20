@@ -17,10 +17,16 @@ import NavBar from "./NavBar";
 import NoPlant from "./features/plants/NoPlant";
 import AddPlant from "./features/plants/AddPlant";
 import AllUsers from "./features/users/AllUsers";
+import { Helmet } from "react-helmet";
 
 function App() {
   return (
     <>
+                <Helmet>
+                <meta charSet="utf-8" />
+                <title>Vine Voice</title>
+                <link rel="canonical" href="http://www.vinevoice.org" />
+            </Helmet>
       <NavBar />
 
       <Routes>
