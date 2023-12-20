@@ -45,7 +45,8 @@ export const addCommentToApi = createAsyncThunk(
       });
 
       if (!response.ok) {
-        throw new Error("Failed to add comment to API");
+         const errorData = await response.json();
+        throw new Error(JSON.stringify(errorData));
       }
       const data = await response.json();
       thunkAPI.dispatch(addCommentToEntry(data));

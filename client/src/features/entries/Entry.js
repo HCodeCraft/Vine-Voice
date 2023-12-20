@@ -22,6 +22,7 @@ const Entry = () => {
   const [commentForm, setCommentForm] = useState(false);
   const [comment, setComment] = useState("");
   const [currentUser, setCurrentUser] = useState(false);
+  const [formErrors, setFormErrors] = useState([])
   const [entry, setEntry] = useState({
     nickname: "",
     location: "",
@@ -114,29 +115,35 @@ const Entry = () => {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newComment = {
       text: comment,
       entry_id: entryId,
     };
-
+  
     try {
       const resultAction = await dispatch(addCommentToApi(newComment, entryId));
-
+  
       if (addCommentToApi.fulfilled.match(resultAction)) {
         const updatedEntry = resultAction.payload;
-
+  
+        setFormErrors([]);
         setComment("");
         setCommentForm(false);
-
+  
         return updatedEntry;
       } else {
-        console.log("error", resultAction.error);
+        const error = resultAction.error.message;
+        const errorObject = JSON.parse(error);
+        const errors = errorObject.errors;
+  
+        setFormErrors(errors);
       }
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
+  
 
   const colorArray = ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#008000"];
 
@@ -235,6 +242,30 @@ const Entry = () => {
         <div ref={commentBox} className="commentBox">
           <p>Your comment must be at least 10 characters.</p>
           {comment?.length > 0 ? <p> It is currently {comment?.length} characters</p> : null }
+          {formErrors.length > 0 ? (
+            <div
+              style={{
+                color: "red",
+                fontWeight: "bold",
+                marginTop: "10px",
+                textAlign: "center", // Center align the text
+              }}
+            > <Typography variant="h6">Validation errors:</Typography>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: "0",
+                  margin: "0 auto",
+                }}
+              >
+                {formErrors.map((error) => (
+                  <Typography key={error}>
+                    <li style={{ marginBottom: "10px" }}>{error}</li>
+                  </Typography>
+                ))}
+              </ul>
+              </div>
+          ) : null}
           <textarea
             rows={10}
             cols={50}
