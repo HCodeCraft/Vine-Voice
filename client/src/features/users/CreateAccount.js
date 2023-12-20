@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchAllPlants } from "../plants/plantSlice";
 import { fetchAllEntries } from "../entries/entrySlice";
 import { fetchAllComments } from "../comments/commentSlice";
+import { Link } from "react-router-dom";
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -312,6 +313,9 @@ const CreateAccount = () => {
               Sign Up
             </Button>
           </form>
+          <Typography style={{ marginBottom: "2em", marginTop:"1em" }}>
+            Do you have an account? <Link to={`/login`}>Sign In</Link>
+          </Typography>
         </Paper>
       </Grid>
       <DevTool control={control} />
