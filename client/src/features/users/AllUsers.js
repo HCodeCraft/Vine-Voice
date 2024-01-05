@@ -104,7 +104,11 @@ const AllUsers = () => {
               >
                 <TableCell align="center">
                   <img
-                    src={row.avatar_thumbnail ? row.avatar_thumbnail : default_avatar }
+                    src={
+                      row.avatar_thumbnail
+                        ? row.avatar_thumbnail
+                        : default_avatar
+                    }
                     className="tiny_pic"
                     alt="avatar"
                   />
@@ -124,7 +128,7 @@ const AllUsers = () => {
                     style={{
                       padding: "3px",
                       border: `2px solid ${
-                        row.recieve_dev_emails ? "green" : "red"
+                        row.receive_dev_emails ? "green" : "red"
                       }`,
                     }}
                   >
@@ -140,11 +144,7 @@ const AllUsers = () => {
                 </TableCell>
                 <TableCell align="center"> {row.plants.length}</TableCell>
                 <TableCell align="center">{row.entries.length}</TableCell>
-                <TableCell align="center">
-                  {
-                   filteredComments.length
-                  }
-                </TableCell>
+                <TableCell align="center">{filteredComments.length}</TableCell>
                 <TableCell align="center">
                   {row.admin !== true ? (
                     <>

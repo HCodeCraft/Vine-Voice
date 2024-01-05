@@ -185,7 +185,7 @@ const UserProfile = () => {
               <Typography variant="subtitle1">Their status:</Typography>
               <div className="statusBubble" style={{ textAlign: "center" }}>
                 <Typography variant="h6" sx={{ align: "center" }}>
-                  {user.status}
+                  {user.status ? user.status : ""}
                 </Typography>
               </div>{" "}
             </>
