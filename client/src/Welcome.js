@@ -22,7 +22,7 @@ const Welcome = () => {
 
   return (
     <div
-      style={{ textAlign: "center", marginTop: ".25em", marginBottom: "1em" }}
+      style={{ textAlign: "center", marginTop: "3.25em", marginBottom: "1em" }}
     >
       <Grid container justifyContent="center">
         <Paper elevation={10} style={paperStyle}>

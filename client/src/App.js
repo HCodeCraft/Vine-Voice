@@ -37,7 +37,7 @@ function App() {
 
         {/* protected routes */}
         <Route path="/plants" element={<AllPlants />} />
-        <Route path="/users/:id" element={<UserProfile />} />
+        <Route path="/users/:username" element={<UserProfile />} />
         <Route path="/plants/:id/edit" element={<EditPlant />} />
         <Route
           path="/plants/:plant_id/entries/:id/edit"
@@ -51,7 +51,7 @@ function App() {
         <Route path="/plants/none" element={<NoPlant />} />
         <Route path="/plants/add" element={<AddPlant />} />
         <Route path="/users/all" element={<AllUsers />} />
-        <Route path="/users/:id/edit" element={<EditProfile />} />
+        <Route path="/users/:username/edit" element={<EditProfile />} />
       </Routes>
     </>
   );

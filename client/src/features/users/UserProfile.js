@@ -32,10 +32,20 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
   const [open, setOpen] = useState(false);
 
-  const userId = Number(params.id);
+  const paramUsername = (params.username).toLowerCase();
+  console.log("paramUsername", paramUsername)
+
+    const allUsers = useSelector((state) => state.user.allUsers);
+    console.log("allUsers", allUsers)
+
+    const pageUser = allUsers.find(user => user.username.toLowerCase() === params.username)
+    console.log("pageUser", pageUser)
+
+    const userId = pageUser.id
+
 
   useEffect(() => {
-    if (userId === loggedInUser.id) {
+    if (paramUsername === loggedInUser.username.toLowerCase()) {
       setCurrentUser(true);
       setUser(loggedInUser);
     } else {
@@ -45,6 +55,7 @@ const UserProfile = () => {
       });
     }
   }, [loggedInUser, userId, dispatch]);
+
 
   useEffect(() => {
     if (user) {

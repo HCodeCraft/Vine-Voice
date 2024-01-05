@@ -6,6 +6,7 @@ import { updateCommentInApi } from "./commentSlice";
 import { deleteCommentFromApi } from "../comments/commentSlice";
 import { Link } from "react-router-dom";
 import default_avatar from "../../pictures/defaultleaf.png";
+import slugify from 'slugify'
 
 const CommentCard = ({ comment, setComment }) => {
   const indEntryComments = useSelector(
@@ -45,6 +46,8 @@ const CommentCard = ({ comment, setComment }) => {
     dispatch(deleteCommentFromApi(commentId));
   };
 
+ 
+
   if (!comment) {
     return null;
   }
@@ -65,7 +68,7 @@ const CommentCard = ({ comment, setComment }) => {
             />
           </div>
           <div className="comment-text-box">
-            <Link to={`/users/${comment.user_id}`}>
+            <Link to={`/users/${(comment.username).toLowerCase()}`}>
               <Typography
                 align="left"
                 sx={{

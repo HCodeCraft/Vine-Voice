@@ -18,7 +18,7 @@ const TabComponent = React.memo(({ user, selectedTab, handleTabClick }) => (
       sx={{ textTransform: "none" }}
       label="My Profile"
       component={Link}
-      to={`/users/${user.id}`}
+      to={`/users/${(user.username).toLowerCase()}`}
       onClick={(event) => handleTabClick(event, 0)}
     />
     <Tab

@@ -170,7 +170,7 @@ const EditPlant = () => {
           className="inputText"
           id="description"
           name="description"
-          value={plant.description}
+          value={plant.description || ""}
           onChange={handlePlantChange}
           rows={5}
           cols={66}
