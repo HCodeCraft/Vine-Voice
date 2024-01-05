@@ -12,7 +12,22 @@ class UserSerializer < ActiveModel::Serializer
   #   rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
   # end
 
-  def avatar_thumbnail
-  Rails.application.routes.url_helpers.rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
+#   def avatar_thumbnail
+#   Rails.application.routes.url_helpers.rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
+# end
+
+def avatar_thumbnail
+  return unless avatar.attached?
+
+  begin
+    rails_representation_url(
+      object.avatar.variant(resize_to_limit: [200, 200]).processed,
+      only_path: true,
+    )
+  rescue ActiveStorage::FileNotFoundError => e
+    Rails.logger.error("Error generating avatar thumbnail: #{e.message}")
+    nil
+  end
 end
+
 end
