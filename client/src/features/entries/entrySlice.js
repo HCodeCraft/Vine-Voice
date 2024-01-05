@@ -48,7 +48,6 @@ export const updateEntryInApi = createAsyncThunk(
         updatedEntryData[key] = value;
       });
 
-      const indPlant = thunkAPI.getState().plant.individualPlant;
 
       thunkAPI.dispatch(updateEntryInPlant(updatedEntryData));
       return updatedEntryData;
