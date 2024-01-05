@@ -8,7 +8,11 @@ class UserSerializer < ActiveModel::Serializer
     rails_blob_path(object.avatar, only_path: true) if object.avatar.attached?
   end
 
+  # def avatar_thumbnail
+  #   rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
+  # end
+
   def avatar_thumbnail
-    rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
-  end
+  Rails.application.routes.url_helpers.rails_representation_url(object.avatar.variant(resize_to_limit: [200, 200]).processed, only_path: true) if object.avatar.attached?
+end
 end
