@@ -102,7 +102,7 @@ const CreateAccount = () => {
 
   return (
     <>
-      <Grid>
+      <Grid style={{ marginTop: "3em" }}>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
             <Avatar sx={{ backgroundColor: "#4CAF50" }}>🌼</Avatar>
@@ -120,6 +120,7 @@ const CreateAccount = () => {
                 required: "Username is required",
               })}
             />
+            <p>The username must not contain spaces, dashes, or underscores</p>
             <p className="error_msg">{errors.username?.message}</p>
             <TextField
               label="E-mail"
@@ -217,7 +218,7 @@ const CreateAccount = () => {
               name="privacy"
               className="margB2"
               control={control}
-              defaultValue={false} 
+              defaultValue={false}
               render={({ field }) => (
                 <label>
                   <input type="checkbox" {...field} />
@@ -313,7 +314,7 @@ const CreateAccount = () => {
               Sign Up
             </Button>
           </form>
-          <Typography style={{ marginBottom: "2em", marginTop:"1em" }}>
+          <Typography style={{ marginBottom: "2em", marginTop: "1em" }}>
             Do you have an account? <Link to={`/login`}>Login</Link>
           </Typography>
         </Paper>
