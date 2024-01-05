@@ -48,6 +48,12 @@ const Entry = () => {
     fetchEntry();
   }, [entryId, dispatch]);
 
+  /// Testing ///
+useEffect(()=> {
+  console.log("entry", entry)
+}, [])
+  /////
+
   const entryUsername = useSelector(
     (state) => state.entry.individualEntry?.user?.username
   );

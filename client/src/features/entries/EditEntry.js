@@ -30,23 +30,28 @@ const EditEntry = () => {
     open_to_advice: false,
   });
   const [formErrors, setFormErrors] = useState([]);
-  const [tags, setTags] = useState();
+  const [tags, setTags] = useState([]);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      const value = e.target.value.trim();
-      if (value) {
-        setTags([...tags, value]);
-        e.target.value = "";
-        setEntry({ ...entry, problems: [...entry.problems, value] });
-      }
+const handleKeyDown = (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const value = e.target.value.trim();
+    if (value) {
+      setTags([...tags, value]);
+      e.target.value = "";
+      setEntry({ ...entry, problems: [...entry.problems, value] });
     }
-  };
+  }
+}
 
-  
+
+
   const removeTag = (index) => {
-    setTags(tags.filter((el, i) => i !== index));
+    setTags((prevTags) => {
+      const updatedTags = prevTags.filter((el, i) => i !== index);
+      setEntry((prevEntry) => ({ ...prevEntry, problems: updatedTags }));
+      return updatedTags;
+    });
   };
 
   useEffect(() => {
@@ -84,6 +89,7 @@ const EditEntry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const entryId = entry.id;
 
     const updatedEntry = new FormData();
@@ -97,12 +103,16 @@ const EditEntry = () => {
     ];
 
     for (const key in entry) {
-      if (!excludedFields.includes(key) && entry[key] !== null) {
-        if (key === "problems" && Array.isArray(entry[key])) {
-          entry[key].forEach((problem) => {
-            updatedEntry.append("entry[problems][]", problem);
-          });
-        } else {
+      if (!excludedFields.includes(key)) {
+        if (key === "problems") {
+          if (Array.isArray(entry[key]) && entry[key].length > 0) {
+            entry[key].forEach((problem) => {
+              updatedEntry.append("entry[problems][]", problem);
+            });
+          } else {
+            updatedEntry.append("entry[problems][]", []);
+          }
+        } else if (entry[key] !== null) {
           updatedEntry.append(`entry[${key}]`, entry[key]);
         }
       }
